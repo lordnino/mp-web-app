@@ -1,0 +1,105 @@
+// Styles for image-upload component 
+.image-upload {
+  .upload-drop-area {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #f3f4f6;
+    border: 2px dashed #cbd5e1;
+    border-radius: 0.75rem;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    text-align: center;
+    justify-content: center;
+
+    &:hover, &:focus-within {
+      border-color: #2563eb;
+      background: #e0e7ef;
+    }
+
+    button {
+      background: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.5rem 1.25rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      margin-right: 1rem;
+
+      &:hover {
+        background: #1d4ed8;
+      }
+    }
+
+    span {
+      color: #64748b;
+      font-size: 1rem;
+    }
+  }
+
+  .preview-list, .uploaded-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .preview-item, .uploaded-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #f9fafb;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 0.75rem;
+    position: relative;
+    width: 120px;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+
+    img.preview-img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 0.5rem;
+      margin-bottom: 0.5rem;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+    }
+
+    button {
+      background: #f87171;
+      color: #fff;
+      border: none;
+      border-radius: 0.5rem;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-top: 0.25rem;
+      transition: background 0.2s;
+
+      &:hover {
+        background: #dc2626;
+      }
+    }
+  }
+
+  > button[type='button'] {
+    background: #2563eb;
+    color: #fff;
+    border: none;
+    border-radius: 0.5rem;
+    padding: 0.5rem 1.5rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-top: 0.5rem;
+
+    &:hover {
+      background: #1d4ed8;
+    }
+  }
+} 

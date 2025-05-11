@@ -1,0 +1,117 @@
+<div class="flex min-w-0 flex-auto flex-col">
+    <app-page-header
+        [breadcrumbs]="[
+            { name: 'View Users', link: '/users/all-users' },
+            { name: isEditMode ? 'Edit User' : 'Add User', link: isEditMode ? '/users/edit-user/' + userId : '/users/add-user' }
+        ]"
+        [title]="isEditMode ? 'Edit User' : 'Add User'"
+    ></app-page-header>
+
+    <div class="flex-auto p-6 sm:p-10">
+        <form
+            class="bg-card flex flex-col overflow-hidden rounded-2xl p-8 pb-4 shadow"
+            [formGroup]="userForm"
+            (ngSubmit)="onSubmit()"
+        >
+            <mat-form-field [ngClass]="formFieldHelpers" class="w-full" appearance="outline">
+                <mat-label>Name</mat-label>
+                <input 
+                    matInput 
+                    formControlName="name" 
+                    placeholder="Enter user's full name"
+                />
+                <mat-error>
+                    @for (error of getFieldErrors('name'); track error) {
+                        {{ error }}
+                    }
+                </mat-error>
+            </mat-form-field>
+
+            <mat-form-field [ngClass]="formFieldHelpers" class="w-full mt-4" appearance="outline">
+                <mat-label>Email</mat-label>
+                <input 
+                    matInput 
+                    formControlName="email" 
+                    placeholder="Enter user's email address"
+                    type="email" 
+                />
+                <mat-error>
+                    @for (error of getFieldErrors('email'); track error) {
+                        {{ error }}
+                    }
+                </mat-error>
+            </mat-form-field>
+
+            @if (!isEditMode) {
+                <mat-form-field [ngClass]="formFieldHelpers" class="w-full mt-4" appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input 
+                        matInput 
+                        formControlName="password" 
+                        placeholder="Enter a strong password (min. 8 characters)"
+                        [type]="hidePassword ? 'password' : 'text'" 
+                    />
+                    <button 
+                        mat-icon-button 
+                        matSuffix 
+                        (click)="togglePasswordVisibility('password')" 
+                        type="button"
+                    >
+                        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                    <mat-error>
+                        @for (error of getPasswordError(); track error) {
+                            {{ error }}
+                        }
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field [ngClass]="formFieldHelpers" class="w-full mt-4" appearance="outline">
+                    <mat-label>Confirm Password</mat-label>
+                    <input 
+                        matInput 
+                        formControlName="confirmPassword" 
+                        placeholder="Re-enter the password to confirm"
+                        [type]="hideConfirmPassword ? 'password' : 'text'" 
+                    />
+                    <button 
+                        mat-icon-button 
+                        matSuffix 
+                        (click)="togglePasswordVisibility('confirmPassword')" 
+                        type="button"
+                    >
+                        <mat-icon>{{ hideConfirmPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                    </button>
+                    <mat-error>
+                        {{ getConfirmPasswordError() }}
+                    </mat-error>
+                </mat-form-field>
+            }
+
+            <mat-form-field [ngClass]="formFieldHelpers" class="w-full mt-4" appearance="outline">
+                <mat-label>Roles</mat-label>
+                <mat-select formControlName="roles" multiple placeholder="Select user roles">
+                    @for (role of roles; track role) {
+                        <mat-option [value]="role.name">{{ role.name }}</mat-option>
+                    }
+                </mat-select>
+                <mat-error>
+                    @for (error of getFieldErrors('roles'); track error) {
+                        {{ error }}
+                    }
+                </mat-error>
+            </mat-form-field>
+
+            <div class="mt-6 flex justify-end">
+                <app-loading-button
+                    [isLoading]="isLoading"
+                    [disabled]="!userForm.valid"
+                    type="submit"
+                    [loadingText]="isEditMode ? 'Updating user...' : 'Saving user...'"
+                >
+                    {{ isEditMode ? 'Update User' : 'Save User' }}
+                </app-loading-button>
+            </div>
+        </form>
+    </div>
+</div> 

@@ -1,0 +1,51 @@
+<div class="image-upload">
+    <!-- Upload Drop Area -->
+    <div class="upload-drop-area" 
+         (dragover)="onDragOver($event)" 
+         (drop)="onDrop($event)">
+        <input #fileInput
+               type="file" 
+               accept="image/*" 
+               (change)="onFileSelected($event)"
+               [multiple]="multiImage"
+               class="hidden">
+        <button mat-raised-button color="primary" (click)="fileInput.click()" type="button">
+            <mat-icon>cloud_upload</mat-icon>
+            Select {{ multiImage ? 'Images' : 'Image' }}
+        </button>
+        <span>or drag and drop</span>
+    </div>
+
+    <!-- Preview List -->
+    <div class="preview-list" *ngIf="previews.length > 0">
+        <div class="preview-item" *ngFor="let preview of previews; let i = index">
+            <img [src]="preview" class="preview-img" alt="Preview">
+            <button mat-button (click)="removePreview(i)" type="button">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <!-- Uploaded List -->
+    <div class="uploaded-list" *ngIf="uploadedImages.length > 0">
+        <div class="uploaded-item" *ngFor="let image of uploadedImages; let i = index">
+            <img [src]="image.url" class="preview-img" alt="Uploaded">
+            @if (multiImage) {
+                <button mat-button (click)="removeUploaded(i)" type="button">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            }
+        </div>
+    </div>
+
+    <!-- Upload Button -->
+    <button *ngIf="files.length > 0" 
+            type="button" 
+            mat-raised-button 
+            color="primary" 
+            (click)="upload()"
+            [disabled]="uploading">
+        <mat-icon *ngIf="uploading">hourglass_empty</mat-icon>
+        <span>{{ uploading ? 'Uploading...' : 'Upload' }}</span>
+    </button>
+</div> 

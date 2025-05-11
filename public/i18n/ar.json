@@ -1,0 +1,103 @@
+{
+    "welcome-back": "مرحبًا بعودتك",
+    "dashboard": {
+        "home": "الصفحة الرئيسية",
+        "total-leads": "اجمالي العملاء",
+        "this-month": "هذا الشهر",
+        "total-qualified": "المؤهلين",
+        "not-qualified": "الغير مؤهلين",
+        "new-leads": "العملاء الجدد",
+        "follow-up": "العملاء المحتملين",
+        "last-campaigns": "الحملات الاخيره"
+    },
+    "leads": {
+        "leads": "العملاء المحتملين",
+        "all-leads": "جميع العملاء",
+        "new-lead": "عميل جديد",
+        "lead-filter": "تصفية العملاء",
+        "add-new-lead": "اضافة عميل محتمل جديد",
+        "edit-lead": "تعديل العميل المحتمل",
+        "qualified": "المؤهلين",
+        "unqualified": "الغير مؤهلين",
+        "follow-up": "العملاء المحتملين",
+        "follow-up-leads": "العملاء المحتملين",
+        "follow-up-qualified": "المؤهلين المحتملين",
+        "follow-up-unqualified": "الغير مؤهلين المحتملين"
+    },
+    "reports": {
+        "reports": "التقارير",
+        "agent-reports": "تقارير الوكلاء",
+        "campaign-reports": "تقارير الحملات",
+        "agent-report-filter": "تصفية تقارير الوكلاء",
+        "campaign-report-filter": "تصفية تقارير الحملات",
+        "agent-name": "اسم الوكيل",
+        "campaign-name": "اسم الحملة",
+        "no-of-leads": "عدد العملاء",
+        "leads-qualified": "العملاء المؤهلين",
+        "leads-not-qualified": "العملاء الغير مؤهلين",
+        "leads-on-going": "العملاء المتبقين",
+        "follow-up": "العملاء المحتملين",
+        "closed": "مغلق",
+        "on-meating": "على الاجتماع",
+        "cancelled": "ملغي"
+    },
+
+    "campaigns": {
+        "campaigns": "الحملات",
+        "all-campaigns": "جميع الحملات",
+        "new-campaigns": "الحملات الجددة"
+    },
+
+    "accounts": {
+        "accounts": "الحسابات"
+    },
+
+    "companies": {
+        "companies": "الشركات",
+        "all-companies": "جميع الشركات",
+        "new-companies": "الشركات الجددة"
+    },
+    "teams": {
+        "teams": "الفرق",
+        "all-teams": "جميع الفرق",
+        "new-teams": "الفرق الجددة"
+    },
+    "public": {
+        "logout": "تسجيل خروج",
+        "profile": "الملف الشخصي",
+        "change-password": "تغيير كلمة المرور",
+        "password": "كلمة المرور",
+        "name": "الاسم",
+        "email": "البريد الالكتروني",
+        "phone": "الهاتف",
+        "location": "الموقع",
+        "company": "الشركة",
+        "campaign": "الحملة",
+        "catch-date": "تاريخ الاطلاق",
+        "status": "الحالة",
+        "agents": "العملاء",
+        "from-date": "من تاريخ",
+        "to-date": "الي تاريخ",
+        "interested-in": "الاهتمامات",
+        "other-phone": "الهاتف الاخر",
+        "other-email": "البريد الاخر",
+        "date-of-birth": "تاريخ الميلاد",
+        "time-to-call": "وقت الاتصال",
+        "job-title": "اسم الوظيفة",
+        "work-space": "مكان العمل",
+        "addtional-info": "معلومات اضافية",
+        "add-comment": "اضافة تعليق",
+        "comment": "تعليق",
+        "enter-comment": "ادخل تعليقك",
+        "no-logs-found-for-this-lead": "لا يوجد تسجيلات لهذا العميل",
+        "lead-basic-info": "معلومات العميل",
+        "more-info": "معلومات اضافية",
+        "please-select-company": "الرجاء تحديد الشركة",
+        "please-select-another-company-or-change-filters": "الرجاء تحديد شركة اخرى او تغيير التصفيات",
+        "save": "حفظ",
+        "cancel": "الغاء",
+        "clear": "مسح",
+        "filter": "تصفية",
+        "select": "اختر"
+    }
+}

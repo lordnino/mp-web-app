@@ -1,0 +1,70 @@
+<div class="flex min-w-0 flex-auto flex-col">
+    <app-page-header
+        [breadcrumbs]="[
+            { name: 'View Roles', link: '/roles-and-permissions/all-roles' },
+            { name: isEditMode ? 'Edit Role' : 'Add Role', link: isEditMode ? '/roles-and-permissions/edit-role/' + roleId : '/roles-and-permissions/add-role' }
+        ]"
+        [title]="isEditMode ? 'Edit Role' : 'Add Role'"
+    ></app-page-header>
+
+    <div class="flex-auto p-6 sm:p-10">
+        <form
+            class="bg-card flex flex-col overflow-hidden rounded-2xl p-8 pb-4 shadow"
+            [formGroup]="roleForm"
+            (ngSubmit)="onSubmit()"
+        >
+            <mat-form-field [ngClass]="formFieldHelpers" class="w-full" appearance="outline">
+                <mat-label>Role Name</mat-label>
+                <input 
+                    matInput 
+                    formControlName="name" 
+                    placeholder="Enter a descriptive name for the role (e.g. Admin, Manager, etc.)" 
+                />
+                @if (formErrors['name']) {
+                    <mat-error>{{ formErrors['name'] }}</mat-error>
+                }
+            </mat-form-field>
+
+            <div class="mt-6">
+                <h3 class="text-lg font-medium">Permissions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+                    @for (module of modulePermissions; track module) {
+                        <mat-card class="p-4">
+                            <mat-card-header>
+                                <mat-card-title class="text-lg font-medium">{{ module.module }}</mat-card-title>
+                            </mat-card-header>
+                            <mat-card-content class="mt-4">
+                                <div class="flex flex-col gap-2">
+                                    @for (permission of module.permissions; track permission) {
+                                        <div class="flex items-center">
+                                            <mat-checkbox
+                                                [checked]="selectedPermissions.includes(permission.value)"
+                                                (change)="onPermissionChange(permission.value, $event.checked)"
+                                            >
+                                                {{ permission.name }}
+                                            </mat-checkbox>
+                                        </div>
+                                    }
+                                </div>
+                            </mat-card-content>
+                        </mat-card>
+                    }
+                </div>
+                @if (formErrors['permissions']) {
+                    <mat-error class="mt-2">{{ formErrors['permissions'] }}</mat-error>
+                }
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <app-loading-button
+                    [isLoading]="isLoading"
+                    [disabled]="!roleForm.valid"
+                    type="submit"
+                    [loadingText]="isEditMode ? 'Updating role...' : 'Saving role...'"
+                >
+                    {{ isEditMode ? 'Update Role' : 'Save Role' }}
+                </app-loading-button>
+            </div>
+        </form>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+<div class="flex min-w-0 flex-auto flex-col">
+    <app-page-header
+        title="Reorder Treatment Categories"
+        subtitle="Drag and drop to reorder categories"
+    ></app-page-header>
+    <div class="flex-auto p-6 sm:p-10">
+        <!-- Loading State -->
+        <div *ngIf="loading" class="flex h-64 items-center justify-center">
+            <mat-progress-spinner
+                mode="indeterminate"
+                diameter="40"
+            ></mat-progress-spinner>
+        </div>
+
+        <!-- Categories List -->
+        <div *ngIf="!loading" class="mx-auto">
+            <div
+                cdkDropList
+                class="space-y-4"
+                (cdkDropListDropped)="onDrop($event)"
+            >
+                <div
+                    *ngFor="let category of categories"
+                    cdkDrag
+                    class="category-item"
+                >
+                    <div
+                        class="flex items-center justify-between rounded-lg bg-white p-4 shadow"
+                    >
+                        <div class="flex items-center gap-4">
+                            <mat-icon
+                                cdkDragHandle
+                                class="cursor-move text-gray-400"
+                                >drag_indicator</mat-icon
+                            >
+                            <div>
+                                <h3 class="font-medium">
+                                    {{ category.name_en }}
+                                </h3>
+                                <p class="text-sm text-gray-500">
+                                    {{ category.name_ar }}
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-500"
+                                >Order:
+                                {{ categories.indexOf(category) + 1 }}</span
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-6 flex justify-end gap-4">
+                <button mat-button (click)="cancel()">Cancel</button>
+                <button
+                    mat-raised-button
+                    color="primary"
+                    (click)="saveOrder()"
+                    [disabled]="saving"
+                >
+                    <mat-icon *ngIf="saving">hourglass_empty</mat-icon>
+                    <span>{{ saving ? 'Saving...' : 'Save Order' }}</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

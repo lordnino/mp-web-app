@@ -1,0 +1,28 @@
+@if (!hideLable) {
+    <h3 class="mb-2" [ngClass]="{ required: isRequired }">{{ title }}</h3>
+}
+<p>
+    <mat-form-field class="w-full">
+        <mat-select
+            [formControl]="optionCtrl"
+            [placeholder]="'Select ' + title"
+            (selectionChange)="onOptionSelected($event)"
+            #singleSelect
+        >
+            <mat-option>
+                <ngx-mat-select-search
+                    [placeholderLabel]="'Find ' + title + '...'"
+                    [formControl]="optionFilterCtrl"
+                    noEntriesFoundLabel="no matching data found"
+                ></ngx-mat-select-search>
+            </mat-option>
+
+            <mat-option
+                *ngFor="let option of filteredOptions | async"
+                [value]="option"
+            >
+                {{ option.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</p>

@@ -1,0 +1,46 @@
+<div class="flex min-w-0 flex-auto flex-col">
+    <app-page-header
+        [breadcrumbs]="[
+            { name: 'View Treatment Categories', link: '/treatment-categories/all-treatment-categories' },
+            { name: isEditMode ? 'Edit Treatment Category' : 'Add Treatment Category', link: isEditMode ? '/treatment-categories/edit-treatment-category/' + categoryId : '/treatment-categories/add-treatment-category' }
+        ]"
+        [title]="isEditMode ? 'Edit Treatment Category' : 'Add Treatment Category'"
+    ></app-page-header>
+    <div class="flex-auto p-6 sm:p-10">
+        <form class="bg-card flex flex-col overflow-hidden rounded-2xl p-8 pb-4 shadow" [formGroup]="form" (ngSubmit)="onSubmit()">
+            <mat-form-field class="w-full" appearance="outline">
+                <mat-label>English Name</mat-label>
+                <input matInput formControlName="name_en" />
+                <mat-error *ngIf="form.get('name_en')?.hasError('required') && form.get('name_en')?.touched">
+                    English Name is required
+                </mat-error>
+            </mat-form-field>
+            <mat-form-field class="w-full mt-4" appearance="outline">
+                <mat-label>Arabic Name</mat-label>
+                <input matInput formControlName="name_ar" />
+                <mat-error *ngIf="form.get('name_ar')?.hasError('required') && form.get('name_ar')?.touched">
+                    Arabic Name is required
+                </mat-error>
+            </mat-form-field>
+
+            <div class="mt-4">
+                <app-image-upload
+                    *ngIf="!isEditMode || !isLoading"
+                    [initialImages]="form.get('image_id')?.value ? [form.get('image_id')?.value] : []"
+                    (imagesChange)="onImagesChange($event)">
+                </app-image-upload>
+            </div>
+
+            <div class="mt-6 flex justify-end">
+                <app-loading-button
+                    [isLoading]="isLoading"
+                    [disabled]="form.invalid"
+                    type="submit"
+                    [loadingText]="isEditMode ? 'Updating...' : 'Creating...'"
+                >
+                    {{ isEditMode ? 'Update' : 'Create' }} Treatment Category
+                </app-loading-button>
+            </div>
+        </form>
+    </div>
+</div> 

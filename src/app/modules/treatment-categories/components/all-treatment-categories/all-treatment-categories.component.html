@@ -1,0 +1,57 @@
+<div class="flex min-w-0 flex-auto flex-col">
+    <app-page-header
+        [breadcrumbs]="[{ name: 'View Treatment Categories', link: '/treatment-categories/all-treatment-categories' }]"
+        title="All Treatment Categories"
+    >
+        <button mat-raised-button color="primary" type="button" class="mr-2" (click)="reorderCategories()">
+            <mat-icon>reorder</mat-icon>
+            Reorder Categories
+        </button>
+        <button mat-raised-button color="primary" type="button" *appCheckPermission="'create_treatment_category'" (click)="goToAddCategory()">
+            <mat-icon>create</mat-icon>
+            Add Category
+        </button>
+    </app-page-header>
+    <div class="flex-auto p-6 sm:p-10">
+        <div class="bg-card flex flex-col overflow-hidden rounded-2xl shadow">
+            <app-data-table
+                [data]="categories"
+                [columns]="columns"
+                [loading]="loading"
+                [actions]="tableActions"
+                (sortChange)="onSortChange($event)"
+                [sortActive]="sortActive"
+                [sortDirection]="sortDirection"
+                (actionClick)="onActionClick($event)"
+            >
+                <ng-template #statusTemplate let-row>
+                    <mat-slide-toggle
+                        [checked]="row.is_active"
+                        (change)="handleStatusChange(row, $event)"
+                    >
+                        {{ row.is_active ? 'Active' : 'Inactive' }}
+                    </mat-slide-toggle>
+                </ng-template>
+                <ng-template #actionsTemplate let-row>
+                    <button mat-icon-button (click)="onActionClick({action: 'edit', row: row})">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="onActionClick({action: 'delete', row: row})">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </ng-template>
+            </app-data-table>
+
+            @if (categoriesMeta?.total > 0) {
+                <div class="w-full flex justify-center mt-4">
+                    <app-pagination
+                        [meta]="categoriesMeta"
+                        (pageChange)="pageChanger($event)"
+                        (pageSizeChange)="onPageSizeChange($event)"
+                        [per_page]="params.per_page"
+                    ></app-pagination>
+                </div>
+            }
+        </div>
+    </div>
+</div> 

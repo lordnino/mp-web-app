@@ -1,0 +1,26 @@
+<h3 class="mb-2" [ngClass]="{ required: isRequired }">{{ title }}</h3>
+<p>
+    <mat-form-field class="w-full">
+        <mat-select
+            [formControl]="optionMultiCtrl"
+            [placeholder]="'Select ' + title"
+            (selectionChange)="onOptionSelected($event)"
+            [multiple]="true"
+            #multiSelect
+        >
+            <mat-option>
+                <ngx-mat-select-search
+                    [placeholderLabel]="'Find ' + title + '...'"
+                    [formControl]="optionMultiFilterCtrl"
+                    noEntriesFoundLabel="no matching data found"
+                ></ngx-mat-select-search>
+            </mat-option>
+            <mat-option
+                *ngFor="let optiion of filteredOptionsMulti | async"
+                [value]="optiion"
+            >
+                {{ optiion.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</p>

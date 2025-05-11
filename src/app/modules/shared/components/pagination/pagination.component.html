@@ -1,0 +1,82 @@
+@if (meta) {
+    <div class="mx-auto mb-8 flex items-center justify-center space-x-2">
+        <!-- Navigation Buttons -->
+        <button
+            class="rounded border bg-primary px-3 py-1"
+            [disabled]="currentPage <= 1"
+            (click)="goToPage(1)"
+            aria-label="First Page"
+        >
+            <mat-icon
+                class="text-white"
+                [svgIcon]="'heroicons_outline:chevron-double-left'"
+            ></mat-icon>
+        </button>
+        <button
+            class="rounded border bg-primary px-3 py-1"
+            [disabled]="currentPage <= 1"
+            (click)="goToPage(currentPage - 1)"
+            aria-label="Previous Page"
+        >
+            <mat-icon
+                class="text-white"
+                [svgIcon]="'heroicons_outline:chevron_left'"
+            ></mat-icon>
+        </button>
+    
+        <!-- Page Input -->
+        <div class="flex items-center space-x-1">
+            <label for="paginationInput" class="text-gray-500">Page</label>
+            <input
+                id="paginationInput"
+                type="text"
+                class="w-10 rounded border text-center"
+                [value]="currentPage"
+                (input)="validateInput($event)"
+                (keyup.enter)="goToPage(inputValue)"
+                (blur)="goToPage(inputValue)"
+                (input)="inputValue = $event.target.value"
+                [attr.aria-labelledby]="
+                    'paginationInputLabel paginationDescription'
+                "
+            />
+            <span class="text-gray-500">of {{ meta.last_page }}</span>
+        </div>
+    
+        <!-- Page Size Dropdown -->
+        <select
+            class="rounded border px-2 py-1"
+            [value]="per_page"
+            (change)="onPageSizeChange($event)"
+        >
+            @for (size of pageSizeOptions; track $index) {
+                <option [value]="size">{{ size }}</option>
+            }
+        </select>
+    
+        <!-- Navigation Buttons -->
+        <button
+            class="rounded border bg-primary px-3 py-1"
+            [disabled]="currentPage >= meta.last_page"
+            (click)="goToPage(currentPage + 1)"
+            aria-label="Next Page"
+        >
+            <mat-icon
+                class="text-white"
+                [svgIcon]="'heroicons_outline:chevron_right'"
+            ></mat-icon>
+        </button>
+        <button
+            class="rounded border bg-primary px-3 py-1"
+            [disabled]="currentPage >= meta.last_page"
+            (click)="goToPage(meta.last_page)"
+            aria-label="Last Page"
+        >
+            <mat-icon
+                class="text-white"
+                [svgIcon]="'heroicons_outline:chevron_double_right'"
+            ></mat-icon>
+        </button>
+    </div>
+    
+}

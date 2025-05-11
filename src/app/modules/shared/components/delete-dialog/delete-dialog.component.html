@@ -1,0 +1,30 @@
+<section class="flex h-full w-full flex-col items-center justify-center px-4">
+    <div class="flex flex-auto flex-col items-center justify-center">
+        <div class="flex flex-row items-center justify-center">
+            <mat-icon
+                class="mr-4 text-red-500"
+                svgIcon="heroicons_outline:alert"
+            ></mat-icon>
+            <h1 class="text-lg text-gray-900">
+                {{ data.title || 'Are You Sure You Want To Delete This Item?' }}
+            </h1>
+        </div>
+        <p class="mt-2 text-center text-gray-600">
+            {{ data.message || 'This action cannot be undone.' }}
+        </p>
+    </div>
+    <div class="mt-6 flex items-center justify-center space-x-4">
+        <button
+            class="btn-primary rounded-lg bg-red-500 px-6 py-2 text-white hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2"
+            (click)="delete()"
+        >
+            Yes
+        </button>
+        <button
+            class="btn-primary rounded-lg border border-gray-300 bg-white px-6 py-2 text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+            (click)="close()"
+        >
+            Cancel
+        </button>
+    </div>
+</section>

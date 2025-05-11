@@ -1,0 +1,102 @@
+{
+    "welcome-back": "Welcome back",
+    "dashboard": {
+        "home": "Home",
+        "total-leads": "Total Leads",
+        "this-month": "This Month",
+        "total-qualified": "Total Qualified",
+        "not-qualified": "Not Qualified",
+        "new-leads": "New Leads",
+        "follow-up": "Follow Up",
+        "last-campaigns": "Last Campaigns"
+    },
+    "leads": {
+        "leads": "Leads",
+        "all-leads": "All Leads",
+        "new-lead": "New Lead",
+        "lead-filter": "Lead Filter",
+        "add-new-lead": "Add New Lead",
+        "edit-lead": "Edit Lead",
+        "qualified": "Qualified",
+        "unqualified": "Unqualified",
+        "follow-up": "Follow Up",
+        "follow-up-leads": "Follow Up Leads",
+        "follow-up-qualified": "Follow Up Qualified"
+    },
+    "reports": {
+        "reports": "Reports",
+        "agent-reports": "Agent Reports",
+        "campaign-reports": "Campaign Reports",
+        "agent-report-filter": "Agent Report Filter",
+        "campaign-report-filter": "Campaign Report Filter",
+        "agent-name": "Agent Name",
+        "campaign-name": "Campaign Name",
+        "no-of-leads": "No. of Leads",
+        "leads-qualified": "Leads Qualified",
+        "leads-not-qualified": "Leads Not Qualified",
+        "leads-on-going": "Leads On Going",
+        "follow-up": "Follow Up ",
+        "closed": "Closed",
+        "on-meating": "On Meeting",
+        "cancelled": "Cancelled"
+    },
+
+    "campaigns": {
+        "campaigns": "Campaigns",
+        "all-campaigns": "All Campaigns",
+        "new-campaigns": "New Campaigns"
+    },
+
+    "accounts": {
+        "accounts": "Accounts"
+    },
+
+    "companies": {
+        "companies": "Companies",
+        "all-companies": "All Companies",
+        "new-companies": "New Companies"
+    },
+    "teams": {
+        "teams": "Teams",
+        "all-teams": "All Teams",
+        "new-teams": "New Teams"
+    },
+    "public": {
+        "logout": "Logout",
+        "profile": "Profile",
+        "change-password": "Change Password",
+        "password": "Password",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "location": "Location",
+        "company": "Company",
+        "campaign": "Campaign",
+        "catch-date": "Catch Date",
+        "status": "Status",
+        "agents": "Agents",
+        "from-date": "From Date",
+        "to-date": "To Date",
+        "interested-in": "Interested In",
+        "other-phone": "Other Phone",
+        "other-email": "Other Email",
+        "date-of-birth": "Date Of Birth",
+        "time-to-call": "Time To Call",
+        "job-title": "Jop Title",
+        "work-space": "Work Space",
+        "addtional-info": "Additional Info",
+        "add-comment": "Add Comment",
+        "comment": "Comment",
+        "enter-comment": "Enter Comment",
+        "no-logs-found-for-this-lead": "No Logs Found For This Lead",
+        "lead-basic-info": "Lead Basic Info",
+        "more-info": "More Info",
+        "please-select-company": "Please Select Company",
+        "please-select-another-company-or-change-filters": "Please Select Another Company Or Change Filters",
+        "save": "Save",
+        "cancel": "Cancel",
+        "clear": "Clear",
+        "filter": "Filter",
+        "select": "Select"
+    }
+}

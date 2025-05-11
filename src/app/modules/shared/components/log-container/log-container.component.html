@@ -1,0 +1,248 @@
+<div class="bg-card mt-4 flex w-full items-center justify-center">
+    @if (logs.length == 0) {
+        <span class="p-8 text-center font-semibold text-gray-500"
+            >No {{ type }} Found For This Lead</span
+        >
+    } @else {
+        <div class="flex w-full flex-col items-start justify-start gap-4 p-4">
+            @for (log of logs; track log.Log_id) {
+                <article
+                    class="mx-auto flex w-full items-center justify-between gap-4 rounded-lg bg-white p-4 shadow"
+                >
+                    <div
+                        class="flex h-12 w-12 items-center justify-center rounded-lg"
+                        [ngClass]="{
+                            'bg-assign_lead': log.type === 'Assign',
+                            'bg-additional_info_log_bg':
+                                log.type.includes('Update'),
+                            'bg-comment_bg': log.type === 'Comment',
+                            'bg-new_reminder_bg': log.type === 'Reminder',
+                            'bg-reminder_bg': log.type === 'Whatsapp',
+                            'bg-phone_call_whatsapp_bg':
+                                log.type === 'CallByPhone',
+                            'bg-assign_lead_bg':
+                                log.type === 'Status' &&
+                                log.Log_Message === 'New Lead',
+                            'bg-new_follow_up_bg':
+                                log.type === 'Status' &&
+                                log.Log_Message === 'FollowUp',
+                            'bg-meeting_bg':
+                                log.type === 'Status' &&
+                                log.Log_Message === 'Meeting',
+                            'bg-new_closed_bg':
+                                log.type === 'Status' &&
+                                log.Log_Message === 'Closed',
+                            'bg-new_on_going_bg':
+                                log.type === 'Status' &&
+                                log.Log_Message === 'OnGoing',
+                            'bg-new_cancelled_bg':
+                                log.type === 'Status' &&
+                                log.Log_Message === 'Cancelled',
+                            'bg-new_not_available_bg':
+                                log.type === 'Status' &&
+                                log.Log_Message === 'NotAvailable',
+                            'bg-new_broker_bg':
+                                log.type === 'Status' &&
+                                log.Log_Message === 'Broker',
+                            'bg-qualified_bg':
+                                log.type === 'is_qualified' &&
+                                log.Log_Message === 'qualified status : 1',
+                            'bg-not_qualified_bg':
+                                log.type === 'is_qualified' &&
+                                log.Log_Message === 'qualified status : 2',
+                        }"
+                    >
+                        @switch (log.type) {
+                            @case ('Comment') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:new_log_comment"
+                                ></mat-icon>
+                            }
+                            @case ('Assign') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:assign_lead"
+                                ></mat-icon>
+                            }
+                            @case ('Reminder') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:new_reminder_log"
+                                ></mat-icon>
+                            }
+                            @case ('Whatsapp') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:whatsapp"
+                                ></mat-icon>
+                            }
+                            @case ('CallByPhone') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:call"
+                                ></mat-icon>
+                            }
+                            @case ('Update Gender') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:additional_info_log"
+                                ></mat-icon>
+                            }
+                            @case ('Update Phone 2') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:additional_info_log"
+                                ></mat-icon>
+                            }
+                            @case ('Update Email 2') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:additional_info_log"
+                                ></mat-icon>
+                            }
+                            @case ('Update date_of_birth') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:additional_info_log"
+                                ></mat-icon>
+                            }
+                            @case ('Update time_to_call') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:additional_info_log"
+                                ></mat-icon>
+                            }
+                            @case ('Update location') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:additional_info_log"
+                                ></mat-icon>
+                            }
+                            @case ('Update job_title') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:additional_info_log"
+                                ></mat-icon>
+                            }
+                            @case ('Update workplace') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:additional_info_log"
+                                ></mat-icon>
+                            }
+                            @case ('Update additional_info') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:additional_info_log"
+                                ></mat-icon>
+                            }
+                        }
+                        @switch (log.Log_Message) {
+                            @case ('New Lead') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:assign"
+                                ></mat-icon>
+                            }
+                            @case ('FollowUp') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:follow_up"
+                                ></mat-icon>
+                            }
+                            @case ('Meeting') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:meeting"
+                                ></mat-icon>
+                            }
+                            @case ('Closed') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:closed"
+                                ></mat-icon>
+                            }
+                            @case ('OnGoing') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:on_going"
+                                ></mat-icon>
+                            }
+                            @case ('Cancelled') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:cancelled"
+                                ></mat-icon>
+                            }
+                            @case ('NotAvailable') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:not_available"
+                                ></mat-icon>
+                            }
+                            @case ('Broker') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:borker"
+                                ></mat-icon>
+                            }
+                            @case ('qualified status : 1') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:qualified"
+                                ></mat-icon>
+                            }
+                            @case ('qualified status : 2') {
+                                <mat-icon
+                                    svgIcon="heroicons_outline:not_qualified"
+                                ></mat-icon>
+                            }
+                        }
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center justify-between">
+                            @if (log.type === 'is_qualified') {
+                                <div
+                                    class="text-sm font-semibold text-gray-900"
+                                >
+                                    Qualified Status -
+                                    {{
+                                        log.created_at
+                                            | date: 'longDate'
+                                            | date: 'd MMMM, y'
+                                    }}
+                                </div>
+                            } @else {
+                                <div
+                                    class="text-sm font-semibold text-gray-900"
+                                >
+                                    {{ log.type }} -
+                                    {{
+                                        log.created_at
+                                            | date: 'longDate'
+                                            | date: 'd MMMM, y'
+                                    }}
+                                </div>
+                            }
+                            <div class="text-sm text-gray-500">
+                                {{ log.created_at | date: 'h:mm aa' }}
+                            </div>
+                        </div>
+                        <div class="text-left text-sm font-medium text-black">
+                            @if (log.type === 'Status') {
+                                {{
+                                    log.Agent_name +
+                                        ' Re-Assigned Lead Status To ' +
+                                        log.Log_Message
+                                }}
+                            } @else if (log.type === 'is_qualified') {
+                                @if (
+                                    log.Log_Message === 'qualified status : 1'
+                                ) {
+                                    {{
+                                        log.Agent_name +
+                                            ' Change Lead Qualified Status To Qualified'
+                                    }}
+                                } @else {
+                                    {{
+                                        log.Agent_name +
+                                            ' Change Lead Qualified Status To Not Qualified'
+                                    }}
+                                }
+                            } @else {
+                                {{
+                                    log.Agent_name +
+                                        ' Added New ' +
+                                        log.type +
+                                        ': ' +
+                                        log.Log_Message
+                                }}
+                            }
+                        </div>
+                        <div class="text-xs text-gray-500">
+                            By: {{ log.Agent_name }}
+                        </div>
+                    </div>
+                </article>
+            }
+        </div>
+    }
+</div>

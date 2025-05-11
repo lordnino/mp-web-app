@@ -1,0 +1,73 @@
+<div class="flex min-w-0 flex-auto flex-col">
+    <app-page-header
+        [breadcrumbs]="[{ name: 'View Users', link: '/users/all-users' }]"
+        title="All Users"
+    >
+    <button mat-raised-button color="primary" type="button" *appCheckPermission="'create_user'" (click)="goToAddUser()">
+        <mat-icon>create</mat-icon>
+        Add User
+    </button>
+</app-page-header>
+
+    <div class="flex-auto p-6 sm:p-10">
+        <!-- Filter Form -->
+        <form class="flex flex-row justify-between items-center w-full" [formGroup]="filterForm" (ngSubmit)="onFilter()">
+            <div class="flex flex-row gap-4 w-full max-w-xl">
+                <mat-form-field class="w-full" appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name" />
+                </mat-form-field>
+                <mat-form-field class="w-full" appearance="outline">
+                    <mat-label>Email</mat-label>
+                    <input matInput formControlName="email" />
+                </mat-form-field>
+            </div>
+            <div class="flex gap-2 items-center ml-4">
+                <button mat-flat-button type="submit" class="filter-btn px-6 py-2 rounded-md font-semibold">Filter</button>
+                <button mat-stroked-button type="button" (click)="onResetFilters()" class="reset-btn px-6 py-2 rounded-md font-semibold">Reset</button>
+            </div>
+        </form>
+        <div class="bg-card flex flex-col overflow-hidden rounded-2xl shadow">
+            <app-data-table
+                [data]="users"
+                [columns]="columns"
+                [loading]="loading"
+                [actions]="tableActions"
+                (actionClick)="onActionClick($event)"
+                (sortChange)="onSortChange($event)"
+                [sortActive]="sortActive"
+                [sortDirection]="sortDirection"
+            >
+                <ng-template #roleTemplate let-row>
+                    <div class="flex flex-wrap gap-2">
+                        <span *ngFor="let role of row.roles"
+                              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">
+                            {{ role }}
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template #statusTemplate let-row>
+                    <mat-slide-toggle
+                        [checked]="row.is_active"
+                        [disabled]="row.role === 'Super Admin'"
+                        (change)="handleStatusChange(row, $event)"
+                        [ngClass]="{'opacity-50': row.role === 'Super Admin'}"
+                    >
+                        {{ row.is_active ? 'Active' : 'Inactive' }}
+                    </mat-slide-toggle>
+                </ng-template>
+            </app-data-table>
+
+            @if (usersMeta?.total > 0) {
+                <div class="w-full flex justify-center mt-4">
+                    <app-pagination
+                        [meta]="usersMeta"
+                        (pageChange)="pageChanger($event)"
+                        (pageSizeChange)="onPageSizeChange($event)"
+                        [per_page]="params.per_page"
+                    ></app-pagination>
+                </div>
+            }
+        </div>
+    </div>
+</div>

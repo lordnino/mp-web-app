@@ -1,0 +1,121 @@
+<div class="rounded-lg overflow-hidden">
+    <!-- Empty state -->
+    <div *ngIf="!loading && (!data || data.length === 0)" class="flex flex-col items-center justify-center p-8">
+        <mat-icon class="text-gray-400 text-6xl mb-4">inbox</mat-icon>
+        <p class="text-gray-500 text-lg">No data found</p>
+    </div>
+
+    <!-- Table content -->
+    <table *ngIf="!loading && data && data.length > 0" mat-table [dataSource]="data" matSort
+        [matSortActive]="sortActive" [matSortDirection]="sortDirection"
+        (matSortChange)="onSortChange($event)" class="w-full">
+        <!-- Dynamic columns -->
+        <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
+            <th mat-header-cell *matHeaderCellDef>
+                <!-- Only add sort header if column is sortable -->
+                <ng-container *ngIf="column.sortable; else unsortableHeader">
+                    <div mat-sort-header>{{ column.label }}</div>
+                </ng-container>
+                <ng-template #unsortableHeader>
+                    {{ column.label }}
+                </ng-template>
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index">
+                <!-- Loading state -->
+                <ng-container *ngIf="loading">
+                    <div class="animate-pulse h-4 bg-gray-200 rounded" [style.width]="skeletonWidths[i % skeletonWidths.length]"></div>
+                </ng-container>
+
+                <!-- Actual content -->
+                <ng-container *ngIf="!loading">
+                    <!-- Actions column with menu -->
+                    <ng-container *ngIf="column.key === 'actions'; else defaultCell">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <ng-container *ngFor="let action of actions">
+                                <button *ngIf="!action.show || action.show(row)" mat-menu-item (click)="onActionClick(action, row)">
+                                    <mat-icon>{{action.icon}}</mat-icon>
+                                    <span>{{action.label}}</span>
+                                </button>
+                            </ng-container>
+                        </mat-menu>
+                    </ng-container>
+                    
+                    <!-- Default cell template -->
+                    <ng-template #defaultCell>
+                        <ng-container *ngIf="column.template; else plainCell">
+                            <ng-container *ngTemplateOutlet="column.template; context: { $implicit: row }">
+                            </ng-container>
+                        </ng-container>
+                        <ng-template #plainCell>
+                            {{ getValue(row, column) }}
+                        </ng-template>
+                    </ng-template>
+                </ng-container>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            [class.opacity-40]="loading"
+            [class.pointer-events-none]="loading"></tr>
+    </table>
+
+    <!-- Loading state -->
+    <table *ngIf="loading" mat-table [dataSource]="loadingData" class="w-full">
+        <!-- Dynamic columns -->
+        <ng-container *ngFor="let column of columns" [matColumnDef]="column.key">
+            <th mat-header-cell *matHeaderCellDef>
+                <!-- Only add sort header if column is sortable -->
+                <ng-container *ngIf="column.sortable; else unsortableHeader">
+                    <div mat-sort-header>{{ column.label }}</div>
+                </ng-container>
+                <ng-template #unsortableHeader>
+                    {{ column.label }}
+                </ng-template>
+            </th>
+            <td mat-cell *matCellDef="let row; let i = index">
+                <!-- Loading state -->
+                <ng-container *ngIf="loading">
+                    <div class="animate-pulse h-4 bg-gray-200 rounded" [style.width]="skeletonWidths[i % skeletonWidths.length]"></div>
+                </ng-container>
+
+                <!-- Actual content -->
+                <ng-container *ngIf="!loading">
+                    <!-- Actions column with menu -->
+                    <ng-container *ngIf="column.key === 'actions'; else defaultCell">
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            <ng-container *ngFor="let action of actions">
+                                <button *ngIf="!action.show || action.show(row)" mat-menu-item (click)="onActionClick(action, row)">
+                                    <mat-icon>{{action.icon}}</mat-icon>
+                                    <span>{{action.label}}</span>
+                                </button>
+                            </ng-container>
+                        </mat-menu>
+                    </ng-container>
+                    
+                    <!-- Default cell template -->
+                    <ng-template #defaultCell>
+                        <ng-container *ngIf="column.template; else plainCell">
+                            <ng-container *ngTemplateOutlet="column.template; context: { $implicit: row }">
+                            </ng-container>
+                        </ng-container>
+                        <ng-template #plainCell>
+                            {{ getValue(row, column) }}
+                        </ng-template>
+                    </ng-template>
+                </ng-container>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            [class.opacity-40]="loading"
+            [class.pointer-events-none]="loading"></tr>
+    </table>
+</div> 
