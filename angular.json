@@ -98,8 +98,8 @@
                                     "with": "src/environments/environment.staging.ts"
                                 }
                             ],
-                            "baseHref": "/dev-naya-dashboard/",
-                            "deployUrl": "/dev-naya-dashboard/"
+                            "baseHref": "/dev-megaplug-dashboard/",
+                            "deployUrl": "/dev-megaplug-dashboard/"
                         },
                         "development": {
                             "optimization": false,

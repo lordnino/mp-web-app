@@ -15,7 +15,7 @@
         "build:dev": "ng build --configuration=development",
         "build:staging": "ng build --configuration=staging",
         "build:prod": "ng build --configuration=production",
-        "deploy:staging": "cd dist/fuse/browser && scp -r * root@68.183.208.161:/var/www/html/dev-naya-dashboard/",
+        "deploy:staging": "cd dist/fuse/browser && scp -r * root@68.183.208.161:/var/www/html/dev-megaplug-dashboard/",
         "watch": "ng build --watch --configuration development",
         "test": "ng test"
     },
