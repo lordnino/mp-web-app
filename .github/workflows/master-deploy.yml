@@ -109,7 +109,7 @@ jobs:
           sleep 10
           
           # Test if the web application is responding
-          STATUS_CODE=$(curl -s -o /dev/null -w '%{http_code}' http://$VM_IP)
+          STATUS_CODE=$(curl -s -o /dev/null -w '%{http_code}' http://$VM_IP:$DEPLOY_PORT)
           
           echo "Web application status code: $STATUS_CODE"
           
