@@ -1,0 +1,121 @@
+name: Production Deployment Pipeline
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  IMAGE_NAME: mp-dashboard
+  VM_USER: ${{ secrets.DO_USERNAME }}
+  VM_IP: ${{ secrets.DO_DROPLET_IP }}
+  DEPLOY_PORT: 90
+  BRANCH_NAME: master
+
+jobs:
+  build:
+    name: Build and Push
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        
+      - name: Build Docker image
+        run: |
+          docker build -t $IMAGE_NAME:${{ github.sha }} .
+          
+      - name: Save Docker image to tar
+        run: docker save -o /tmp/$IMAGE_NAME.tar $IMAGE_NAME:${{ github.sha }}
+        
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $VM_IP >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+        
+      - name: Copy Docker image to server
+        run: |
+          scp -i ~/.ssh/id_rsa /tmp/$IMAGE_NAME.tar $VM_USER@$VM_IP:~/$IMAGE_NAME.tar
+          
+  deploy:
+    name: Deploy to Production
+    needs: build
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DO_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $VM_IP >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+        
+      - name: Load Docker image
+        run: |
+          ssh -i ~/.ssh/id_rsa $VM_USER@$VM_IP "source ~/.profile && /usr/bin/docker load -i $IMAGE_NAME.tar"
+          
+      - name: Deploy container
+        env:
+          DEPLOY_PORT: ${{ env.DEPLOY_PORT }}
+          BRANCH_NAME: ${{ env.BRANCH_NAME }}
+        run: |
+          ssh -i ~/.ssh/id_rsa $VM_USER@$VM_IP "source ~/.profile && {
+            echo 'Deploying new production container...';
+            NEW_CONTAINER='$IMAGE_NAME-$BRANCH_NAME';
+            
+            # Check if a container with the same name exists and remove it
+            if /usr/bin/docker ps -a | grep \$NEW_CONTAINER; then
+              echo 'Container with the same name already exists. Stopping and removing it...';
+              /usr/bin/docker stop \$NEW_CONTAINER || true
+              /usr/bin/docker rm \$NEW_CONTAINER || true
+            fi
+            
+            # Run the new container
+            /usr/bin/docker run -d --restart unless-stopped --name \$NEW_CONTAINER -p $DEPLOY_PORT:80 $IMAGE_NAME:${{ github.sha }}
+            
+            # Clean up old images to save space
+            echo 'Cleaning up old images...';
+            /usr/bin/docker image prune -f
+          }"
+          
+      - name: Check container health
+        env:
+          BRANCH_NAME: ${{ env.BRANCH_NAME }}
+        run: |
+          ssh -i ~/.ssh/id_rsa $VM_USER@$VM_IP "source ~/.profile && {
+            echo 'Checking container status...';
+            NEW_CONTAINER='$IMAGE_NAME-$BRANCH_NAME';
+            
+            # Check if container is running
+            if ! /usr/bin/docker ps | grep \$NEW_CONTAINER; then
+              echo 'Container failed to start. Checking logs...';
+              /usr/bin/docker logs \$NEW_CONTAINER;
+              exit 1;
+            fi
+            
+            echo 'Container is running. Deployment successful!';
+          }"
+          
+      - name: Test web application
+        run: |
+          # Wait a bit for the server to be ready
+          sleep 10
+          
+          # Test if the web application is responding
+          STATUS_CODE=$(curl -s -o /dev/null -w '%{http_code}' http://$VM_IP)
+          
+          echo "Web application status code: $STATUS_CODE"
+          
+          if [[ "$STATUS_CODE" -ge 200 && "$STATUS_CODE" -lt 300 ]]; then
+            echo "Web application is accessible with status code: $STATUS_CODE"
+          else
+            echo "Web application is not accessible. Status code: $STATUS_CODE"
+            exit 1
+          fi 
