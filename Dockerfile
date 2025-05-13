@@ -1,4 +1,4 @@
-FROM node:20-alpine AS build
+FROM node:20.18.3-alpine AS build
 
 WORKDIR /app
 
@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Install dependencies
-RUN npm install --legacy-peer-deps
+RUN npm ci --legacy-peer-deps
 
 # Copy the rest of the application code
 COPY . .
