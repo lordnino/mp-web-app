@@ -163,6 +163,45 @@ export class AllUsersComponent implements OnInit, AfterViewInit {
         });
     }
 
+    handleStatusChange(user: User, event: any): void {
+        // Prevent the default toggle behavior
+        event.source.checked = user.is_active;
+
+        const newStatus = !user.is_active;
+
+        const dialogRef = this._dialog.open(StatusToggleDialogComponent, {
+            data: {
+                userName: user.name,
+                newStatus: newStatus,
+                entityName: 'User',
+                message: `Are you sure you want to ${newStatus ? 'activate' : 'deactivate'} ${user.name}?`            }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            if (result) {
+                this._usersService.toggleUserStatus(user.id, newStatus).subscribe({
+                    next: () => {
+                        user.is_active = newStatus;
+                        event.source.checked = newStatus;
+                        this._snackBar.open(
+                            `User ${newStatus ? 'activated' : 'deactivated'} successfully`,
+                            'Close',
+                            { duration: 3000 }
+                        );
+                    },
+                    error: (error) => {
+                        console.error('Error toggling User status:', error);
+                        this._snackBar.open(
+                            'Error updating User status',
+                            'Close',
+                            { duration: 3000 }
+                        );
+                    }
+                });
+            }
+        });
+    }
+
     getUsers(params: any = {}) {
         this.loading = true;
         const queryParams = {

@@ -1,9 +1,9 @@
 <div class="flex min-w-0 flex-auto flex-col">
     <app-page-header
         [breadcrumbs]="[
-            { name: 'View Treatments', link: '/treatment-categories/all-treatments' },
+            { name: 'View Services', link: '/treatment-categories/all-services' },
         ]"
-        [title]="'View Treatments'"
+        [title]="'View Services'"
     >
     </app-page-header>
 
@@ -27,7 +27,7 @@
         </form>
         <div class="bg-card flex flex-col overflow-hidden rounded-2xl shadow">
             <app-data-table
-                [data]="treatments"
+                [data]="services"
                 [columns]="columns"
                 [loading]="loading"
                 [actions]="tableActions"
@@ -36,6 +36,14 @@
                 [sortDirection]="sortDirection"
                 class="w-full"
             >
+            <ng-template #goalTemplate let-row>
+                <div class="flex flex-wrap gap-2">
+                    <span *ngFor="let goal of row.health_goals"
+                        class="bg-gray-100 text-gray-800 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border">
+                        {{ goal.name_en }}
+                    </span>
+                </div>
+            </ng-template>
             
                 <ng-template #statusTemplate let-row>
                     <mat-slide-toggle
@@ -62,10 +70,10 @@
                 </ng-template>
             </app-data-table>
 
-            @if (treatmentsMeta?.total > 0) {
+            @if (servicesMeta?.total > 0) {
                 <div class="w-full flex justify-center mt-4">
                     <app-pagination
-                        [meta]="treatmentsMeta"
+                        [meta]="servicesMeta"
                         (pageChange)="pageChanger($event)"
                         (pageSizeChange)="onPageSizeChange($event)"
                         [per_page]="params.per_page"

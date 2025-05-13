@@ -56,4 +56,20 @@ export class TreatmentCategoriesService {
     getAllServices(params: any = {}) {
         return this.http.get(`${this._servicesBaseUrl}`, { params });
     }
+
+    getTreatmentById(id: number | string) {
+        return this.http.get(`${this._treatmentsBaseUrl}/${id}`);
+    }
+
+    updateTreatment(id: number | string, payload: any) {
+        return this.http.put(`${this._treatmentsBaseUrl}/${id}`, payload);
+    }
+
+    toggleTreatmentStatus(id: number | string, payload: any) {
+        return this.http.patch(`${this._treatmentsBaseUrl}/${id}/toggle-active`, payload);
+    }
+
+    toggleServiceStatus(id: number | string, payload: any) {
+        return this.http.patch(`${this._servicesBaseUrl}/${id}/toggle-active`, payload);
+    }
 } 

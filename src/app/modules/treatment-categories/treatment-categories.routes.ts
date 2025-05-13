@@ -4,7 +4,7 @@ import { TreatmentCategoryFormComponent } from './components/treatment-category-
 import { ReorderCategoriesComponent } from './components/reorder-categories/reorder-categories.component';
 import { AllTreatmentsComponent } from './components/all-treatments/all-treatments.component';
 import { HealthGoalsComponent } from './components/health-goals/health-goals.component';
-import { ServicesComponent } from './components/services/services.component';
+import { AllServicesComponent } from './components/all-services/all-services.component';
 
 export default [
     {
@@ -25,7 +25,7 @@ export default [
     },
     {
         path: 'services',
-        component: ServicesComponent
+        component: AllServicesComponent
     },
     {
         path: 'health-goals',

@@ -1,27 +1,27 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialog } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Sort } from '@angular/material/sort';
-import { Router } from '@angular/router';
-import { DataTableComponent } from 'app/modules/shared/components/data-table/data-table.component';
-import { DeleteDialogComponent } from 'app/modules/shared/components/delete-dialog/delete-dialog.component';
-import { MultipleDropDownComponent } from 'app/modules/shared/components/multiple-drop-down/multiple-drop-down.component';
-import { PageHeaderComponent } from 'app/modules/shared/components/page-header/page-header.component';
-import { PaginationComponent } from 'app/modules/shared/components/pagination/pagination.component';
-import { CheckPermissionDirective } from 'app/modules/shared/directives/check-permission.directive';
-import { PaginationMeta } from 'app/modules/shared/models/api-response.model';
-import { StatusToggleDialogComponent } from 'app/modules/users/components/status-toggle-dialog/status-toggle-dialog.component';
+import { CommonModule } from '@angular/common';
 import { TreatmentCategoriesService } from '../../Services/treatment-categories.service';
 import { TreatmentCategory } from '../../models/treatment-category.model';
+import { DataTableComponent } from 'app/modules/shared/components/data-table/data-table.component';
+import { Router } from '@angular/router';
+import { PageHeaderComponent } from 'app/modules/shared/components/page-header/page-header.component';
+import { PaginationMeta } from 'app/modules/shared/models/api-response.model';
+import { FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
+import { MultipleDropDownComponent } from 'app/modules/shared/components/multiple-drop-down/multiple-drop-down.component';
+import { PaginationComponent } from 'app/modules/shared/components/pagination/pagination.component';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatIconModule } from '@angular/material/icon';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DeleteDialogComponent } from 'app/modules/shared/components/delete-dialog/delete-dialog.component';
+import { StatusToggleDialogComponent } from 'app/modules/users/components/status-toggle-dialog/status-toggle-dialog.component';
+import { MatButtonModule } from '@angular/material/button';
+import { CheckPermissionDirective } from 'app/modules/shared/directives/check-permission.directive';
+import { Sort } from '@angular/material/sort';
 import { ImagePreviewDialogComponent } from 'app/modules/shared/components/image-preview-dialog/image-preview-dialog.component';
-
 interface TableColumn {
     key: string;
     label: string;
@@ -30,7 +30,7 @@ interface TableColumn {
 }
 
 @Component({
-    selector: 'app-all-treatments',
+    selector: 'app-services',
     standalone: true,
     imports: [
         CommonModule,
@@ -45,28 +45,31 @@ interface TableColumn {
         MatInputModule,
         MatIconModule,
         MatButtonModule,
-        CheckPermissionDirective,
+        CheckPermissionDirective
     ],
-    templateUrl: './all-treatments.component.html',
-    styleUrls: ['./all-treatments.component.scss'],
+    templateUrl: './all-services.component.html',
+    styleUrls: ['./all-services.component.scss']
 })
-export class AllTreatmentsComponent implements OnInit {
+export class AllServicesComponent implements OnInit {
     @ViewChild('actionsTemplate') actionsTemplate: TemplateRef<any>;
     @ViewChild('statusTemplate') statusTemplate: TemplateRef<any>;
-    @ViewChild('imageTemplate') imageTemplate: TemplateRef<any>;
-    treatments: TreatmentCategory[] = [];
+    @ViewChild('goalTemplate') goalTemplate: TemplateRef<any>;
+    @ViewChild('imageTemplate') imageTemplate: TemplateRef<any>;    
+    services: any[] = [];
     columns: TableColumn[] = [
         { key: 'id', label: 'ID', sortable: true },
         { key: 'name_en', label: 'English Name', sortable: true },
         { key: 'name_ar', label: 'Arabic Name', sortable: true },
-        { key: 'category.name_en', label: 'Treatment Category', sortable: true },
+        { key: 'treatment.category', label: 'Treatment Category', sortable: true },
+        { key: 'treatment.name_en', label: 'Treatment', sortable: true },
         { key: 'image_url', label: 'Media', template: null },
+        { key: 'health_goals', label: 'Health', sortable: false },
         { key: 'is_active', label: 'Status', template: null },
         { key: 'created_at', label: 'Created At', sortable: true },
         // { key: 'actions', label: 'Actions' }
     ];
     loading = false;
-    treatmentsMeta: PaginationMeta;
+    servicesMeta: PaginationMeta;
     params = {
         page: 1,
         count: 10,
@@ -74,49 +77,47 @@ export class AllTreatmentsComponent implements OnInit {
         last_page: 1,
         sort: 'created_at,desc',
     };
+    filterForm: FormGroup;
 
     tableActions = [
-        {
-            label: 'Edit',
-            icon: 'edit',
+        { 
+            label: 'Edit', 
+            icon: 'edit', 
             action: 'edit',
-            show: (row: any) => true,
+            show: (row: any) => true
         },
-        {
-            label: 'Delete',
-            icon: 'delete',
+        { 
+            label: 'Delete', 
+            icon: 'delete', 
             action: 'delete',
             show: (row: any) => {
                 // Don't allow deleting super admin users
                 return row.role !== 'Super Admin';
-            },
-        },
+            }
+        }
     ];
     sortActive = 'created_at';
     sortDirection: 'asc' | 'desc' = 'desc';
-    filterForm: FormGroup;
 
-    constructor(
-        private service: TreatmentCategoriesService,
-        private router: Router,
-        private _dialog: MatDialog,
-        private _snackBar: MatSnackBar,
-        private fb: FormBuilder
-    ) {}
+    constructor(private service: TreatmentCategoriesService, private router: Router, private _dialog: MatDialog, private _snackBar: MatSnackBar, private fb: FormBuilder) {}
 
     ngOnInit() {
         this.filterForm = this.fb.group({
             name_en: [''],
             name_ar: ['']
         });
-        this.getAllTreatments();
+        this.getAllServices();
     }
 
     ngAfterViewInit() {
         // Update the columns configuration with the template references
-        this.columns = this.columns.map((col) => {
+        this.columns = this.columns.map(col => {
+
             if (col.key === 'is_active') {
                 return { ...col, template: this.statusTemplate };
+            }
+            if (col.key === 'health_goals') {
+                return { ...col, template: this.goalTemplate };
             }
             if (col.key === 'image_url') {
                 return { ...col, template: this.imageTemplate };
@@ -125,89 +126,94 @@ export class AllTreatmentsComponent implements OnInit {
         });
     }
 
-    getAllTreatments(params: any = {}) {
+    getAllServices(params: any = {}) {
         const queryParams = {
             ...this.params,
             ...params,
         };
         this.loading = true;
-        this.service.getAllTreatments(queryParams).subscribe({
+        this.service.getAllServices(queryParams).subscribe({
             next: (res: any) => {
-                this.treatments = res.data;
-                this.treatmentsMeta = res.meta;
-                console.log('Treatments:', this.treatments);
-                console.log('Treatments Meta:', this.treatmentsMeta);
+                this.services = res.data;
+                this.servicesMeta = res.meta;
+                console.log('Services:', this.services);
+                console.log('Services Meta:', this.servicesMeta);
                 this.loading = false;
             },
-            error: () => {
-                this.loading = false;
-            },
+            error: () => { this.loading = false; }
         });
     }
 
-    handleStatusChange(treatment: any, event: any): void {
+    handleStatusChange(service: any, event: any): void {
         // Prevent the default toggle behavior
-        event.source.checked = treatment.is_active;
+        event.source.checked = service.is_active;
 
-        const newStatus = !treatment.is_active;
+        const newStatus = !service.is_active;
 
         const dialogRef = this._dialog.open(StatusToggleDialogComponent, {
             data: {
-                userName: treatment.name_en,
+                userName: service.name_en,
                 newStatus: newStatus,
-                entityName: 'Treatment',
-                message: `Are you sure you want to ${newStatus ? 'activate' : 'deactivate'} ${treatment.name_en}?`,
-            },
+                entityName: 'Service',
+                message: `Are you sure you want to ${newStatus ? 'activate' : 'deactivate'} ${service.name_en}?`            }
         });
 
-        const payload = {   
-            is_active: newStatus
-        }
-        dialogRef.afterClosed().subscribe((result) => {
+        dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                this.service.toggleTreatmentStatus(treatment.id, payload).subscribe({
+                const payload = {
+                    is_active: newStatus
+                }
+                this.service.toggleServiceStatus(service.id, payload).subscribe({
                     next: () => {
-                        treatment.is_active = newStatus;
+                        service.is_active = newStatus;
                         event.source.checked = newStatus;
                         this._snackBar.open(
-                            `Treatments ${newStatus ? 'activated' : 'deactivated'} successfully`,
+                            `Service ${newStatus ? 'activated' : 'deactivated'} successfully`,
                             'Close',
                             { duration: 3000 }
                         );
                     },
                     error: (error) => {
-                        console.error('Error toggling treatment status:', error);
+                        console.error('Error toggling Service status:', error);
                         this._snackBar.open(
-                            'Error updating treatment status',
+                            'Error updating Service status',
                             'Close',
                             { duration: 3000 }
                         );
-                    },
+                    }
                 });
             }
         });
     }
 
+    onFilter() {
+        const filters = this.filterForm.value;
+        console.log(filters);
+        this.getAllServices({ ...filters });
+    }
+
     onResetFilters() {
         this.filterForm.reset();
-        this.getAllTreatments();
+        this.getAllServices();
     }
 
     pageChanger(event: number): void {
         this.params.page = event;
-        this.getAllTreatments();
+        this.getAllServices();
     }
 
     onPageSizeChange(newSize: number): void {
         this.params.count = newSize;
-        this.params.per_page = newSize;
-        this.getAllTreatments();
+        this.params.per_page = newSize;;
+        this.getAllServices();
     }
 
-    onFilter() {
-        const filters = this.filterForm.value;
-        console.log(filters);
-        this.getAllTreatments({ ...filters });
+    reorderCategories() {
+        this.router.navigate(['/treatment-categories/reorder']);
+    }
+
+    goToAddCategory() {
+        this.router.navigate(['/treatment-categories/add-treatment-category']);
     }
 
     onSortChange(sort: Sort) {
@@ -222,7 +228,7 @@ export class AllTreatmentsComponent implements OnInit {
         this.sortActive = sort.active;
         this.sortDirection = sort.direction as 'asc' | 'desc';
         this.params.sort = `${sort.active},${sort.direction}`;
-        this.getAllTreatments();
+        this.getAllServices();
     }
 
     openImagePreview(imageUrl: string): void {
@@ -235,4 +241,4 @@ export class AllTreatmentsComponent implements OnInit {
             maxHeight: '90vh'
         });
     }
-}
+} 
