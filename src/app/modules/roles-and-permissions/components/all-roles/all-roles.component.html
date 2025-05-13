@@ -12,55 +12,70 @@
     </app-page-header>
 
     <div class="flex-auto p-6 sm:p-10">
-        <app-data-table
-            [data]="roles"
-            [columns]="columns"
-            [actions]="tableActions"
-            [loading]="loading"
-            (sortChange)="onSortChange($event)"
-            [sortActive]="sortActive"
-            [sortDirection]="sortDirection"
-            (actionClick)="onActionClick($event)"
-        >
-            <!-- Custom template for permissions column -->
-            <ng-template #permissionsTemplate let-role>
-                @if (role.permissions?.length) {
-                    <div class="flex flex-wrap gap-2">
-                        @for (permission of role.permissions; track permission) {
-                            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                                [class.bg-blue-100]="permission.toLowerCase().includes('view')"
-                                [class.text-blue-800]="permission.toLowerCase().includes('view')"
-                                [class.bg-red-100]="permission.toLowerCase().includes('delete')"
-                                [class.text-red-800]="permission.toLowerCase().includes('delete')"
-                                [class.bg-green-100]="permission.toLowerCase().includes('create')"
-                                [class.text-green-800]="permission.toLowerCase().includes('create')"
-                                [class.bg-yellow-100]="permission.toLowerCase().includes('update')"
-                                [class.text-yellow-800]="permission.toLowerCase().includes('update')"
-                                [class.bg-gray-100]="!permission.toLowerCase().includes('view') && 
-                                                   !permission.toLowerCase().includes('delete') && 
-                                                   !permission.toLowerCase().includes('create') && 
-                                                   !permission.toLowerCase().includes('update')"
-                                [class.text-gray-800]="!permission.toLowerCase().includes('view') && 
-                                                     !permission.toLowerCase().includes('delete') && 
-                                                     !permission.toLowerCase().includes('create') && 
-                                                     !permission.toLowerCase().includes('update')"
-                            >
-                                {{ permission.replace('_', ' ') }}
-                            </span>
-                        }
-                    </div>
-                } @else {
-                    <span class="text-gray-500">No permissions</span>
-                }
-            </ng-template>
-        </app-data-table>
+        <form class="flex flex-row justify-between items-center w-full" [formGroup]="filterForm" (ngSubmit)="onFilter()">
+            <div class="flex flex-row gap-4 w-full max-w-xl">
+                <mat-form-field appearance="outline">
+                    <mat-label>Name</mat-label>
+                    <input matInput formControlName="name" />
+                </mat-form-field>
+            </div>
+            <div class="flex gap-2 items-center ml-4">
+                <button mat-flat-button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-md shadow-sm">Filter</button>
+                <button mat-stroked-button type="button" (click)="onResetFilters()" class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold px-6 py-2 rounded-md">Reset</button>
+            </div>
+        </form>
 
-        <app-pagination
-            class="flex justify-center mt-4"
-            [meta]="rolesMeta"
-            (pageChange)="pageChanger($event)"
-            (pageSizeChange)="onPageSizeChange($event)"
-            [per_page]="params.per_page"
-        ></app-pagination>
+        <div class="bg-card flex flex-col overflow-hidden rounded-2xl shadow">
+            <app-data-table
+                [data]="roles"
+                [columns]="columns"
+                [actions]="tableActions"
+                [loading]="loading"
+                (sortChange)="onSortChange($event)"
+                [sortActive]="sortActive"
+                [sortDirection]="sortDirection"
+                (actionClick)="onActionClick($event)"
+            >
+                <!-- Custom template for permissions column -->
+                <ng-template #permissionsTemplate let-role>
+                    @if (role.permissions?.length) {
+                        <div class="flex flex-wrap gap-2">
+                            @for (permission of role.permissions; track permission) {
+                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                                    [class.bg-blue-100]="permission.toLowerCase().includes('view')"
+                                    [class.text-blue-800]="permission.toLowerCase().includes('view')"
+                                    [class.bg-red-100]="permission.toLowerCase().includes('delete')"
+                                    [class.text-red-800]="permission.toLowerCase().includes('delete')"
+                                    [class.bg-green-100]="permission.toLowerCase().includes('create')"
+                                    [class.text-green-800]="permission.toLowerCase().includes('create')"
+                                    [class.bg-yellow-100]="permission.toLowerCase().includes('update')"
+                                    [class.text-yellow-800]="permission.toLowerCase().includes('update')"
+                                    [class.bg-gray-100]="!permission.toLowerCase().includes('view') && 
+                                                       !permission.toLowerCase().includes('delete') && 
+                                                       !permission.toLowerCase().includes('create') && 
+                                                       !permission.toLowerCase().includes('update')"
+                                    [class.text-gray-800]="!permission.toLowerCase().includes('view') && 
+                                                         !permission.toLowerCase().includes('delete') && 
+                                                         !permission.toLowerCase().includes('create') && 
+                                                         !permission.toLowerCase().includes('update')"
+                                >
+                                    {{ permission.replace('_', ' ') }}
+                                </span>
+                            }
+                        </div>
+                    } @else {
+                        <span class="text-gray-500">No permissions</span>
+                    }
+                </ng-template>
+            </app-data-table>
+    
+            <app-pagination
+                class="flex justify-center mt-4"
+                [meta]="rolesMeta"
+                (pageChange)="pageChanger($event)"
+                (pageSizeChange)="onPageSizeChange($event)"
+                [per_page]="params.per_page"
+            ></app-pagination>
+        </div>
     </div>
 </div>

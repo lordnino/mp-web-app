@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewChild, TemplateRef, AfterViewInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { DeleteDialogComponent } from 'app/modules/shared/components/delete-dialog/delete-dialog.component';
@@ -19,6 +19,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { CheckPermissionDirective } from 'app/modules/shared/directives/check-permission.directive';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 interface TableColumn {
     key: string;
     label: string;
@@ -38,7 +40,10 @@ interface TableColumn {
         DataTableComponent,
         CheckPermissionDirective,
         MatButtonModule,
-        MatIconModule
+        MatIconModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
     ],
     templateUrl: './all-roles.component.html',
     styleUrl: './all-roles.component.scss',
@@ -61,6 +66,7 @@ export class AllRolesComponent implements OnInit, AfterViewInit {
     columns: TableColumn[] = [
         { key: 'name', label: 'Role Name', sortable: true },
         { key: 'permissions', label: 'Permissions', sortable: false },
+        { key: 'created_at', label: 'Created At', sortable: true },
         { key: 'actions', label: 'Actions' }
     ];
 
@@ -84,24 +90,23 @@ export class AllRolesComponent implements OnInit, AfterViewInit {
     ];
     sortActive = 'created_at';
     sortDirection: 'asc' | 'desc' = 'desc';
+    filterForm: FormGroup;
 
     constructor(
         private _rolesAndPermissionsService: RolesAndPermissionsService,
         private _fuseConfigService: FuseConfigService,
         private _dialog: MatDialog,
         private _router: Router,
-        private _snackBar: MatSnackBar
+        private _snackBar: MatSnackBar,
+        private fb: FormBuilder
     ) {}
 
     ngOnInit() {
+        this.filterForm = this.fb.group({
+            name: [''],
+        });
         this.getRoles();
     }
-
-    // isAdmin() {
-    //     const user = JSON.parse(window.localStorage.getItem('user'));
-    //     console.log(user);
-    //     return user.role === 'Super Admin';
-    // }
 
     ngAfterViewInit() {
         // Update the columns configuration with the template reference
@@ -110,6 +115,17 @@ export class AllRolesComponent implements OnInit, AfterViewInit {
                 ? { ...col, template: this.permissionsTemplate }
                 : col
         );
+    }
+
+    onResetFilters() {
+        this.filterForm.reset();
+        this.getRoles();
+    }
+
+    onFilter() {
+        const filters = this.filterForm.value;
+        console.log(filters);
+        this.getRoles({ ...filters });
     }
 
     getRoles(params: any = {}) {
@@ -147,24 +163,33 @@ export class AllRolesComponent implements OnInit, AfterViewInit {
                 this._router.navigate(['/roles-and-permissions/edit-role', event.row.id]);
                 break;
             case 'delete':
-                const dialogRef = this._dialog.open(DeleteDialogComponent, {
-                    data: {
-                        title: 'Delete Role',
-                        message: `Are you sure you want to delete role ${event.row.name}? This will remove all associated permissions and cannot be undone.`,
-                        deleteFn: () => this._rolesAndPermissionsService.deleteRole(event.row.id)
-                    }
-                });
+                if (event.row.users_count > 0) {
+                    this._snackBar.open(
+                        'Role cannot be deleted because it has associated users',
+                        'Close',
+                        { duration: 3000 }
+                    );
+                    return;
+                } else {
+                    const dialogRef = this._dialog.open(DeleteDialogComponent, {
+                        data: {
+                            title: 'Delete Role',
+                            message: `Are you sure you want to delete role ${event.row.name}? This will remove all associated permissions and cannot be undone.`,
+                            deleteFn: () => this._rolesAndPermissionsService.deleteRole(event.row.id)
+                        }
+                    });
 
-                dialogRef.afterClosed().subscribe(result => {
-                    if (result) {
-                        this.getRoles();
-                        this._snackBar.open(
-                            'Role deleted successfully',
-                            'Close',
-                            { duration: 3000 }
-                        );
-                    }
-                });
+                    dialogRef.afterClosed().subscribe(result => {
+                        if (result) {
+                            this.getRoles();
+                            this._snackBar.open(
+                                'Role deleted successfully',
+                                'Close',
+                                { duration: 3000 }
+                            );
+                        }
+                    });
+                }
                 break;
         }
     }

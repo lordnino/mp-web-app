@@ -13,7 +13,13 @@ import { environment } from 'environments/environment';
     styleUrls: ['./image-upload.component.scss']
 })
 export class ImageUploadComponent {
-    @Input() initialImages: any[] = [];
+    @Input() set initialImages(value: string[]) {
+        this._initialImages = value?.map(url => ({ url })) || [];
+    }
+    get initialImages(): { url: string }[] {
+        return this._initialImages;
+    }
+    private _initialImages: { url: string }[] = [];
     @Input() multiImage: boolean = false;
     @Output() imagesChange = new EventEmitter<any[]>();
 

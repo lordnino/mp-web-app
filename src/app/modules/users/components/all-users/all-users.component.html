@@ -13,18 +13,18 @@
         <!-- Filter Form -->
         <form class="flex flex-row justify-between items-center w-full" [formGroup]="filterForm" (ngSubmit)="onFilter()">
             <div class="flex flex-row gap-4 w-full max-w-xl">
-                <mat-form-field class="w-full" appearance="outline">
-                    <mat-label>Name</mat-label>
+                <mat-form-field class="" appearance="outline">
+                    <mat-label>Role Name</mat-label>
                     <input matInput formControlName="name" />
                 </mat-form-field>
-                <mat-form-field class="w-full" appearance="outline">
+                <mat-form-field class="" appearance="outline">
                     <mat-label>Email</mat-label>
                     <input matInput formControlName="email" />
                 </mat-form-field>
             </div>
             <div class="flex gap-2 items-center ml-4">
-                <button mat-flat-button type="submit" class="filter-btn px-6 py-2 rounded-md font-semibold">Filter</button>
-                <button mat-stroked-button type="button" (click)="onResetFilters()" class="reset-btn px-6 py-2 rounded-md font-semibold">Reset</button>
+                <button mat-flat-button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-md shadow-sm">Filter</button>
+                <button mat-stroked-button type="button" (click)="onResetFilters()" class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold px-6 py-2 rounded-md">Reset</button>
             </div>
         </form>
         <div class="bg-card flex flex-col overflow-hidden rounded-2xl shadow">
@@ -37,11 +37,17 @@
                 (sortChange)="onSortChange($event)"
                 [sortActive]="sortActive"
                 [sortDirection]="sortDirection"
+                class="w-full"
             >
                 <ng-template #roleTemplate let-row>
                     <div class="flex flex-wrap gap-2">
                         <span *ngFor="let role of row.roles"
-                              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-800 border border-blue-200">
+                              [ngClass]="{
+                                'bg-blue-100 text-blue-800': role === 'Super Admin',
+                                'bg-green-100 text-green-800': role === 'Admin',
+                                'bg-gray-100 text-gray-800': role !== 'Super Admin' && role !== 'Admin'
+                              }"
+                              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold border">
                             {{ role }}
                         </span>
                     </div>
