@@ -35,6 +35,8 @@ export class ExampleComponent implements OnInit, AfterViewInit {
       }
       // Add more markers as needed
     ];
+    selectedStation: any = null;
+    drawerOpen = false;
 
     constructor(private ngZone: NgZone) {}
 
@@ -103,5 +105,10 @@ export class ExampleComponent implements OnInit, AfterViewInit {
         const overlay = new LabelOverlay(position, label, map);
         this.overlays.push(overlay);
       });
+    }
+
+    onMarkerClick(marker: any) {
+      this.selectedStation = marker;
+      this.drawerOpen = true;
     }
 }

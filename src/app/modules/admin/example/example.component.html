@@ -5,11 +5,21 @@
     [center]="center"
     [zoom]="zoom"
   >
-  @for (marker of markers; track $index) {
-    <map-marker
-    [position]="marker.position"
-    [icon]="marker.icon"
-  ></map-marker>
-  }
+    @for (marker of markers; track marker.position) {
+      <map-marker
+        [position]="marker.position"
+        [icon]="marker.icon"
+        (mapClick)="onMarkerClick(marker)"
+      ></map-marker>
+    }
   </google-map>
+</div>
+
+<div class="station-drawer" [class.open]="drawerOpen">
+  <button class="close-btn" (click)="drawerOpen = false">×</button>
+  @if (selectedStation) {
+    <h2>{{ selectedStation.label }}</h2>
+    <p>Latitude: {{ selectedStation.position.lat }}</p>
+    <p>Longitude: {{ selectedStation.position.lng }}</p>
+  }
 </div>
