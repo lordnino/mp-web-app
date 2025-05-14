@@ -5,10 +5,11 @@
     [center]="center"
     [zoom]="zoom"
   >
+  @for (marker of markers; track $index) {
     <map-marker
-      [position]="markerPosition"
-      [icon]="stationIcon"
-    >
-    </map-marker>
+    [position]="marker.position"
+    [icon]="marker.icon"
+  ></map-marker>
+  }
   </google-map>
 </div>
