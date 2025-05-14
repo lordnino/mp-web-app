@@ -14,6 +14,10 @@ export class ExampleComponent implements OnInit
     zoom = 8;
     center: google.maps.LatLngLiteral = { lat: 30.0444, lng: 31.2357 };
     markerPosition: google.maps.LatLngLiteral = this.center;
+    stationIcon = {
+        url: '/megaplug/station-point.svg',
+        scaledSize: { width: 42, height: 42 }
+    };
     
     /**
      * Constructor
