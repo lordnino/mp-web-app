@@ -20,9 +20,11 @@ import { TranslocoHttpLoader } from './core/transloco/transloco.http-loader';
 import { ErrorHandler } from '@angular/core';
 import { GlobalErrorHandler } from './core/global-error-handler';
 import { queryParamsInterceptor } from './core/interceptors/query-params.interceptor';
+import { environment } from 'environments/environment';
 
 export const appConfig: ApplicationConfig = {
     providers: [
+
         provideAnimations(),
         provideHttpClient(
             withInterceptors([queryParamsInterceptor])

@@ -1,6 +1,6 @@
 import { Component, ViewEncapsulation, OnInit, AfterViewInit, ViewChild, NgZone } from '@angular/core';
 import { GoogleMapsModule, GoogleMap } from '@angular/google-maps';
-
+import { FirebaseService } from 'app/core/services/firebase.service';
 declare const google: any;
 
 @Component({
@@ -11,43 +11,63 @@ declare const google: any;
     imports: [GoogleMapsModule],
     styleUrls: ['./example.component.scss']
 })
-export class ExampleComponent implements OnInit, AfterViewInit {
+export class ExampleComponent {
     @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
-    zoom = 8;
+    zoom = 12;
     center: google.maps.LatLngLiteral = { lat: 30.0444, lng: 31.2357 };
     overlays: any[] = [];
-    markers = [
-      {
-        position: { lat: 30.0444, lng: 31.2357 },
-        label: 'Station 1',
-        icon: {
-          url: '/megaplug/station-point.svg',
-          scaledSize: { width: 42, height: 42 }
-        }
-      },
-      {
-        position: { lat: 29.9753, lng: 31.1376 },
-        label: 'Station 2',
-        icon: {
-          url: '/megaplug/station-point.svg',
-          scaledSize: { width: 42, height: 42 }
-        }
-      }
-      // Add more markers as needed
-    ];
+    markers: any;
     selectedStation: any = null;
     drawerOpen = false;
 
-    constructor(private ngZone: NgZone) {}
+    constructor(private ngZone: NgZone, private firebaseService: FirebaseService) {}
 
     ngOnInit() {
+        this.getStations();
         console.log('Google Maps API available:', !!window['google']?.maps);
         console.log('Center coordinates:', this.center);
         console.log('Map component initialized');
     }
 
-    ngAfterViewInit() {
-      this.addLabelOverlays();
+    getStations() {
+      this.firebaseService.getStations().then((stations) => {
+        console.log('Raw stations data:', stations);
+        this.markers = stations.map(station => {
+          const lat = Number(station.latitude ?? station.lat);
+          const lng = Number(station.longitude ?? station.lng);
+
+          if (isNaN(lat) || isNaN(lng)) {
+            console.error(`Invalid coordinates for station ${station.name_en || station.name_ar || station.id}:`, { lat, lng });
+            return null;
+          }
+
+          // Choose icon URL based on status
+          let iconUrl = '/megaplug/station-available-marker.svg';
+          if (station.status === 'unavailable') {
+            iconUrl = '/megaplug/stastion-unavailable-marker.svg';
+          } else if (station.status === 'InUse') {
+            iconUrl = '/megaplug/station-in-use-marker.svg';
+          }
+
+          return {
+            ...station,
+            position: { lat, lng },
+            label: station.name_en || station.name_ar || station.id,
+            icon: {
+              url: iconUrl,
+              scaledSize: { width: 42, height: 42 }
+            }
+          }
+        }).filter(marker => marker !== null); // Remove any invalid markers
+
+        console.log('Processed markers:', this.markers);
+        
+        setTimeout(() => {
+          this.addLabelOverlays();
+        }, 1000);
+      }).catch(error => {
+        console.error('Error fetching stations:', error);
+      });
     }
 
     addLabelOverlays() {
@@ -112,3 +132,19 @@ export class ExampleComponent implements OnInit, AfterViewInit {
       this.drawerOpen = true;
     }
 }
+
+// import { initializeApp } from 'firebase/app';
+// import { getFirestore, collection, getDocs } from 'firebase/firestore';
+// import { environment } from 'environments/environment';
+
+// const app = initializeApp(environment.firebaseConfig);
+// const db = getFirestore(app);
+
+// async function testFirestore() {
+//   const snapshot = await getDocs(collection(db, 'stations'));
+//   console.log(snapshot);
+//   snapshot.docs.forEach(doc => {
+//     console.log('Doc ID:', doc.id, 'Data:', doc.data());
+//   });
+// }
+// testFirestore();
