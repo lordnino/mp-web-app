@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, onSnapshot } from 'firebase/firestore';
 import { environment } from 'environments/environment';
 
 const app = initializeApp(environment.firebaseConfig);
@@ -28,5 +28,17 @@ export class FirebaseService {
       id: doc.id,
       ...doc.data(),
     })) as Station[];
+  }
+
+  // Real-time listener for stations
+  listenToStations(callback: (stations: Station[]) => void) {
+    const unsubscribe = onSnapshot(collection(db, 'stations'), (querySnapshot) => {
+      const stations = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      })) as Station[];
+      callback(stations);
+    });
+    return unsubscribe; // Call this to stop listening
   }
 }
