@@ -1,0 +1,65 @@
+:host {
+    display: block;
+    height: 100%;
+    position: relative;
+}
+
+.map-wrapper {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+:host ::ng-deep .map-wrapper,
+:host ::ng-deep .map-container,
+:host ::ng-deep .gm-style,
+:host ::ng-deep .gm-style > div {
+    width: 100% !important;
+    height: 100% !important;
+    min-width: 100% !important;
+    min-height: 100% !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+}
+
+:host ::ng-deep .map-container > div {
+    width: 100% !important;
+    height: 100% !important;
+}
+
+google-map {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.station-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 350px;
+  height: 100vh;
+  background: #fff;
+  box-shadow: -2px 0 8px rgba(0,0,0,0.1);
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(.4,0,.2,1);
+  z-index: 1000;
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+}
+.station-drawer.open {
+  transform: translateX(0);
+}
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  line-height: 1;
+}

@@ -1,9 +1,25 @@
-<div class="flex min-w-0 flex-auto flex-col">
-    <!-- Main -->
-    <div class="flex-auto p-6 sm:p-10">
-        <!-- CONTENT GOES HERE -->
-        <div
-            class="h-400 max-h-400 min-h-400 rounded-2xl border-2 border-dashed border-gray-300"
-        ></div>
-    </div>
+<div class="map-wrapper">
+  <google-map
+    [height]="'100%'"
+    [width]="'100%'"
+    [center]="center"
+    [zoom]="zoom"
+  >
+    @for (marker of markers; track marker.position) {
+      <map-marker
+        [position]="marker.position"
+        [icon]="marker.icon"
+        (mapClick)="onMarkerClick(marker)"
+      ></map-marker>
+    }
+  </google-map>
+</div>
+
+<div class="station-drawer" [class.open]="drawerOpen">
+  <button class="close-btn" (click)="drawerOpen = false">×</button>
+  @if (selectedStation) {
+    <h2>{{ selectedStation.label }}</h2>
+    <p>Latitude: {{ selectedStation.position.lat }}</p>
+    <p>Longitude: {{ selectedStation.position.lng }}</p>
+  }
 </div>
