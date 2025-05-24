@@ -9,6 +9,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
         icon: 'heroicons_outline:chart-pie',
         link: '/example',
     },
+    {
+        id: 'connector-type',
+        title: 'Connector Types',
+        type: 'basic',
+        icon: 'heroicons_outline:bolt',
+        link: '/connector-types/all-connector-types',
+        permission: ['view_connector_type'],
+    },
     // {
     //     id: 'roles-and-permissions',
     //     title: 'Roles & Permissions',

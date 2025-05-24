@@ -138,5 +138,23 @@ export const appRoutes: Route[] = [
         ],
     },
 
+    {
+        path: 'connector-types',
+        component: LayoutComponent,
+        canActivate: [AuthGuard, RoutePermissionGuard],
+        resolve: {
+            initialData: initialDataResolver,
+        },
+        data: {
+            permissions: ['view_connector_type'],
+        },
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('app/modules/connector-types/connector-types.routes'),
+            },
+        ],
+    },
+
     { path: '**', redirectTo: 'example' },
 ];

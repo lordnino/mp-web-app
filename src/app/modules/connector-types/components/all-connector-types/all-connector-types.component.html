@@ -1,0 +1,85 @@
+<div class="flex min-w-0 flex-auto flex-col">
+    <app-page-header
+        [breadcrumbs]="[
+            { name: 'View Connector Types', link: '/connector-types/all-connector-types' },
+        ]"
+        [title]="'View Connector Types'"
+    >
+    </app-page-header>
+
+    <div class="flex-auto p-6 sm:p-10">
+        <!-- Filter Form -->
+        <!-- <form class="flex flex-row justify-between items-center w-full" [formGroup]="filterForm" (ngSubmit)="onFilter()">
+            <div class="flex flex-row gap-4 w-full max-w-xl">
+                <mat-form-field class="" appearance="outline">
+                    <mat-label>English Name</mat-label>
+                    <input matInput formControlName="name_en" />
+                </mat-form-field>
+                <mat-form-field class="" appearance="outline">
+                    <mat-label>Arabic Name</mat-label>
+                    <input matInput formControlName="name_ar" />
+                </mat-form-field>
+            </div>
+            <div class="flex gap-2 items-center ml-4">
+                <button mat-flat-button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-md shadow-sm">Filter</button>
+                <button mat-stroked-button type="button" (click)="onResetFilters()" class="bg-gray-200 hover:bg-gray-300 text-gray-900 font-semibold px-6 py-2 rounded-md">Reset</button>
+            </div>
+        </form> -->
+
+        <div class="bg-card flex flex-col overflow-hidden rounded-2xl shadow">
+            <app-data-table
+                [data]="connectorTypes"
+                [columns]="columns"
+                [loading]="loading"
+                [actions]="tableActions"
+                (sortChange)="onSortChange($event)"
+                [sortActive]="sortActive"
+                [sortDirection]="sortDirection"
+                class="w-full"
+            >
+
+                <ng-template #imageTemplate let-row>
+                    @if (row.image) {
+                        <div class="flex items-center">
+                            <img 
+                                [src]="row.image" 
+                                alt="Treatment Image" 
+                                class="w-16 h-16 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                                (click)="openImagePreview(row.image_url, 'Connector Image')"
+                            >
+                        </div>
+                    } @else {
+                        <span class="text-gray-500">No image</span>
+                    }
+                   
+                </ng-template>
+
+                <ng-template #symbolTemplate let-row>
+                    @if (row.symbol) {
+                        <div class="flex items-center">
+                            <img 
+                                [src]="row.symbol" 
+                                alt="Treatment Image" 
+                                class="w-16 h-16 object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                                (click)="openImagePreview(row.symbol, 'Connector Symbol')"
+                            >
+                        </div>
+                    } @else {
+                        <span class="text-gray-500">No Symbol</span>
+                    }
+                </ng-template>
+            </app-data-table>
+
+            @if (connectorTypesMeta?.total > 0) {
+                <div class="w-full flex justify-center mt-4">
+                    <app-pagination
+                        [meta]="connectorTypesMeta"
+                        (pageChange)="pageChanger($event)"
+                        (pageSizeChange)="onPageSizeChange($event)"
+                        [per_page]="params.per_page"
+                    ></app-pagination>
+                </div>
+            }
+        </div>
+    </div>
+</div>
