@@ -7,7 +7,7 @@
         <div class="mx-auto w-full max-w-80 sm:mx-0 sm:w-80">
             <!-- Logo -->
             <div class="w-12">
-                <img src="images/logo/logo.svg" />
+                <img src="megaplug/logo-48.png" />
             </div>
 
             <!-- Title -->
@@ -51,11 +51,15 @@
             <!-- Sign in form -->
             <form class="mt-8" [formGroup]="signInForm" #signInNgForm="ngForm">
                 <!-- Email field -->
-                <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+                <mat-form-field
+                    class="w-full"
+                    appearance="outline"
+                    floatLabel="always"
+                >
                     <mat-label>Email address</mat-label>
-                    <input 
-                        id="email" 
-                        matInput 
+                    <input
+                        id="email"
+                        matInput
                         [formControlName]="'email'"
                         placeholder="Enter your email address"
                     />
@@ -70,7 +74,11 @@
                 </mat-form-field>
 
                 <!-- Password field -->
-                <mat-form-field class="w-full" appearance="outline" floatLabel="always">
+                <mat-form-field
+                    class="w-full"
+                    appearance="outline"
+                    floatLabel="always"
+                >
                     <mat-label>Password</mat-label>
                     <input
                         id="password"
@@ -142,7 +150,6 @@
                         ></mat-progress-spinner>
                     }
                 </button>
-
             </form>
         </div>
     </div>
@@ -176,10 +183,15 @@
                 <div>Welcome Back</div>
             </div>
             <div class="mt-6 text-lg leading-6 tracking-tight text-gray-400">
-                NAYA Wellness Resort, the first Medical & Wellness Resort in Egypt. Located in El Saf, Giza Governorate,
-                the resort offers individuals a serene and charming environment to enhance their well-being. With a
-                focus on holistic practices and transformative experiences, NAYA Wellness Resort aims to provide a
-                haven for Egyptians and tourists alike.
+                MegaPlug is a cutting-edge project dedicated to providing a
+                network of electric car charging stations across Egypt. Our
+                mission is to make sustainable transportation accessible to
+                everyone by offering reliable, fast, and user-friendly charging
+                solutions. With strategically located stations, MegaPlug ensures
+                that electric vehicle owners can travel with confidence, knowing
+                they have convenient access to charging facilities. Join us in
+                driving the future of green mobility and contributing to a
+                cleaner, more sustainable environment.
             </div>
         </div>
     </div>
