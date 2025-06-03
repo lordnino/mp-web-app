@@ -8,7 +8,10 @@ body fuse-splash-screen {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(142.14deg, #24DF4A -36.87%, #00A421 81.22%);
+    /* background: linear-gradient(142.14deg, #24DF4A -36.87%, #00A421 81.22%); */
+    background-image: url('/megaplug/splash.png');
+    background-size: cover;
+    background-position: center;
     color: #F9FAFB;
     z-index: 999999;
     pointer-events: none;

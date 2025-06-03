@@ -1,0 +1,33 @@
+<div class="station-card" [class.selected]="selected" (click)="onCardClick()">
+  <div
+    class="station-card-status"
+    [ngClass]="{
+      'available': station.status === 'Available',
+      'in-use': station.status === 'InUse',
+      'unavailable': station.status === 'Unavailable'
+    }"
+  >
+    {{ station.status === 'Available' ? 'Available' : (station.status === 'InUse' ? 'in use' : 'Unavailable') }}
+  </div>
+  <div class="station-card-image">
+    <img [src]="station.image || '/megaplug/ev-station-placeholder.svg'" alt="Station Image" />
+  </div>
+  <div class="station-card-content">
+    <div class="station-card-header">
+      <div class="station-card-header-left">
+        <div class="station-card-title">{{ station.name_en || station.name_ar || station.label }}</div>
+        <div class="station-card-address">{{ station.address_en || station.address_ar }}</div>
+      </div>
+    </div>
+    <div class="station-card-info-row">
+      <span class="station-card-connectors">
+        <img src="/megaplug/icons/connector.svg" alt="Connectors" />
+        <span class="count">{{ connectors }} connectors</span>
+      </span>
+      <span class="station-card-power">
+        <img src="/megaplug/icons/power.svg" alt="Power" />
+        <span class="range">{{ powerRange }}</span>
+      </span>
+    </div>
+  </div>
+</div> 

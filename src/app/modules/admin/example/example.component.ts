@@ -1,6 +1,11 @@
 import { Component, ViewEncapsulation, OnInit, AfterViewInit, ViewChild, NgZone, OnDestroy } from '@angular/core';
 import { GoogleMapsModule, GoogleMap } from '@angular/google-maps';
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { FirebaseService } from 'app/core/services/firebase.service';
+import { StationCardComponent } from './station-card.component';
 declare const google: any;
 
 @Component({
@@ -8,7 +13,7 @@ declare const google: any;
     standalone   : true,
     templateUrl  : './example.component.html',
     encapsulation: ViewEncapsulation.None,
-    imports: [GoogleMapsModule],
+    imports: [GoogleMapsModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, StationCardComponent],
     styleUrls: ['./example.component.scss']
 })
 export class ExampleComponent implements OnInit, OnDestroy {
@@ -20,6 +25,11 @@ export class ExampleComponent implements OnInit, OnDestroy {
     selectedStation: any = null;
     drawerOpen = false;
     private unsubscribeStations: () => void;
+    filterName: string = '';
+    filterAvailability: string = '';
+    filterConnectorType: string = '';
+    filterChargePower: string = '';
+    filteredStations: any[] = [];
 
     constructor(private ngZone: NgZone, private firebaseService: FirebaseService) {}
 
@@ -59,6 +69,8 @@ export class ExampleComponent implements OnInit, OnDestroy {
             setTimeout(() => {
                 this.addLabelOverlays();
             }, 1000);
+
+            this.applyFilters();
         });
         console.log('Google Maps API available:', !!window['google']?.maps);
         console.log('Center coordinates:', this.center);
@@ -178,6 +190,32 @@ export class ExampleComponent implements OnInit, OnDestroy {
         .filter((c: any) => c && typeof c === 'object' && c.charge_power)
         .map((c: any) => c.charge_power);
       return Array.from(new Set(all)).sort((a, b) => a - b);
+    }
+
+    applyFilters() {
+        if (!this.markers) {
+            this.filteredStations = [];
+            return;
+        }
+        this.filteredStations = this.markers.filter(station => {
+            // Filter by name
+            const matchesName = !this.filterName || (station.label && station.label.toLowerCase().includes(this.filterName.toLowerCase()));
+            // Filter by availability
+            const matchesAvailability = !this.filterAvailability || (station.status && station.status.toLowerCase() === this.filterAvailability.toLowerCase());
+            // Filter by connector type
+            const matchesConnectorType = !this.filterConnectorType || (this.getConnectorTypes(station).some(type => type.name === this.filterConnectorType));
+            // Filter by charge power (as string match)
+            const matchesChargePower = !this.filterChargePower || (this.getPowerRange(station).includes(this.filterChargePower));
+            return matchesName && matchesAvailability && matchesConnectorType && matchesChargePower;
+        });
+    }
+
+    onStationCardClick(station: any) {
+      if (station?.position) {
+        this.center = { ...station.position };
+        this.zoom = 16; // or your preferred zoom level
+        this.onMarkerClick(station);
+      }
     }
 }
 
