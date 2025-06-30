@@ -1,0 +1,20 @@
+<div class="log-history-list">
+  <div class="log-history-card" *ngFor="let log of logs">
+    <div class="log-avatar">
+      <img *ngIf="log.userAvatar; else defaultAvatar" [src]="log.userAvatar" alt="avatar" />
+      <ng-template #defaultAvatar>
+        <div class="default-avatar">
+          <mat-icon>account_circle</mat-icon>
+        </div>
+      </ng-template>
+    </div>
+    <div class="log-content">
+      <div class="log-name">{{ log.userName }}</div>
+      <div class="log-message">{{ log.message }}</div>
+    </div>
+    <span class="log-status" [ngClass]="log.status.toLowerCase()">{{ log.status }}</span>
+    <div class="log-date">
+      <span>{{ log.date }} , {{ log.time }}</span>
+    </div>
+  </div>
+</div>

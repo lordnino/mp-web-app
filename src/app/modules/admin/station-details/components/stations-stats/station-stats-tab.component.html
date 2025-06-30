@@ -1,0 +1,46 @@
+<div class="stats-grid">
+  <!-- Consumed kW/h -->
+  <div class="stats-card">
+    <div class="stats-header">
+      <div>
+        <div class="stats-title">Consumed kW/h</div>
+        <div class="stats-subtitle">Your Consumed KW in a Year</div>
+      </div>
+      <button class="stats-menu" mat-button [matMenuTriggerFor]="periodMenu"><mat-icon>more_vert</mat-icon></button>
+    </div>
+    <div class="stats-main">
+      <div class="stats-icon gradient">
+        <img src="megaplug/station/stats/wat-chart.png" alt="fast-charge" class="w-[19px] h-[19px]" />
+      </div>
+      <div>
+        <div class="stats-label">Total Consumed kW</div>
+        <div class="stats-value-row">
+          <span class="stats-value">{{ consumedKwValue }}</span>
+          <span class="stats-change up">
+            {{ consumedKwChange.replace('+', '') }}
+            <img src="megaplug/station/stats/carret-up.png" alt="up" class="w-[19px] h-[19px]">
+          </span>
+        </div>
+      </div>
+      <mat-menu #periodMenu="matMenu">
+        <button mat-menu-item (click)="selectPeriod('Week')">Week</button>
+        <button mat-menu-item (click)="selectPeriod('Month')">Month</button>
+        <button mat-menu-item (click)="selectPeriod('Year')">Year</button>
+      </mat-menu>
+    </div>
+    <apx-chart
+      [series]="consumedKwChartOptions.series"
+      [chart]="consumedKwChartOptions.chart"
+      [xaxis]="consumedKwChartOptions.xaxis"
+      [yaxis]="consumedKwChartOptions.yaxis"
+      [dataLabels]="consumedKwChartOptions.dataLabels"
+      [stroke]="consumedKwChartOptions.stroke"
+      [tooltip]="consumedKwChartOptions.tooltip"
+      [markers]="consumedKwChartOptions.markers"
+      [grid]="consumedKwChartOptions.grid"
+      [legend]="consumedKwChartOptions.legend"
+      [colors]="consumedKwChartOptions.colors"
+      [fill]="consumedKwChartOptions.fill">
+    </apx-chart>
+  </div>
+</div>

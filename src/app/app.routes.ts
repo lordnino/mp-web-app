@@ -4,6 +4,7 @@ import { AuthGuard } from 'app/core/auth/guards/auth.guard';
 import { NoAuthGuard } from 'app/core/auth/guards/noAuth.guard';
 import { LayoutComponent } from 'app/layout/layout.component';
 import { RoutePermissionGuard } from './core/auth/guards/route-permission.guard';
+import { StationDetailsComponent } from './modules/admin/station-details/station-details.component';
 
 // @formatter:off
 /* eslint-disable max-len */
@@ -70,6 +71,7 @@ export const appRoutes: Route[] = [
         },
         children: [
             {path: 'example', loadChildren: () => import('app/modules/admin/example/example.routes')},
+            {path: 'station/:id', component: StationDetailsComponent},
         ]
     },
 
