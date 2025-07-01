@@ -1,0 +1,182 @@
+.charging-points-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 18px 18px 8px 18px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 8px 0 rgba(16, 30, 54, 0.06);
+}
+
+.charging-points-header {
+    font-size: 18px;
+    font-weight: 700;
+    color: #23272f;
+    margin-bottom: 18px;
+}
+
+.charging-point-block {
+    margin-bottom: 32px;
+}
+
+.charging-point-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.point-icon {
+    font-size: 28px;
+    color: #23293e;
+}
+
+.point-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: #23272f;
+}
+
+.point-status {
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 2px 12px;
+    margin-left: 8px;
+    margin-right: 8px;
+    text-transform: capitalize;
+    background: #eafaf2;
+    color: #16c784;
+}
+.point-status.orange {
+    background: #fff4e5;
+    color: #ff9800;
+}
+.point-status.red {
+    background: #ffeaea;
+    color: #ff5b5b;
+}
+.point-status.green {
+    background: #eafaf2;
+    color: #16c784;
+}
+
+.point-id {
+    font-size: 13px;
+    color: #7c8db5;
+    margin-left: auto;
+    margin-right: 8px;
+}
+
+.point-menu {
+    margin-left: 0;
+}
+
+.point-info-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    font-size: 14px;
+    color: #7c8db5;
+    margin-bottom: 10px;
+}
+
+.info-item mat-icon {
+    font-size: 18px;
+    vertical-align: middle;
+    margin-right: 2px;
+}
+
+.connectors-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: #23272f;
+    margin-bottom: 8px;
+}
+
+.connectors-row {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 18px;
+}
+
+.connector-card {
+    background: #f6f8fb;
+    border-radius: 10px;
+    padding: 14px 14px 24px 18px;
+    flex: 1 1 0;
+    min-width: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    overflow: visible;
+}
+
+.connector-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.connector-title {
+    color: #23272f;
+}
+
+.connector-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: #7c8db5;
+}
+
+.connector-power-icon {
+    color: #ffb200;
+    font-size: 18px;
+}
+
+.connector-status {
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 2px 12px;
+    width: fit-content;
+    text-transform: capitalize;
+    background: #eafaf2;
+    color: #16c784;
+}
+.connector-status.orange {
+    background: #fff4e5;
+    color: #ff9800;
+}
+.connector-status.red {
+    background: #ffeaea;
+    color: #ff5b5b;
+}
+.connector-status.green {
+    background: #eafaf2;
+    color: #16c784;
+}
+
+.connector-img {
+    width: 72px;
+    height: auto;
+    max-height: 48px;
+    object-fit: contain;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    background: none;
+    box-shadow: none;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.connector-switch {
+    margin-top: 8px;
+    align-self: flex-end;
+}

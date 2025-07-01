@@ -1,0 +1,85 @@
+
+.edit-station-btn {
+    position: fixed;
+    left: 315px;
+    right: 16px;
+    bottom: 16px;
+    z-index: 100;
+    background: #151c2c;
+    color: #dbe2f3;
+    font-size: 16px;
+    font-weight: 500;
+    border: none;
+    border-radius: 8px;
+    padding: 14px 0;
+    text-align: center;
+    box-shadow: 0 2px 8px 0 rgba(16, 30, 54, 0.06);
+    cursor: pointer;
+    transition: background 0.2s, left 0.2s;
+  }
+  
+  .edit-station-btn:hover {
+    background: #23293e;
+  }
+  
+  .amenities-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px 32px 32px 32px;
+    margin-bottom: 32px;
+    box-shadow: 0 2px 8px 0 rgba(16, 30, 54, 0.06);
+  }
+  
+  .amenities-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    font-size: 20px;
+    font-weight: 700;
+    color: #23272f;
+    margin-bottom: 18px;
+  }
+  
+  .amenities-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #23272f;
+  }
+  
+  .amenities-count {
+    font-size: 16px;
+    color: #6D7698;
+    font-weight: 400;
+    cursor: pointer;
+  }
+  
+  .amenities-list {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 32px 0;
+  }
+  
+  .amenity {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  .amenity-icon {
+    background: #4ac97d;
+    color: #fff;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+  }
+  
+  .amenity-label {
+    font-size: 15px;
+    color: #23272f;
+    text-align: center;
+  }

@@ -43,6 +43,16 @@
             <span>{{ station.charges }} Charges</span>
           </div>
         </div>
+        <div class="station-info-footer">
+          <div class="station-info-update">
+            <mat-icon style="color: #4ac97d;">autorenew</mat-icon>
+            <span>Last update time : 10 Am , 3 jul 2025</span>
+          </div>
+          <button mat-raised-button color="primary" class="update-now-btn">
+            <mat-icon style="color: #fff;">autorenew</mat-icon>
+            Update Now
+          </button>
+        </div>
       </div>
       <div class="station-tabs">
         <div class="tab" [ngClass]="{active: selectedTab === 'Details'}" (click)="selectedTab = 'Details'">Details</div>
@@ -54,10 +64,26 @@
       </div>
     </div>
 
-    <div *ngIf="selectedTab === 'Log History'">
-      <log-history-tab [stationId]="station.id"></log-history-tab>
-    </div>
-    <div *ngIf="selectedTab === 'Station statistics'">
-      <station-stats-tab [stationId]="station.id"></station-stats-tab>
-    </div>
+      <div *ngIf="selectedTab === 'Log History'">
+        <log-history-tab [stationId]="station.id"></log-history-tab>
+      </div>
+      <div *ngIf="selectedTab === 'Station statistics'">
+        <station-stats-tab [stationId]="station.id"></station-stats-tab>
+      </div>
+      <div *ngIf="selectedTab === 'Charging History'">
+        <charging-history-tab [stationId]="station.id"></charging-history-tab>
+      </div>
+      <div *ngIf="selectedTab === 'Reviews'">
+        <reviews-tab [stationId]="station.id"></reviews-tab>
+      </div>
+      <div *ngIf="selectedTab === 'Amenities'">
+        <amenities-tab [stationId]="station.id"></amenities-tab>
+      </div>
+      <div *ngIf="selectedTab === 'Details'">
+        <details-tab [stationId]="station.id"></details-tab>
+      </div>
 </div>
+
+<button #editBtn class="edit-station-btn">
+  Edit Station Details
+</button>

@@ -159,6 +159,7 @@ mat-icon {
     display: flex;
     flex-direction: column;
     width: 100%;
+    margin-bottom: 50px;
   }
 
 .station-tabs {
@@ -186,4 +187,87 @@ mat-icon {
 .station-tabs .tab.active {
   background: #5a48fa;
   color: #fff;
+}
+
+.edit-station-btn {
+  position: fixed;
+  left: 315px;
+  right: 16px;
+  bottom: 16px;
+  z-index: 100;
+  background: #151c2c;
+  color: #dbe2f3;
+  font-size: 16px;
+  font-weight: 500;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 0;
+  text-align: center;
+  box-shadow: 0 2px 8px 0 rgba(16, 30, 54, 0.06);
+  cursor: pointer;
+  transition: background 0.2s, left 0.2s;
+}
+
+.edit-station-btn:hover {
+  background: #23293e;
+}
+
+.station-info-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 24px 32px 18px 32px;
+  margin-bottom: 32px;
+  box-shadow: 0 2px 8px 0 rgba(16, 30, 54, 0.06);
+}
+
+.station-info-header {
+  font-size: 18px;
+  font-weight: 700;
+  color: #23272f;
+  margin-bottom: 18px;
+}
+
+.station-info-list {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+}
+
+.station-info-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  color: #7c8db5;
+  font-weight: 500;
+}
+
+.station-info-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.station-info-update {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 15px;
+  color: #7c8db5;
+}
+
+.update-now-btn {
+  background: #5b4fff !important;
+  color: #fff !important;
+  font-weight: 600;
+  border-radius: 8px;
+  padding: 8px 28px;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px 0 rgba(91, 79, 255, 0.08);
 }

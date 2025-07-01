@@ -1,0 +1,41 @@
+<div class="charging-points-card">
+    <div class="charging-points-header">
+        Charging Points & Connectors
+      </div>
+</div>
+<div *ngFor="let point of chargingPoints" class="charging-points-card">
+  <div class="charging-point-block">
+    <div class="charging-point-header">
+      <mat-icon class="point-icon">local_gas_station</mat-icon>
+      <span class="point-title">{{ point.name }}</span>
+      <span class="point-status" [ngClass]="point.statusColor">{{ point.status }}</span>
+      <span class="point-id">{{ point.id }}</span>
+      <button mat-icon-button class="point-menu"><mat-icon>more_vert</mat-icon></button>
+    </div>
+    <div class="point-info-row">
+      <span class="info-item"><mat-icon color="primary">check</mat-icon> Uptime : {{ point.uptime }}</span>
+      <span class="info-item"><mat-icon color="warn">close</mat-icon> failure rate : {{ point.failureRate }}</span>
+      <span class="info-item"><mat-icon>barcode</mat-icon> Serial : {{ point.serial }}</span>
+      <span class="info-item"><mat-icon>bolt</mat-icon> Type : {{ point.type }}</span>
+      <span class="info-item"><mat-icon>settings</mat-icon> firmware : {{ point.firmware }}</span>
+      <span class="info-item"><mat-icon>memory</mat-icon> model : {{ point.model }}</span>
+      <span class="info-item"><mat-icon>apartment</mat-icon> Vendor : {{ point.vendor }}</span>
+    </div>
+    <div class="connectors-title">Connectors</div>
+    <div class="connectors-row">
+      <div *ngFor="let connector of point.connectors" class="connector-card">
+        <div class="connector-header">
+          <span class="connector-title">{{ connector.name }}</span>
+          <button mat-icon-button class="connector-menu"><mat-icon>more_vert</mat-icon></button>
+        </div>
+        <div class="connector-info">
+          <span class="connector-id">ID: {{ connector.id }}</span>
+          <mat-icon class="connector-power-icon">bolt</mat-icon>
+          <span class="connector-power">{{ connector.power }}</span>
+        </div>
+        <div class="connector-status" [ngClass]="connector.statusColor">{{ connector.status }}</div>
+        <img [src]="connector.image" class="connector-img" alt="connector" />
+      </div>
+    </div>
+  </div>
+</div>

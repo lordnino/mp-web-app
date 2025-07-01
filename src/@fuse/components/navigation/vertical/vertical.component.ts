@@ -55,6 +55,7 @@ import {
     Subscription,
     takeUntil,
 } from 'rxjs';
+import { LayoutService } from 'app/modules/shared/services/layout.service';
 
 @Component({
     selector: 'fuse-vertical-navigation',
@@ -93,7 +94,7 @@ export class FuseVerticalNavigationComponent
     private _scrollStrategyOptions = inject(ScrollStrategyOptions);
     private _fuseNavigationService = inject(FuseNavigationService);
     private _fuseUtilsService = inject(FuseUtilsService);
-
+    private _layoutService = inject(LayoutService);
     @Input() appearance: FuseVerticalNavigationAppearance = 'default';
     @Input() autoCollapse: boolean = true;
     @Input() inner: boolean = false;
@@ -297,6 +298,7 @@ export class FuseVerticalNavigationComponent
             }
 
             // Execute the observable
+            console.log(currentMode);
             this.modeChanged.next(currentMode);
 
             // Enable the animations after a delay
@@ -314,6 +316,8 @@ export class FuseVerticalNavigationComponent
         }
 
         // Opened
+        console.log(this.opened);
+        this._layoutService.setDrawerOpen(this.opened);
         if ('opened' in changes) {
             // Coerce the value to a boolean
             this.opened = coerceBooleanProperty(changes.opened.currentValue);
@@ -495,12 +499,13 @@ export class FuseVerticalNavigationComponent
      */
     open(): void {
         // Return if the navigation is already open
+        console.log(this.opened);
         if (this.opened) {
             return;
         }
-
         // Set the opened
         this._toggleOpened(true);
+        this._layoutService.setDrawerOpen(true);
     }
 
     /**
@@ -508,6 +513,7 @@ export class FuseVerticalNavigationComponent
      */
     close(): void {
         // Return if the navigation is already closed
+        console.log(this.opened);
         if (!this.opened) {
             return;
         }
@@ -517,6 +523,7 @@ export class FuseVerticalNavigationComponent
 
         // Set the opened
         this._toggleOpened(false);
+        this._layoutService.setDrawerOpen(false);
     }
 
     /**

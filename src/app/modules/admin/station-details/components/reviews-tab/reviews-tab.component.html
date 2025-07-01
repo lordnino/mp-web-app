@@ -1,0 +1,29 @@
+<div class="reviews-container">
+  <div class="reviews-header">
+    <span class="reviews-title">Reviews</span>
+    <span class="reviews-count">(350 Reviews)</span>
+  </div>
+  <div class="reviews-list">
+    <div class="review-item" *ngFor="let review of [
+      { name: 'Eyad hisham', avatar: 'avatars/brian-hughes.jpg', time: '1 month ago', text: 'Amazing car... mattis id eu neque egestas feugiat. Eget aliquet nulla dignissim eget tortor auctor elementum magna.', rating: 5 },
+      { name: 'Eyad hisham', avatar: 'avatars/female-01.jpg', time: '1 month ago', text: 'Amazing car... mattis id eu neque egestas feugiat. Eget aliquet nulla dignissim eget tortor auctor elementum magna.', rating: 5 },
+      { name: 'Eyad hisham', avatar: 'avatars/female-02.jpg', time: '1 month ago', text: 'Amazing car... mattis id eu neque egestas feugiat. Eget aliquet nulla dignissim eget tortor auctor elementum magna.', rating: 5 },
+      { name: 'Mona Ali', avatar: 'avatars/female-03.jpg', time: '2 days ago', text: 'I really love this car 😍... Lacinia ullamcorper mattis id eu neque egestas feugiat. Eget aliquet nulla dignissim eget tortor elementum magna ornare suscipit accumsan arcu.', rating: 5 }
+    ]">
+      <div class="review-main">
+        <div class="review-avatar" *ngIf="review.avatar">
+          <img src="megaplug/station/reviews/user.png" alt="avatar" />
+        </div>
+        <div class="review-content">
+          <div class="review-user">{{ review.name }}</div>
+          <div class="review-time">{{ review.time }}</div>
+          <div class="review-text">{{ review.text }}</div>
+        </div>
+      </div>
+      <div class="review-rating">
+        <mat-icon class="star">star</mat-icon>
+        <span>{{ review.rating }}.0</span>
+      </div>
+    </div>
+  </div>
+</div>
