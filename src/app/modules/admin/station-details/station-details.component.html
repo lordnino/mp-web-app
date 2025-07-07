@@ -1,89 +1,229 @@
-<div class="page-container p-6 sm:p-10">
-    <div class="station-details-container">
-      <div class="station-images">
-        <img class="side-img" [src]="station.images[1]" alt="Charging car" />
-        <img class="main-img" [src]="station.images[0]" alt="Station" />
-        <img class="side-img" [src]="station.images[2]" alt="Phone app" />
-      </div>
-      <div class="station-header">
-        <div>
-          <h2>{{ station.name }} <span class="status available">{{ station.status }}</span></h2>
-          <div class="address">{{ station.address }}</div>
-          <div class="open-hours">
-            <span class="open" *ngIf="station.isOpen">Open</span>
-            <span class="dot">•</span>
-            <span>{{ station.openHours }}</span>
-          </div>
+<ng-container *ngIf="loading">
+    <div class="page-container p-6 sm:p-10">
+        <div class="station-details-container station-skeleton">
+            <!-- Images Row -->
+            <div class="skeleton-images">
+                <div class="skeleton-img side"></div>
+                <div class="skeleton-img main"></div>
+                <div class="skeleton-img side"></div>
+            </div>
+            <!-- Header Section -->
+            <div class="skeleton-header-row">
+                <div class="skeleton-header-left">
+                    <div class="skeleton-title"></div>
+                    <div class="skeleton-status"></div>
+                    <div class="skeleton-address"></div>
+                    <div class="skeleton-open-hours"></div>
+                </div>
+                <div class="skeleton-header-right">
+                    <div class="skeleton-toggle"></div>
+                    <div class="skeleton-rating"></div>
+                </div>
+            </div>
+            <!-- Info Row -->
+            <div class="skeleton-info-row">
+                <div
+                    class="skeleton-info-item"
+                    *ngFor="let i of [1, 2, 3, 4]"
+                ></div>
+            </div>
+            <!-- Info Footer -->
+            <div class="skeleton-info-footer"></div>
+            <!-- Tabs Row -->
+            <div class="skeleton-tabs-row">
+                <div
+                    class="skeleton-tab"
+                    *ngFor="let t of [1, 2, 3, 4, 5, 6]"
+                ></div>
+            </div>
+            <!-- Section Placeholder -->
+            <div class="skeleton-section"></div>
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
         </div>
-        <div class="station-actions">
-          <mat-slide-toggle color="primary" [(ngModel)]="station.isActive"></mat-slide-toggle>
-          <div class="rating">
-            <mat-icon color="warn">star</mat-icon>
-            <span>{{ station.rating }}</span>
-          </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="!loading && station">
+    <div class="page-container p-6 sm:p-10">
+        <div class="station-details-container">
+            <div class="station-images">
+                <img
+                    class="side-img"
+                    [src]="station.images[1]"
+                    alt="Charging car"
+                />
+                <img class="main-img" [src]="station.images[0]" alt="Station" />
+                <img
+                    class="side-img"
+                    [src]="station.images[2]"
+                    alt="Phone app"
+                />
+            </div>
+            <div class="station-header">
+                <div>
+                    <h2>
+                        {{ station.name_en }} ({{
+                            station.type.slice(0, 2).toUpperCase()
+                        }})
+                        <span class="status available">{{
+                            station.status
+                        }}</span>
+                    </h2>
+                    <div class="address">{{ station.address_en }}</div>
+                    <div class="open-hours">
+                        <span class="open" *ngIf="station.is_open">Open</span>
+                        <span class="close" *ngIf="!station.is_open"
+                            >Close</span
+                        >
+                        <span class="dot">•</span>
+                        <span>{{ station.openHours }}</span>
+                    </div>
+                </div>
+                <div class="station-actions">
+                    <mat-slide-toggle
+                        color="primary"
+                        [(ngModel)]="station.is_open"
+                    ></mat-slide-toggle>
+                    <div class="rating">
+                        <mat-icon color="warn">star</mat-icon>
+                        <span>{{ station.rating }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="station-info">
+                <h3>Station Information</h3>
+                <div class="info-list">
+                    <div class="info-item">
+                        <img
+                            src="megaplug/station/watt.svg"
+                            alt="watt"
+                            class="h-[19px] w-[19px]"
+                        />
+                        <span>{{ station.connectors.length }} connectors</span>
+                    </div>
+                    <div class="info-item">
+                        <img
+                            src="megaplug/station/electric.svg"
+                            alt="electric"
+                            class="h-[19px] w-[19px]"
+                        />
+                        <span>{{ station.power }}</span>
+                    </div>
+                    <div class="info-item">
+                        <img
+                            src="megaplug/station/fast-charge.svg"
+                            alt="fast-charge"
+                            class="h-[19px] w-[19px]"
+                        />
+                        <span>{{ station.type }}</span>
+                    </div>
+                    <div class="info-item">
+                        <img
+                            src="megaplug/station/details/charging-points.svg"
+                            alt="charges"
+                            class="h-[19px] w-[19px]"
+                        />
+                        <span>5 AC Charging Points</span>
+                    </div>
+                    <div class="info-item">
+                        <img
+                            src="megaplug/station/details/charging-points-blue.svg"
+                            alt="charges"
+                            class="h-[19px] w-[19px]"
+                        />
+                        <span>3 Charging Points</span>
+                    </div>
+                </div>
+                <div class="station-info-footer">
+                    <div class="station-info-update">
+                        <mat-icon style="color: #4ac97d">autorenew</mat-icon>
+                        <span>
+                            Last update time :
+                            <ng-container *ngIf="lastUpdateTime; else noUpdate">
+                                {{ lastUpdateTime | lastUpdateFormat }}
+                            </ng-container>
+                            <ng-template #noUpdate>--</ng-template>
+                        </span>
+                    </div>
+                    <button
+                        (click)="getStationDetails(station.id)"
+                        mat-raised-button
+                        color="primary"
+                        class="update-now-btn"
+                        (click)="getStationDetails(station.id)"
+                    >
+                        <mat-icon style="color: #fff">autorenew</mat-icon>
+                        Update Now
+                    </button>
+                </div>
+            </div>
+            <div class="station-tabs">
+                <div
+                    class="tab"
+                    [ngClass]="{ active: selectedTab === 'Details' }"
+                    (click)="selectedTab = 'Details'"
+                >
+                    Details
+                </div>
+                <div
+                    class="tab"
+                    [ngClass]="{ active: selectedTab === 'Amenities' }"
+                    (click)="selectedTab = 'Amenities'"
+                >
+                    Amenities
+                </div>
+                <div
+                    class="tab"
+                    [ngClass]="{ active: selectedTab === 'Reviews' }"
+                    (click)="selectedTab = 'Reviews'"
+                >
+                    Reviews
+                </div>
+                <div
+                    class="tab"
+                    [ngClass]="{ active: selectedTab === 'Charging History' }"
+                    (click)="selectedTab = 'Charging History'"
+                >
+                    Charging History
+                </div>
+                <div
+                    class="tab"
+                    [ngClass]="{ active: selectedTab === 'Station statistics' }"
+                    (click)="selectedTab = 'Station statistics'"
+                >
+                    Station statistics
+                </div>
+                <div
+                    class="tab"
+                    [ngClass]="{ active: selectedTab === 'Log History' }"
+                    (click)="selectedTab = 'Log History'"
+                >
+                    Log History
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="station-info">
-        <h3>Station Information</h3>
-        <div class="info-list">
-          <div class="info-item">
-             <img src="megaplug/station/watt.svg" alt="watt" class="w-[19px] h-[19px]" />
-            <span>{{ station.connectors }} connectors</span>
-          </div>
-          <div class="info-item">
-            <img src="megaplug/station/electric.svg" alt="electric" class="w-[19px] h-[19px]" />
-            <span>{{ station.power }}</span>
-          </div>
-          <div class="info-item">
-            <img src="megaplug/station/fast-charge.svg" alt="fast-charge" class="w-[19px] h-[19px]" />
-            <span>{{ station.type }}</span>
-          </div>
-          <div class="info-item">
-            <img src="megaplug/station/charges.svg" alt="charges" class="w-[19px] h-[19px]" />
-            <span>{{ station.charges }} Charges</span>
-          </div>
+
+        <div *ngIf="selectedTab === 'Log History'">
+            <log-history-tab [stationId]="station.id"></log-history-tab>
         </div>
-        <div class="station-info-footer">
-          <div class="station-info-update">
-            <mat-icon style="color: #4ac97d;">autorenew</mat-icon>
-            <span>Last update time : 10 Am , 3 jul 2025</span>
-          </div>
-          <button mat-raised-button color="primary" class="update-now-btn">
-            <mat-icon style="color: #fff;">autorenew</mat-icon>
-            Update Now
-          </button>
+        <div *ngIf="selectedTab === 'Station statistics'">
+            <station-stats-tab [stationId]="station.id"></station-stats-tab>
         </div>
-      </div>
-      <div class="station-tabs">
-        <div class="tab" [ngClass]="{active: selectedTab === 'Details'}" (click)="selectedTab = 'Details'">Details</div>
-        <div class="tab" [ngClass]="{active: selectedTab === 'Amenities'}" (click)="selectedTab = 'Amenities'">Amenities</div>
-        <div class="tab" [ngClass]="{active: selectedTab === 'Reviews'}" (click)="selectedTab = 'Reviews'">Reviews</div>
-        <div class="tab" [ngClass]="{active: selectedTab === 'Charging History'}" (click)="selectedTab = 'Charging History'">Charging History</div>
-        <div class="tab" [ngClass]="{active: selectedTab === 'Station statistics'}" (click)="selectedTab = 'Station statistics'">Station statistics</div>
-        <div class="tab" [ngClass]="{active: selectedTab === 'Log History'}" (click)="selectedTab = 'Log History'">Log History</div>
-      </div>
+        <div *ngIf="selectedTab === 'Charging History'">
+            <charging-history-tab
+                [stationId]="station.id"
+            ></charging-history-tab>
+        </div>
+        <div *ngIf="selectedTab === 'Reviews'">
+            <reviews-tab [stationId]="station.id"></reviews-tab>
+        </div>
+        <div *ngIf="selectedTab === 'Amenities'">
+            <amenities-tab [stationId]="station.id"></amenities-tab>
+        </div>
+        <div *ngIf="selectedTab === 'Details'">
+            <details-tab [stationId]="station.id"></details-tab>
+        </div>
     </div>
 
-      <div *ngIf="selectedTab === 'Log History'">
-        <log-history-tab [stationId]="station.id"></log-history-tab>
-      </div>
-      <div *ngIf="selectedTab === 'Station statistics'">
-        <station-stats-tab [stationId]="station.id"></station-stats-tab>
-      </div>
-      <div *ngIf="selectedTab === 'Charging History'">
-        <charging-history-tab [stationId]="station.id"></charging-history-tab>
-      </div>
-      <div *ngIf="selectedTab === 'Reviews'">
-        <reviews-tab [stationId]="station.id"></reviews-tab>
-      </div>
-      <div *ngIf="selectedTab === 'Amenities'">
-        <amenities-tab [stationId]="station.id"></amenities-tab>
-      </div>
-      <div *ngIf="selectedTab === 'Details'">
-        <details-tab [stationId]="station.id"></details-tab>
-      </div>
-</div>
-
-<button #editBtn class="edit-station-btn">
-  Edit Station Details
-</button>
+    <button #editBtn class="edit-station-btn">Edit Station Details</button>
+</ng-container>

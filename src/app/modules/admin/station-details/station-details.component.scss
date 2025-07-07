@@ -85,6 +85,11 @@
   font-weight: 500;
 }
 
+.close {
+  color: #f44336;
+  font-weight: 500;
+}
+
 .dot {
   font-size: 1.2em;
   color: #bbb;
@@ -145,7 +150,7 @@
 .info-item {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 3px;
   font-size: 1rem;
   color: #444;
 }
@@ -271,3 +276,176 @@ mat-icon {
   gap: 8px;
   box-shadow: 0 2px 8px 0 rgba(91, 79, 255, 0.08);
 }
+
+.station-skeleton {
+  width: 100%;
+  min-height: 420px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 8px 0 rgba(91, 79, 255, 0.08);
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+  margin-bottom: 32px;
+
+  .skeleton-images {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    .skeleton-img {
+      background: #e0e0e0;
+      border-radius: 8px;
+      &.side {
+        width: 80px;
+        height: 80px;
+      }
+      &.main {
+        flex: 1 1 0;
+        min-width: 320px;
+        height: 120px;
+      }
+    }
+  }
+
+  .skeleton-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    gap: 32px;
+    .skeleton-header-left {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      .skeleton-title {
+        width: 260px;
+        height: 28px;
+        background: #e0e0e0;
+        border-radius: 6px;
+      }
+      .skeleton-status {
+        width: 80px;
+        height: 22px;
+        background: #e0e0e0;
+        border-radius: 12px;
+      }
+      .skeleton-address {
+        width: 200px;
+        height: 18px;
+        background: #e0e0e0;
+        border-radius: 4px;
+      }
+      .skeleton-open-hours {
+        width: 140px;
+        height: 16px;
+        background: #e0e0e0;
+        border-radius: 4px;
+      }
+    }
+    .skeleton-header-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 12px;
+      .skeleton-toggle {
+        width: 48px;
+        height: 28px;
+        background: #e0e0e0;
+        border-radius: 14px;
+      }
+      .skeleton-rating {
+        width: 40px;
+        height: 20px;
+        background: #e0e0e0;
+        border-radius: 10px;
+      }
+    }
+  }
+
+  .skeleton-info-row {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 12px;
+    .skeleton-info-item {
+      width: 140px;
+      height: 22px;
+      background: #e0e0e0;
+      border-radius: 6px;
+    }
+  }
+
+  .skeleton-info-footer {
+    width: 200px;
+    height: 18px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 18px;
+  }
+
+  .skeleton-tabs-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    .skeleton-tab {
+      width: 110px;
+      height: 32px;
+      background: #e0e0e0;
+      border-radius: 16px;
+    }
+  }
+
+  .skeleton-section {
+    width: 100%;
+    min-height: 120px;
+    background: #e0e0e0;
+    border-radius: 12px;
+    margin-bottom: 24px;
+  }
+
+  .mat-progress-bar {
+    margin-top: 8px;
+    width: 320px;
+    align-self: center;
+  }
+}
+
+// Optional: Add shimmer animation
+.station-skeleton .skeleton-img,
+.station-skeleton .skeleton-title,
+.station-skeleton .skeleton-status,
+.station-skeleton .skeleton-address,
+.station-skeleton .skeleton-open-hours,
+.station-skeleton .skeleton-toggle,
+.station-skeleton .skeleton-rating,
+.station-skeleton .skeleton-info-item,
+.station-skeleton .skeleton-info-footer,
+.station-skeleton .skeleton-tab,
+.station-skeleton .skeleton-section {
+  position: relative;
+  overflow: hidden;
+}
+.station-skeleton .skeleton-img::after,
+.station-skeleton .skeleton-title::after,
+.station-skeleton .skeleton-status::after,
+.station-skeleton .skeleton-address::after,
+.station-skeleton .skeleton-open-hours::after,
+.station-skeleton .skeleton-toggle::after,
+.station-skeleton .skeleton-rating::after,
+.station-skeleton .skeleton-info-item::after,
+.station-skeleton .skeleton-info-footer::after,
+.station-skeleton .skeleton-tab::after,
+.station-skeleton .skeleton-section::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; height: 100%; width: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  animation: shimmer 1.2s infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
