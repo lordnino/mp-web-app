@@ -47,25 +47,17 @@
     <div class="page-container p-6 sm:p-10">
         <div class="station-details-container">
             <div class="station-images">
-                <swiper-container
-                    slides-per-view="3"
-                    centered-slides="true"
-                    space-between="10"
-                    pagination="true"
-                    loop="true"
-                    class="station-images-swiper"
-                    style="width: 100%; height: 240px;"
-                >
-                    <ng-container *ngFor="let img of station.images; let i = index">
-                        <swiper-slide>
-                            <img
-                                [src]="img"
-                                [alt]="'Station image ' + (i + 1)"
-                                class="station-image"
-                            />
-                        </swiper-slide>
-                    </ng-container>
-                </swiper-container>
+                <img
+                    class="side-img"
+                    [src]="station.images[1]"
+                    alt="Charging car"
+                />
+                <img class="main-img" [src]="station.images[0]" alt="Station" />
+                <img
+                    class="side-img"
+                    [src]="station.images[2]"
+                    alt="Phone app"
+                />
             </div>
             <div class="station-header">
                 <div>

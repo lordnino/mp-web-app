@@ -91,33 +91,21 @@ export class StationDetailsComponent implements AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this._layoutService.getDrawerOpen().subscribe((isOpen) => {
-            console.log(isOpen);
-            if (isOpen) {
-                this.editBtn.nativeElement.style.left = '315px';
-            } else {
-                this.editBtn.nativeElement.style.left = '16px';
+        setTimeout(() => {
+            this._layoutService.getDrawerOpen().subscribe((isOpen) => {
+                console.log(isOpen);
+                if (!this.editBtn) return;
+                if (isOpen) {
+                    this.editBtn.nativeElement.style.left = '315px';
+                } else {
+                    this.editBtn.nativeElement.style.left = '16px';
+                }
+            });
+            if (this.swiperEl) {
+                const swiper = this.swiperEl.nativeElement.swiper;
+                swiper.update();
             }
-        });
-        const swiper = this.swiperEl.nativeElement.swiper;
-        swiper.update();
-        // setTimeout(() => {
-        //     const drawer = document.querySelector('.fuse-vertical-navigation-appearance-default') as HTMLElement;
-        //     if (!drawer) return;
-
-        //     // Function to update the CSS variable
-        //     const updateBtnLeft = () => {
-        //         const drawerWidth = drawer.offsetWidth;
-        //         document.documentElement.style.setProperty('--drawer-width', `${drawerWidth + 40}px`);
-        //     };
-
-        //     // Initial set
-        //     updateBtnLeft();
-
-        //     // Watch for drawer resize
-        //     const resizeObserver = new ResizeObserver(updateBtnLeft);
-        //     resizeObserver.observe(drawer);
-        // }, 100);
+        }, 500);
     }
 
     getStationDetails(stationId: string) {
