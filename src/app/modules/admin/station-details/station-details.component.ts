@@ -143,8 +143,8 @@ export class StationDetailsComponent implements AfterViewInit {
                         'megaplug/station/details/img2.svg', // Car charging
                         'megaplug/station/details/img3.svg', // Phone app
                     ],
-                    ...station.data.station,
-                    reviews: station.data.reviews
+                    ...station.station,
+                    reviews: station.reviews
                 };
                 console.log(this.station);
                 this.loading = false; // Set loading to false after data is loaded
