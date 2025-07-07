@@ -449,3 +449,19 @@ mat-icon {
   100% { transform: translateX(100%); }
 }
 
+.station-images-swiper {
+    width: 100%;
+    height: 240px;
+    min-height: 309px;
+}
+
+.station-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Change to 'contain' if you want the entire image to be visible */
+}
+
+.swiper-slide {
+    width: calc(100% / 3); /* Adjust this to control the peek effect */
+}
+

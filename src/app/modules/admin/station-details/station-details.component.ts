@@ -7,6 +7,7 @@ import {
     ViewEncapsulation,
     Pipe,
     PipeTransform,
+    CUSTOM_ELEMENTS_SCHEMA
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { GoogleMapsModule } from '@angular/google-maps';
@@ -24,6 +25,7 @@ import { DetailsTabComponent } from './components/details-tab/details-tab.compon
 import { LogHistoryTabComponent } from './components/log-history-tab/log-history-tab.component';
 import { ReviewsTabComponent } from './components/reviews-tab/reviews-tab.component';
 import { StationStatsTabComponent } from './components/stations-stats/station-stats-tab.component';
+
 
 @Pipe({ name: 'lastUpdateFormat', standalone: true })
 export class LastUpdateFormatPipe implements PipeTransform {
@@ -66,9 +68,11 @@ export class LastUpdateFormatPipe implements PipeTransform {
         LastUpdateFormatPipe, // Add the custom pipe here
     ],
     styleUrls: ['./station-details.component.scss'],
+    schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class StationDetailsComponent implements AfterViewInit {
     @ViewChild('editBtn') editBtn: ElementRef;
+    @ViewChild('swiperEl', { static: false }) swiperEl: ElementRef;
 
     // Static data for the station details UI
     station;
@@ -95,6 +99,8 @@ export class StationDetailsComponent implements AfterViewInit {
                 this.editBtn.nativeElement.style.left = '16px';
             }
         });
+        const swiper = this.swiperEl.nativeElement.swiper;
+        swiper.update();
         // setTimeout(() => {
         //     const drawer = document.querySelector('.fuse-vertical-navigation-appearance-default') as HTMLElement;
         //     if (!drawer) return;
@@ -133,9 +139,9 @@ export class StationDetailsComponent implements AfterViewInit {
                     charges: '30,000',
                     isActive: true,
                     images: [
-                        'https://images.unsplash.com/photo-1506744038136-46273834b3fb', // Main station image
-                        'https://images.unsplash.com/photo-1519125323398-675f0ddb6308', // Car charging
-                        'https://images.unsplash.com/photo-1519125323398-675f0ddb6308', // Phone app
+                        'megaplug/station/details/img1.svg', // Main station image
+                        'megaplug/station/details/img2.svg', // Car charging
+                        'megaplug/station/details/img3.svg', // Phone app
                     ],
                     ...station.data.station,
                     reviews: station.data.reviews
