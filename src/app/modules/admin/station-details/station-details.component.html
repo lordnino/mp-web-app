@@ -45,6 +45,18 @@
 
 <ng-container *ngIf="!loading && station">
     <div class="page-container p-6 sm:p-10">
+        <!-- <swiper-container class="mySwiper" pagination="true" pagination-clickable="true" space-between="30"
+            slides-per-view="3">
+            <swiper-slide>Slide 1</swiper-slide>
+            <swiper-slide>Slide 2</swiper-slide>
+            <swiper-slide>Slide 3</swiper-slide>
+            <swiper-slide>Slide 4</swiper-slide>
+            <swiper-slide>Slide 5</swiper-slide>
+            <swiper-slide>Slide 6</swiper-slide>
+            <swiper-slide>Slide 7</swiper-slide>
+            <swiper-slide>Slide 8</swiper-slide>
+            <swiper-slide>Slide 9</swiper-slide>
+        </swiper-container> -->
         <div class="station-details-container">
             <div class="station-images">
                 <img
@@ -76,7 +88,7 @@
                             >Close</span
                         >
                         <span class="dot">•</span>
-                        <span>{{ station.openHours }}</span>
+                        <span>{{ station.today_working_hours?.start_time }} - {{ station.today_working_hours?.end_time }}</span>
                     </div>
                 </div>
                 <div class="station-actions">
@@ -99,7 +111,7 @@
                             alt="watt"
                             class="h-[19px] w-[19px]"
                         />
-                        <span>{{ station.connectors.length }} connectors</span>
+                        <span>{{getConnectorsCount()}} connectors</span>
                     </div>
                     <div class="info-item">
                         <img
@@ -107,7 +119,7 @@
                             alt="electric"
                             class="h-[19px] w-[19px]"
                         />
-                        <span>{{ station.power }}</span>
+                        <span>{{ station.connector_powers.join('- ') }}</span>
                     </div>
                     <div class="info-item">
                         <img
@@ -131,7 +143,7 @@
                             alt="charges"
                             class="h-[19px] w-[19px]"
                         />
-                        <span>3 Charging Points</span>
+                        <span>{{station.charging_points.length}} Charging Points</span>
                     </div>
                 </div>
                 <div class="station-info-footer">
@@ -215,7 +227,7 @@
             ></charging-history-tab>
         </div>
         <div *ngIf="selectedTab === 'Reviews'">
-            <reviews-tab [stationId]="station.id"></reviews-tab>
+            <reviews-tab [stationId]="station.id" [reviews]="station.reviews"></reviews-tab>
         </div>
         <div *ngIf="selectedTab === 'Amenities'">
             <amenities-tab [stationId]="station.id"></amenities-tab>

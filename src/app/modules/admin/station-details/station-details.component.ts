@@ -25,6 +25,7 @@ import { DetailsTabComponent } from './components/details-tab/details-tab.compon
 import { LogHistoryTabComponent } from './components/log-history-tab/log-history-tab.component';
 import { ReviewsTabComponent } from './components/reviews-tab/reviews-tab.component';
 import { StationStatsTabComponent } from './components/stations-stats/station-stats-tab.component';
+import { Station } from 'app/models/station.model';
 
 
 @Pipe({ name: 'lastUpdateFormat', standalone: true })
@@ -75,7 +76,7 @@ export class StationDetailsComponent implements AfterViewInit {
     @ViewChild('swiperEl', { static: false }) swiperEl: ElementRef;
 
     // Static data for the station details UI
-    station;
+    station: Station;
     selectedTab = 'Details';
     loading = true; // Add loading state
     lastUpdateTime: Date | null = null; // Track last API call time
@@ -126,17 +127,28 @@ export class StationDetailsComponent implements AfterViewInit {
                     type: 'AC Station',
                     charges: '30,000',
                     isActive: true,
-                    images: [
-                        'megaplug/station/details/img1.svg', // Main station image
-                        'megaplug/station/details/img2.svg', // Car charging
-                        'megaplug/station/details/img3.svg', // Phone app
-                    ],
                     ...station.station,
-                    reviews: station.reviews
+                    reviews: station.reviews,
+                    images: [
+                        // 'megaplug/station/details/img1.svg', // Main station image
+                        // 'megaplug/station/details/img2.svg', // Car charging
+                        // 'megaplug/station/details/img3.svg', // Phone app
+                        'https://images.unsplash.com/photo-1506744038136-46273834b3fb', // Main station image
+                        'https://images.unsplash.com/photo-1519125323398-675f0ddb6308', // Car charging
+                        'https://images.unsplash.com/photo-1519125323398-675f0ddb6308', // Phone app
+                    ],
                 };
                 console.log(this.station);
                 this.loading = false; // Set loading to false after data is loaded
                 this.lastUpdateTime = new Date(); // Set last update time
             });
+    }
+
+    getConnectorsCount() {
+        let connectors = 0;
+        this.station.charging_points.forEach((charging_point: any) => {
+            connectors += charging_point.connectors.length;
+        });
+        return connectors;
     }
 }

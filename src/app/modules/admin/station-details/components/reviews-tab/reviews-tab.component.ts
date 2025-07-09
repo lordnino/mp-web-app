@@ -7,6 +7,8 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
+import { Review } from 'app/models/station.model';
+import { formatDistanceToNow } from 'date-fns';
 
 @Component({
     selector     : 'reviews-tab',
@@ -27,5 +29,10 @@ import { CommonModule } from '@angular/common';
 })
 export class ReviewsTabComponent {
     @Input() stationId: string;
+    @Input() reviews: Review[];
     constructor() {}
+
+    getFormattedDate(date: string): string {
+        return formatDistanceToNow(new Date(date), { addSuffix: true });
+      }
 }
