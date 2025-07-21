@@ -137,6 +137,7 @@ export class StationDetailsComponent implements AfterViewInit {
                         'https://images.unsplash.com/photo-1519125323398-675f0ddb6308', // Car charging
                         'https://images.unsplash.com/photo-1519125323398-675f0ddb6308', // Phone app
                     ],
+                    charging_history: station.charging_history,
                 };
                 console.log(this.station);
                 this.loading = false; // Set loading to false after data is loaded

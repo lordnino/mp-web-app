@@ -7,7 +7,7 @@
     <div class="review-item" *ngFor="let review of reviews">
       <div class="review-main">
         <div class="review-avatar">
-          <img src="megaplug/station/reviews/user.png" alt="avatar" />
+          <img [src]="review.user.avatar" alt="avatar" />
         </div>
         <div class="review-content">
           <div class="review-user">{{ review.user.name }}</div>

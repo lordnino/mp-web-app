@@ -1,16 +1,15 @@
 .charging-points-card {
     background: #fff;
     border-radius: 12px;
-    padding: 18px 18px 8px 18px;
+    padding: 15px 8px;
     margin-bottom: 32px;
     box-shadow: 0 2px 8px 0 rgba(16, 30, 54, 0.06);
 }
 
 .charging-points-header {
-    font-size: 18px;
+    font-size: 15px;
     font-weight: 700;
     color: #23272f;
-    margin-bottom: 18px;
 }
 
 .charging-point-block {
@@ -32,7 +31,7 @@
 }
 
 .point-title {
-    font-size: 17px;
+    font-size: 14px;
     font-weight: 700;
     color: #23272f;
 }
@@ -45,20 +44,20 @@
     margin-left: 8px;
     margin-right: 8px;
     text-transform: capitalize;
-    background: #eafaf2;
-    color: #16c784;
-}
-.point-status.orange {
-    background: #fff4e5;
-    color: #ff9800;
-}
-.point-status.red {
-    background: #ffeaea;
-    color: #ff5b5b;
+    color: #fff;
+    background: #3EBF80;
 }
 .point-status.green {
-    background: #eafaf2;
-    color: #16c784;
+    background: #3EBF80;
+    color: #fff;
+}
+.point-status.orange {
+    background: #E86F00;
+    color: #fff;
+}
+.point-status.red {
+    background: #F41F52;
+    color: #fff;
 }
 
 .point-id {
@@ -79,6 +78,7 @@
     font-size: 14px;
     color: #7c8db5;
     margin-bottom: 10px;
+    margin-left: 34px;
 }
 
 .info-item mat-icon {
@@ -146,20 +146,20 @@
     padding: 2px 12px;
     width: fit-content;
     text-transform: capitalize;
-    background: #eafaf2;
-    color: #16c784;
-}
-.connector-status.orange {
-    background: #fff4e5;
-    color: #ff9800;
-}
-.connector-status.red {
-    background: #ffeaea;
-    color: #ff5b5b;
+    color: #fff;
+    background: #3EBF80;
 }
 .connector-status.green {
-    background: #eafaf2;
-    color: #16c784;
+    background: #3EBF80;
+    color: #fff;
+}
+.connector-status.orange {
+    background: #E86F00;
+    color: #fff;
+}
+.connector-status.red {
+    background: #F41F52;
+    color: #fff;
 }
 
 .connector-img {

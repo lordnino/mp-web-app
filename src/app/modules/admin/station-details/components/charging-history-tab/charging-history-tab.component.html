@@ -1,16 +1,16 @@
 <div class="charging-history-list">
-  <div class="charging-history-card" *ngFor="let item of [1,2,3,4]">
+  <div class="charging-history-card" *ngFor="let history of chargingHistory">
     <div class="card-header">
-      <div class="card-title">Eyad hisham</div>
-      <div class="card-price">15.12 EGP</div>
+      <div class="card-title">{{history.user_name}}</div>
+      <div class="card-price">{{history.cost}} EGP</div>
     </div>
-    <div class="card-subtitle">Tesla Car</div>
+    <!-- <div class="card-subtitle">Tesla Car</div> -->
     <div class="card-info-row">
         <img src="megaplug/station/charging-history/plug.svg" alt="evbox" class="w-[18px] h-[18px]" />
-        <span class="card-info-text">EVBox Troniq 50 CCS2</span>
+        <span class="card-info-text">#{{history.transaction_id}} {{history.connector_type}}</span>
         <img src="megaplug/station/charging-history/charging.svg" alt="evbox" class="w-[18px] h-[18px]" />
-      <span class="card-info-text">Charging 100% - 2500 KW</span>
+      <span class="card-info-text">Charging {{history.soc ? history.soc + '%' : '100%'}} - {{history.energy_consumed}} KW</span>
     </div>
-    <div class="card-date">2 Feb 2023 , 7:40 pm</div>
+    <div class="card-date">{{history.end_time | date: 'd MMM y, h:mm a'}}</div>
   </div>
 </div>

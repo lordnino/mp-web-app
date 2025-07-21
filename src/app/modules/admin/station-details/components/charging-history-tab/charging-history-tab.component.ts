@@ -27,5 +27,7 @@ import { CommonModule } from '@angular/common';
 })
 export class ChargingHistoryTabComponent {
     @Input() stationId: string;
+    @Input() chargingHistory: any[] = [];
+    
     constructor() {}
 }

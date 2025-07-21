@@ -10,6 +10,6 @@ export class StationsService {
     private _httpClient = inject(HttpClient);
 
     getStationsDetails(stationId: string) {
-        return this._httpClient.get<Station>(`${environment.apiUrl}stations/${stationId}`);
+        return this._httpClient.get<Station>(`${environment.apiUrl}stations/${stationId}/details`);
     }
 }

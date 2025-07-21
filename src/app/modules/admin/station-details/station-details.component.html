@@ -74,14 +74,16 @@
             <div class="station-header">
                 <div>
                     <h2>
-                        {{ station.name_en }} ({{
-                            station.type.slice(0, 2).toUpperCase()
-                        }})
+                        <span class="text-[1rem] text-[#231F20]">
+                            {{ station.name_en }} ({{
+                                station.type.slice(0, 2).toUpperCase()
+                            }})
+                        </span>
                         <span class="status available">{{
                             station.status
                         }}</span>
                     </h2>
-                    <div class="address">{{ station.address_en }}</div>
+                    <div class="address" class="!text-[0.875rem] !text-[#64758B]">{{ station.address_en }}</div>
                     <div class="open-hours">
                         <span class="open" *ngIf="station.is_open">Open</span>
                         <span class="close" *ngIf="!station.is_open"
@@ -111,7 +113,7 @@
                             alt="watt"
                             class="h-[19px] w-[19px]"
                         />
-                        <span>{{getConnectorsCount()}} connectors</span>
+                        <span class="text-[#64758B]">{{getConnectorsCount()}} connectors</span>
                     </div>
                     <div class="info-item">
                         <img
@@ -119,7 +121,7 @@
                             alt="electric"
                             class="h-[19px] w-[19px]"
                         />
-                        <span>{{ station.connector_powers.join('- ') }}</span>
+                        <span class="text-[#64758B]">{{ station.connector_powers.join('- ') }}</span>
                     </div>
                     <div class="info-item">
                         <img
@@ -127,7 +129,7 @@
                             alt="fast-charge"
                             class="h-[19px] w-[19px]"
                         />
-                        <span>{{ station.type }}</span>
+                        <span class="text-[#64758B]">{{ station.type }}</span>
                     </div>
                     <div class="info-item">
                         <img
@@ -135,7 +137,7 @@
                             alt="charges"
                             class="h-[19px] w-[19px]"
                         />
-                        <span>5 AC Charging Points</span>
+                        <span class="text-[#64758B]">5 AC Charging Points</span>
                     </div>
                     <div class="info-item">
                         <img
@@ -143,7 +145,7 @@
                             alt="charges"
                             class="h-[19px] w-[19px]"
                         />
-                        <span>{{station.charging_points.length}} Charging Points</span>
+                        <span class="text-[#64758B]">{{station.charging_points.length}} Charging Points</span>
                     </div>
                 </div>
                 <div class="station-info-footer">
@@ -224,13 +226,14 @@
         <div *ngIf="selectedTab === 'Charging History'">
             <charging-history-tab
                 [stationId]="station.id"
+                [chargingHistory]="station.charging_history"
             ></charging-history-tab>
         </div>
         <div *ngIf="selectedTab === 'Reviews'">
             <reviews-tab [stationId]="station.id" [reviews]="station.reviews"></reviews-tab>
         </div>
         <div *ngIf="selectedTab === 'Amenities'">
-            <amenities-tab [stationId]="station.id"></amenities-tab>
+            <amenities-tab [stationId]="station.id" [amenities]="station.amenities"></amenities-tab>
         </div>
         <div *ngIf="selectedTab === 'Details'">
             <details-tab [stationId]="station.id"></details-tab>

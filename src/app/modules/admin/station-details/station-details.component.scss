@@ -9,7 +9,7 @@
   gap: 20px;
   justify-content: center;
   align-items: center;
-  margin-bottom: 24px;
+  margin-bottom: 15px;
 }
 
 .station-images .side-img {
@@ -143,7 +143,7 @@
 
 .info-list {
   display: flex;
-  gap: 32px;
+  gap: 15px;
   flex-wrap: wrap;
 }
 
@@ -235,7 +235,7 @@ mat-icon {
 .station-info-list {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 15px;
   margin-bottom: 18px;
   flex-wrap: wrap;
 }
@@ -265,7 +265,7 @@ mat-icon {
 }
 
 .update-now-btn {
-  background: #5b4fff !important;
+  background: #5046E5 !important;
   color: #fff !important;
   font-weight: 600;
   border-radius: 8px;
@@ -314,7 +314,7 @@ mat-icon {
     justify-content: space-between;
     align-items: flex-start;
     margin-bottom: 20px;
-    gap: 32px;
+    gap: 15px;
     .skeleton-header-left {
       flex: 1;
       display: flex;

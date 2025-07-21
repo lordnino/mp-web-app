@@ -27,6 +27,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AmenitiesTabComponent {
     @Input() stationId: string;
+    // @Input() amenities: any[];
 
     amenities = [
         { icon: 'wifi', label: 'Free Wi-Fi' },
