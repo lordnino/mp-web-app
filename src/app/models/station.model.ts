@@ -51,12 +51,15 @@ export interface Amenity {
 
 export interface ChargingPoint {
     id: number;
-    name: string | null;
+    serial_number: string;
     vendor: string | null;
     model: string | null;
     firmware_version: string | null;
     is_active: boolean;
+    is_dc: boolean;
+    status: string;
     connectors: Connector[];
+    name?: string | null;
 }
 
 export interface Connector {

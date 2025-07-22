@@ -71,5 +71,7 @@ export class LogHistoryTabComponent {
         }
     ];
 
+    @Input() logHistory: any[] = [];
+
     constructor() {}
 }

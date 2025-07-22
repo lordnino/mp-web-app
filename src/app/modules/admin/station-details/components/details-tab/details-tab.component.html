@@ -1,15 +1,15 @@
 <div class="charging-points-card">
     <div class="charging-points-header">Charging Points & Connectors</div>
 </div>
-<div *ngFor="let point of chargingPoints" class="charging-points-card">
+<div *ngFor="let point of charging_points; let index = index" class="charging-points-card">
     <div class="charging-point-block">
         <div class="charging-point-header">
             <mat-icon class="point-icon">local_gas_station</mat-icon>
-            <span class="point-title">{{ point.name }}</span>
-            <span class="point-status" [ngClass]="point.statusColor">{{
+            <span class="point-title">Charging Point {{ index + 1 }}</span>
+            <span class="point-status" [ngClass]="point.status.replace(' ', '').toLowerCase()">{{
                 point.status
             }}</span>
-            <span class="point-id">{{ point.id }}</span>
+            <span class="point-id">#{{ point.id }}</span>
             <button mat-icon-button class="point-menu">
                 <mat-icon>more_vert</mat-icon>
             </button>
@@ -21,7 +21,7 @@
                     class="h-[19px] w-[19px]"
                     alt="uptime"
                 />
-                Uptime : {{ point.uptime }}</span
+                Uptime : {{ point.uptime ? point.uptime : 'N/A' }}</span
             >
             <span class="info-item"
                 ><img
@@ -29,7 +29,7 @@
                     class="h-[19px] w-[19px]"
                     alt="downtime"
                 />
-                failure rate : {{ point.failureRate }}</span
+                failure rate : {{ point.failureRate ? point.failureRate : 'N/A' }}</span
             >
             <span class="info-item"
                 ><img
@@ -37,7 +37,7 @@
                     class="h-[19px] w-[28px]"
                     alt="serial"
                 />
-                Serial : {{ point.serial }}</span
+                Serial : {{ point.serial_number ? point.serial_number : 'N/A' }}</span
             >
             <span class="info-item"
                 ><img
@@ -45,7 +45,7 @@
                     class="h-[19px] w-[19px]"
                     alt="fast-charge"
                 />
-                Type : {{ point.type }}</span
+                Type : {{ point.is_dc ? 'DC' : 'AC' }}</span
             >
             <span class="info-item"
                 ><img
@@ -53,7 +53,7 @@
                     class="h-[19px] w-[19px]"
                     alt="firmware"
                 />
-                firmware : {{ point.firmware }}</span
+                firmware : {{ point.firmware_version ? point.firmware_version : 'N/A' }}</span
             >
             <span class="info-item"
                 ><img
@@ -61,7 +61,7 @@
                     class="h-[19px] w-[19px]"
                     alt="model"
                 />
-                model : {{ point.model }}</span
+                model : {{ point.model ? point.model : 'N/A' }}</span
             >
             <span class="info-item"
                 ><img
@@ -69,31 +69,31 @@
                     class="h-[19px] w-[19px]"
                     alt="vendor"
                 />
-                Vendor : {{ point.vendor }}</span
+                Vendor : {{ point.vendor ? point.vendor : 'N/A' }}</span
             >
         </div>
         <div class="connectors-title">Connectors</div>
         <div class="connectors-row">
             <div
-                *ngFor="let connector of point.connectors"
+                *ngFor="let connector of point.connectors; let connectorIndex = index"
                 class="connector-card"
             >
                 <div class="connector-header">
-                    <span class="connector-title">{{ connector.name }}</span>
+                    <span class="connector-title">Connector {{ connectorIndex + 1 }} / {{ connector.connector_type.name_en }}</span>
                     <button mat-icon-button class="connector-menu">
                         <mat-icon>more_vert</mat-icon>
                     </button>
                 </div>
                 <div class="connector-info">
-                    <span class="connector-id">ID: {{ connector.id }}</span>
+                    <span class="connector-id">ID: #{{ connector.id }}</span>
                     <mat-icon class="connector-power-icon">bolt</mat-icon>
-                    <span class="connector-power">{{ connector.power }}</span>
+                    <span class="connector-power">{{ connector.charge_power.name_en }}</span>
                 </div>
-                <div class="connector-status" [ngClass]="connector.statusColor">
+                <div class="connector-status" [ngClass]="connector.status.replace(' ', '').toLowerCase()">
                     {{ connector.status }}
                 </div>
                 <img
-                    [src]="connector.image"
+                    [src]="connector.connector_type.image"
                     class="connector-img"
                     alt="connector"
                 />

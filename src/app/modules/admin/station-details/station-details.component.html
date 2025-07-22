@@ -218,10 +218,10 @@
         </div>
 
         <div *ngIf="selectedTab === 'Log History'">
-            <log-history-tab [stationId]="station.id"></log-history-tab>
+            <log-history-tab [logHistory]="station.log_history" [stationId]="station.id"></log-history-tab>
         </div>
         <div *ngIf="selectedTab === 'Station statistics'">
-            <station-stats-tab [stationId]="station.id"></station-stats-tab>
+            <station-stats-tab [stationId]="station.id" [statistics]="station.statistics"></station-stats-tab>
         </div>
         <div *ngIf="selectedTab === 'Charging History'">
             <charging-history-tab
@@ -236,7 +236,7 @@
             <amenities-tab [stationId]="station.id" [amenities]="station.amenities"></amenities-tab>
         </div>
         <div *ngIf="selectedTab === 'Details'">
-            <details-tab [stationId]="station.id"></details-tab>
+            <details-tab [stationId]="station.id" [charging_points]="station.charging_points"></details-tab>
         </div>
     </div>
 

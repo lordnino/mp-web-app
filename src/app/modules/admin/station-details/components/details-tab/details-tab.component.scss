@@ -47,15 +47,15 @@
     color: #fff;
     background: #3EBF80;
 }
-.point-status.green {
+.point-status.available {
     background: #3EBF80;
     color: #fff;
 }
-.point-status.orange {
+.point-status.inuse {
     background: #E86F00;
     color: #fff;
 }
-.point-status.red {
+.point-status.unavailable {
     background: #F41F52;
     color: #fff;
 }
@@ -149,15 +149,15 @@
     color: #fff;
     background: #3EBF80;
 }
-.connector-status.green {
+.connector-status.available {
     background: #3EBF80;
     color: #fff;
 }
-.connector-status.orange {
+.connector-status.inuser {
     background: #E86F00;
     color: #fff;
 }
-.connector-status.red {
+.connector-status.unavailable {
     background: #F41F52;
     color: #fff;
 }
