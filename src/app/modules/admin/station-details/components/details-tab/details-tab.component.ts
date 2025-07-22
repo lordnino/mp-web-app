@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Input } from '@angular/core';
+import { Component, ViewEncapsulation, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
 import { GoogleMapsModule, GoogleMap } from '@angular/google-maps';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,7 +26,7 @@ import { ChargingPoint } from 'app/models/station.model';
     ],
     styleUrls: ['./details-tab.component.scss']
 })
-export class DetailsTabComponent {
+export class DetailsTabComponent implements OnInit, OnChanges {
     @Input() stationId: string;
 
     // chargingPoints = [
@@ -128,11 +128,55 @@ export class DetailsTabComponent {
 
 
     @Input() charging_points: ChargingPoint[] = [];
+    @Input() location: string;
     constructor() {}
+    center: google.maps.LatLngLiteral = { lat: 0, lng: 0 };
+    zoom = 15;
+    markers: Array<{ position: google.maps.LatLngLiteral; icon?: any }> = [];
+
+    ngOnInit() {
+      
+    }
 
     ngAfterViewInit() {
       setTimeout(() => {
-        console.log(this.charging_points);
+        this.setMapLocation();
       }, 1000);
+    }
+
+    ngOnChanges(changes: SimpleChanges): void {
+      if (changes['location'] && this.location) {
+        this.setMapLocation();
+      }
+    }
+
+    setMapLocation() {
+      if (!this.location) return;
+      try {
+        const loc = JSON.parse(this.location);
+        console.log(loc);
+        if (loc && loc.lat && loc.lng) {
+          this.center = { lat: +loc.lat, lng: +loc.lng };
+          // Custom SVG marker: black circle with white center
+          const svgIcon = {
+            url: 'data:image/svg+xml;utf-8,' + encodeURIComponent(`
+              <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="20" cy="20" r="20" fill="#23272F"/>
+                <circle cx="20" cy="20" r="8" fill="#F6FAF7"/>
+              </svg>
+            `),
+            scaledSize: new google.maps.Size(40, 40),
+            anchor: new google.maps.Point(20, 20)
+          };
+          this.markers = [
+            {
+              position: this.center,
+              icon: svgIcon
+            },
+          ];
+        }
+      } catch (e) {
+        // Invalid location JSON
+      }
     }
 }

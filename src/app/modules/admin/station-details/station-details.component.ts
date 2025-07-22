@@ -129,14 +129,14 @@ export class StationDetailsComponent implements AfterViewInit {
                     isActive: true,
                     ...station.station,
                     reviews: station.reviews,
-                    images: [
-                        // 'megaplug/station/details/img1.svg', // Main station image
-                        // 'megaplug/station/details/img2.svg', // Car charging
-                        // 'megaplug/station/details/img3.svg', // Phone app
-                        'https://images.unsplash.com/photo-1506744038136-46273834b3fb', // Main station image
-                        'https://images.unsplash.com/photo-1519125323398-675f0ddb6308', // Car charging
-                        'https://images.unsplash.com/photo-1519125323398-675f0ddb6308', // Phone app
-                    ],
+                    // images: [
+                    //     // 'megaplug/station/details/img1.svg', // Main station image
+                    //     // 'megaplug/station/details/img2.svg', // Car charging
+                    //     // 'megaplug/station/details/img3.svg', // Phone app
+                    //     'https://images.unsplash.com/photo-1506744038136-46273834b3fb', // Main station image
+                    //     'https://images.unsplash.com/photo-1519125323398-675f0ddb6308', // Car charging
+                    //     'https://images.unsplash.com/photo-1519125323398-675f0ddb6308', // Phone app
+                    // ],
                     charging_history: station.charging_history,
                     log_history: station.log_history,
                     statistics: station.statistics,

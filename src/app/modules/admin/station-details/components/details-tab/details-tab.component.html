@@ -101,3 +101,30 @@
         </div>
     </div>
 </div>
+
+<div class="location-card">
+  <div class="location-title">Location</div>
+  <div class="location-map-wrapper">
+    <google-map
+      [height]="'220px'"
+      [width]="'100%'"
+      [center]="center"
+      [zoom]="zoom"
+      [options]="{ disableDefaultUI: true, draggable: false, scrollwheel: false, styles: [ { featureType: 'poi', stylers: [ { visibility: 'off' } ] } ] }"
+    >
+      <map-marker *ngFor="let marker of markers" [position]="marker.position" [icon]="marker.icon"></map-marker>
+      <map-circle
+        *ngIf="center.lat && center.lng"
+        [center]="center"
+        [radius]="300"
+        [options]="{
+          strokeColor: '#00C896',
+          strokeOpacity: 0.7,
+          strokeWeight: 2,
+          fillColor: '#00C896',
+          fillOpacity: 0.10
+        }"
+      ></map-circle>
+    </google-map>
+  </div>
+</div>

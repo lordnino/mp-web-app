@@ -58,7 +58,7 @@
             <swiper-slide>Slide 9</swiper-slide>
         </swiper-container> -->
         <div class="station-details-container">
-            <div class="station-images">
+            <!-- <div class="station-images">
                 <img
                     class="side-img"
                     [src]="station.images[1]"
@@ -70,6 +70,25 @@
                     [src]="station.images[2]"
                     alt="Phone app"
                 />
+            </div> -->
+            <div>
+                <swiper-container
+                    slides-per-view="1"
+                    space-between="20"
+                    loop="false"
+                    centered-slides="true"
+                    pagination="true"
+                    pagination-clickable="true"
+                    style="width: 100%; height: auto; max-height: 390px;"
+                >
+                    <swiper-slide *ngFor="let image of station.images">
+                        <img
+                            [src]="image.image_url"
+                            [alt]="image.image_url"
+                            style="width: 100%; border-radius: 12px; max-height: 390px; object-fit: cover;"
+                        />
+                    </swiper-slide>
+                </swiper-container>
             </div>
             <div class="station-header">
                 <div>
@@ -83,14 +102,22 @@
                             station.status
                         }}</span>
                     </h2>
-                    <div class="address" class="!text-[0.875rem] !text-[#64758B]">{{ station.address_en }}</div>
+                    <div
+                        class="address"
+                        class="!text-[0.875rem] !text-[#64758B]"
+                    >
+                        {{ station.address_en }}
+                    </div>
                     <div class="open-hours">
                         <span class="open" *ngIf="station.is_open">Open</span>
                         <span class="close" *ngIf="!station.is_open"
                             >Close</span
                         >
                         <span class="dot">•</span>
-                        <span>{{ station.today_working_hours?.start_time }} - {{ station.today_working_hours?.end_time }}</span>
+                        <span
+                            >{{ station.today_working_hours?.start_time }} -
+                            {{ station.today_working_hours?.end_time }}</span
+                        >
                     </div>
                 </div>
                 <div class="station-actions">
@@ -113,7 +140,9 @@
                             alt="watt"
                             class="h-[19px] w-[19px]"
                         />
-                        <span class="text-[#64758B]">{{getConnectorsCount()}} connectors</span>
+                        <span class="text-[#64758B]"
+                            >{{ getConnectorsCount() }} connectors</span
+                        >
                     </div>
                     <div class="info-item">
                         <img
@@ -121,7 +150,9 @@
                             alt="electric"
                             class="h-[19px] w-[19px]"
                         />
-                        <span class="text-[#64758B]">{{ station.connector_powers.join('- ') }}</span>
+                        <span class="text-[#64758B]">{{
+                            station.connector_powers.join('- ')
+                        }}</span>
                     </div>
                     <div class="info-item">
                         <img
@@ -145,7 +176,10 @@
                             alt="charges"
                             class="h-[19px] w-[19px]"
                         />
-                        <span class="text-[#64758B]">{{station.charging_points.length}} Charging Points</span>
+                        <span class="text-[#64758B]"
+                            >{{ station.charging_points.length }} Charging
+                            Points</span
+                        >
                     </div>
                 </div>
                 <div class="station-info-footer">
@@ -218,10 +252,16 @@
         </div>
 
         <div *ngIf="selectedTab === 'Log History'">
-            <log-history-tab [logHistory]="station.log_history" [stationId]="station.id"></log-history-tab>
+            <log-history-tab
+                [logHistory]="station.log_history"
+                [stationId]="station.id"
+            ></log-history-tab>
         </div>
         <div *ngIf="selectedTab === 'Station statistics'">
-            <station-stats-tab [stationId]="station.id" [statistics]="station.statistics"></station-stats-tab>
+            <station-stats-tab
+                [stationId]="station.id"
+                [statistics]="station.statistics"
+            ></station-stats-tab>
         </div>
         <div *ngIf="selectedTab === 'Charging History'">
             <charging-history-tab
@@ -230,13 +270,23 @@
             ></charging-history-tab>
         </div>
         <div *ngIf="selectedTab === 'Reviews'">
-            <reviews-tab [stationId]="station.id" [reviews]="station.reviews"></reviews-tab>
+            <reviews-tab
+                [stationId]="station.id"
+                [reviews]="station.reviews"
+            ></reviews-tab>
         </div>
         <div *ngIf="selectedTab === 'Amenities'">
-            <amenities-tab [stationId]="station.id" [amenities]="station.amenities"></amenities-tab>
+            <amenities-tab
+                [stationId]="station.id"
+                [amenities]="station.amenities"
+            ></amenities-tab>
         </div>
         <div *ngIf="selectedTab === 'Details'">
-            <details-tab [stationId]="station.id" [charging_points]="station.charging_points"></details-tab>
+            <details-tab
+                [stationId]="station.id"
+                [charging_points]="station.charging_points"
+                [location]="station.location"
+            ></details-tab>
         </div>
     </div>
 
