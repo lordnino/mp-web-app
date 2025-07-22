@@ -7,7 +7,7 @@
       'unavailable': station.status === 'Unavailable'
     }"
   >
-    {{ station.status === 'Available' ? 'Available' : (station.status === 'InUse' ? 'in use' : 'Unavailable') }}
+    {{ station.status === 'Available' ? 'Available' : (station.status === 'InUse' ? 'In Use' : 'Unavailable') }}
   </div>
   <div class="station-card-image">
     <img [src]="station.image || '/megaplug/ev-station-placeholder.svg'" alt="Station Image" />
@@ -20,12 +20,12 @@
       </div>
     </div>
     <div class="station-card-info-row">
-      <span class="station-card-connectors">
-        <img src="/megaplug/icons/connector.svg" alt="Connectors" />
+      <span class="station-card-connectors d-flex align-items-center">
+        <img src="megaplug/station-list/watt-green.svg" alt="Connectors" />
         <span class="count">{{ connectors }} connectors</span>
       </span>
       <span class="station-card-power">
-        <img src="/megaplug/icons/power.svg" alt="Power" />
+        <img src="megaplug/station-list/fast-charge-yellow.svg" alt="Power" />
         <span class="range">{{ powerRange }}</span>
       </span>
     </div>
