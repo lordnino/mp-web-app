@@ -8,6 +8,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
         type: 'basic',
         icon: 'heroicons_outline:building-office',
         link: '/example',
+        permission: ['view_station'],
     },
     {
         id: 'connector-type',

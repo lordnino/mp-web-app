@@ -98,7 +98,7 @@
         <div class="add-station-icon">
          <img src="megaplug/station-list/add-station-icon.svg" alt="">
         </div>
-        <span class="add-station-text">Add New Station</span>
+        <span class="add-station-text whitespace-nowrap">Add New Station</span>
       </div>
     </div>
         <!-- Drawer remains as is -->
@@ -182,16 +182,20 @@
                     <div class="section-title">Station Information</div>
                     <!-- Station Information -->
                     <div class="station-info">
-                        <div>
-                            <span class="icon connectors"></span>
-                            {{
-                                getConnectorCount(selectedStation)
-                            }}
-                            connectors
+                        <div class="flex items-center gap-2">
+                            <img src="megaplug/station-list/watt-green.svg" class="w-[18px] h-[18px]" alt="Connectors" />
+                            <span class="text-[#64758B] font-regular whitespace-nowrap">
+                                {{
+                                    getConnectorCount(selectedStation)
+                                }}
+                                connectors
+                            </span>
                         </div>
-                        <div>
-                            <span class="icon power"></span>
-                            {{ getPowerRange(selectedStation) }}
+                        <div class="flex items-center gap-2">
+                            <img src="megaplug/station-list/fast-charge-yellow.svg" class="w-[18px] h-[18px]" alt="Power" />
+                            <span class="text-[#64758B] font-regular whitespace-nowrap">
+                                {{ getPowerRange(selectedStation) }}
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -224,16 +228,19 @@
                             power of getChargePowers(selectedStation);
                             track power
                         ) {
-                            <span class="power-badge"
-                                >⚡ {{ power }} KW</span
-                            >
+                            <span class="power-badge flex items-center gap-2"
+                                ><img src="megaplug/station-list/watt-light-grey.svg" class="w-[13px] h-[13px]" alt="watt" />  
+                                <span>
+                                    {{ power }} KW
+                                </span>
+                            </span>
                         }
                     </div>
                 </div>
                 <!-- Details Button -->
                 <button class="station-details-btn flex justify-center items-center gap-2" (click)="onStationDetailsClick()">
                     <img src="megaplug/station-list/station-details.svg" class="w-[18px] h-[16px]" alt="Station Details" />
-                    <span>Station Details</span>
+                    <span class="whitespace-nowrap">Station Details</span>
                 </button>
             </div>
         }
