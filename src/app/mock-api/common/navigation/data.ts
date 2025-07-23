@@ -4,9 +4,9 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 export const defaultNavigation: FuseNavigationItem[] = [
     {
         id: 'example',
-        title: 'Dashboard',
+        title: 'Stations',
         type: 'basic',
-        icon: 'heroicons_outline:chart-pie',
+        icon: 'heroicons_outline:building-office',
         link: '/example',
     },
     {

@@ -7,6 +7,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FirebaseService } from 'app/core/services/firebase.service';
 import { StationCardComponent } from './station-card.component';
 import { StationListMap, ConnectorType } from './station-list-map.model';
+import { Router } from '@angular/router';
 declare const google: any;
 
 @Component({
@@ -25,6 +26,7 @@ export class ExampleComponent implements OnInit, OnDestroy {
     markers: StationListMap[] = [];
     selectedStation: StationListMap | null = null;
     drawerOpen = false;
+    isStationPanelCollapsed = false;
     private unsubscribeStations: () => void;
     filterName: string = '';
     filterAvailability: string = '';
@@ -32,7 +34,7 @@ export class ExampleComponent implements OnInit, OnDestroy {
     filterChargePower: string = '';
     filteredStations: any[] = [];
 
-    constructor(private ngZone: NgZone, private firebaseService: FirebaseService) {}
+    constructor(private ngZone: NgZone, private firebaseService: FirebaseService, private router: Router) {}
 
     ngOnInit() {
         // Set sample station data
@@ -331,5 +333,13 @@ export class ExampleComponent implements OnInit, OnDestroy {
         this.zoom = 16; // or your preferred zoom level
         this.onMarkerClick(station);
       }
+    }
+
+    toggleStationPanel() {
+      this.isStationPanelCollapsed = !this.isStationPanelCollapsed;
+    }
+
+    onStationDetailsClick() {
+      this.router.navigate(['/station/', this.selectedStation?.id]);
     }
 }

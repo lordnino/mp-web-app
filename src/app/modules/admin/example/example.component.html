@@ -36,11 +36,18 @@
             Filter Stations
         </button>
     </div>
-    <!-- Main content: station list + map -->
+        <!-- Main content: station list + map -->
     <div class="stations-main-content bg-[#FCFBFB]">
-        <!-- Total Stations Display -->
-        @if (markers) {
-            <div class="d-flex flex-col gap-3 px-10 py-5">
+      <!-- Floating Toggle Button -->
+      <div class="floating-toggle-btn" (click)="toggleStationPanel()">
+        <i class="toggle-icon" [class.expanded]="!isStationPanelCollapsed">
+          {{ isStationPanelCollapsed ? '←' : '→' }}
+        </i>
+      </div>
+      
+      <!-- Total Stations Display -->
+      @if (markers) {
+        <div class="d-flex flex-col gap-3 px-10 py-5 station-right-panel" [class.collapsed]="isStationPanelCollapsed">
                 <div class="total-stations-display px-4 py-2">
                     <div class="total-stations-info">
                         <span class="total-label">Total Stations</span>
@@ -87,137 +94,137 @@
             </div>
         </div>
         <!-- Drawer remains as is -->
-        <div class="station-drawer" [class.open]="drawerOpen">
-            <div class="station-drawer-header">
-                <span class="quick-view-title">Quick View</span>
-                <button class="close-btn" (click)="drawerOpen = false">
-                    ×
-                </button>
-            </div>
-            @if (selectedStation) {
-                <div class="station-quick-view">
-                    <!-- Station Image -->
-                    <div class="station-image-wrapper">
-                        @if (selectedStation.image) {
-                            <img
-                                class="station-image"
-                                [src]="selectedStation.image"
-                                alt="Station Image"
-                            />
-                        } @else {
-                            <img
-                                class="station-image"
-                                src="/megaplug/ev-station-placeholder.svg"
-                                alt="Station Image"
-                            />
-                        }
-                        <span
-                            class="station-status"
-                            [class.available]="
-                                selectedStation.status.toLowerCase() ===
-                                'available'
-                            "
-                            [class.inuse]="
-                                selectedStation.status.toLowerCase() === 'inuse'
-                            "
-                            [class.unavailable]="
-                                selectedStation.status.toLowerCase() ===
-                                'unavailable'
-                            "
-                        >
-                            {{
-                                selectedStation.status === 'Available'
-                                    ? 'Available'
-                                    : selectedStation.status === 'InUse'
-                                      ? 'In Use'
-                                      : 'Unavailable'
-                            }}
-                        </span>
-                    </div>
-                    <!-- Station Name & Address -->
-                    <div class="station-header">
-                        <h2>
-                            {{
-                                selectedStation.name_en ||
-                                    selectedStation.name_ar ||
-                                    selectedStation.label
-                            }}
-                        </h2>
-                        <div class="station-address">
-                            {{
-                                selectedStation.address_en ||
-                                    selectedStation.address_ar
-                            }}
-                        </div>
-                        <div class="station-rating mt-3">
-                            <span class="star">
-                                <img
-                                    src="/megaplug/icons/star-bold.svg"
-                                    alt="Star"
-                                />
-                            </span>
-                            4.9
-                        </div>
-                    </div>
-                    <!-- Divider -->
-                    <div class="station-divider"></div>
-                    <!-- Station Information Title -->
-                    <div>
-                        <div class="section-title">Station Information</div>
-                        <!-- Station Information -->
-                        <div class="station-info">
-                            <div>
-                                <span class="icon connectors"></span>
-                                {{
-                                    getConnectorCount(selectedStation)
-                                }}
-                                connectors
-                            </div>
-                            <div>
-                                <span class="icon power"></span>
-                                {{ getPowerRange(selectedStation) }}
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Divider -->
-                    <div class="station-divider"></div>
-                    <!-- Connector Types -->
-                    <div class="connector-types">
-                        <div class="section-title">Connector Type</div>
-                        <ul>
-                            @for (
-                                type of getConnectorTypes(selectedStation);
-                                track type.name
-                            ) {
-                                <li>
-                                    <img
-                                        [src]="type.icon"
-                                        alt="{{ type.name }}"
-                                        class="connector-icon"
-                                    />
-                                    {{ type.name }}
-                                </li>
-                            }
-                        </ul>
-                    </div>
-                    <!-- Charge Power -->
-                    <div class="charge-power">
-                        <div class="section-title">Charge Power</div>
-                        <div class="power-list">
-                            @for (
-                                power of getChargePowers(selectedStation);
-                                track power
-                            ) {
-                                <span class="power-badge"
-                                    >⚡ {{ power }} KW</span
-                                >
-                            }
-                        </div>
-                    </div>
-                    <!-- Details Button -->
-                    <button class="station-details-btn">Station Details</button>
-                </div>
-            }
+    </div>
+    <div class="station-drawer" [class.open]="drawerOpen">
+        <div class="station-drawer-header">
+            <span class="quick-view-title">Quick View</span>
+            <button class="close-btn" (click)="drawerOpen = false">
+                ×
+            </button>
         </div>
+        @if (selectedStation) {
+            <div class="station-quick-view">
+                <!-- Station Image -->
+                <div class="station-image-wrapper">
+                    @if (selectedStation.image) {
+                        <img
+                            class="station-image"
+                            [src]="selectedStation.image"
+                            alt="Station Image"
+                        />
+                    } @else {
+                        <img
+                            class="station-image"
+                            src="/megaplug/ev-station-placeholder.svg"
+                            alt="Station Image"
+                        />
+                    }
+                    <span
+                        class="station-status"
+                        [class.available]="
+                            selectedStation.status.toLowerCase() ===
+                            'available'
+                        "
+                        [class.inuse]="
+                            selectedStation.status.toLowerCase() === 'inuse'
+                        "
+                        [class.unavailable]="
+                            selectedStation.status.toLowerCase() ===
+                            'unavailable'
+                        "
+                    >
+                        {{
+                            selectedStation.status === 'Available'
+                                ? 'Available'
+                                : selectedStation.status === 'InUse'
+                                  ? 'In Use'
+                                  : 'Unavailable'
+                        }}
+                    </span>
+                </div>
+                <!-- Station Name & Address -->
+                <div class="station-header">
+                    <h2>
+                        {{
+                            selectedStation.name_en ||
+                                selectedStation.name_ar ||
+                                selectedStation.label
+                        }}
+                    </h2>
+                    <div class="station-address">
+                        {{
+                            selectedStation.address_en ||
+                                selectedStation.address_ar
+                        }}
+                    </div>
+                    <div class="station-rating mt-3">
+                        <span class="star">
+                            <img
+                                src="/megaplug/icons/star-bold.svg"
+                                alt="Star"
+                            />
+                        </span>
+                        4.9
+                    </div>
+                </div>
+                <!-- Divider -->
+                <div class="station-divider"></div>
+                <!-- Station Information Title -->
+                <div>
+                    <div class="section-title">Station Information</div>
+                    <!-- Station Information -->
+                    <div class="station-info">
+                        <div>
+                            <span class="icon connectors"></span>
+                            {{
+                                getConnectorCount(selectedStation)
+                            }}
+                            connectors
+                        </div>
+                        <div>
+                            <span class="icon power"></span>
+                            {{ getPowerRange(selectedStation) }}
+                        </div>
+                    </div>
+                </div>
+                <!-- Divider -->
+                <div class="station-divider"></div>
+                <!-- Connector Types -->
+                <div class="connector-types">
+                    <div class="section-title">Connector Type</div>
+                    <ul>
+                        @for (
+                            type of getConnectorTypes(selectedStation);
+                            track type.name
+                        ) {
+                            <li>
+                                <img
+                                    [src]="type.icon"
+                                    alt="{{ type.name }}"
+                                    class="connector-icon"
+                                />
+                                {{ type.name }}
+                            </li>
+                        }
+                    </ul>
+                </div>
+                <!-- Charge Power -->
+                <div class="charge-power">
+                    <div class="section-title">Charge Power</div>
+                    <div class="power-list">
+                        @for (
+                            power of getChargePowers(selectedStation);
+                            track power
+                        ) {
+                            <span class="power-badge"
+                                >⚡ {{ power }} KW</span
+                            >
+                        }
+                    </div>
+                </div>
+                <!-- Details Button -->
+                <button class="station-details-btn" (click)="onStationDetailsClick()">Station Details</button>
+            </div>
+        }
     </div>
 </div>
