@@ -339,6 +339,11 @@ export class ExampleComponent implements OnInit, OnDestroy {
       this.isStationPanelCollapsed = !this.isStationPanelCollapsed;
     }
 
+    onAddNewStation() {
+      console.log('Add New Station clicked');
+      // Add your logic here for adding a new station
+    }
+
     onStationDetailsClick() {
       this.router.navigate(['/station/', this.selectedStation?.id]);
     }

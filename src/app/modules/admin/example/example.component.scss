@@ -417,6 +417,65 @@ google-map {
   z-index: 1;
 }
 
+/* Add New Station Button */
+.add-station-btn {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  background: linear-gradient(135deg, #5b47fa, #7b61ff);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(91, 71, 250, 0.3);
+  z-index: 1000;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.add-station-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(91, 71, 250, 0.4);
+  background: linear-gradient(135deg, #4736c6, #6b4fd8);
+}
+
+.add-station-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gas-pump-icon {
+  font-size: 20px;
+  color: white;
+}
+
+.plus-icon {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background: #ff6b6b;
+  color: white;
+  border-radius: 50%;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.add-station-text {
+  white-space: nowrap;
+}
+
 /* Floating Toggle Button */
 .floating-toggle-btn {
   position: absolute;

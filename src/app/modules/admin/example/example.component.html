@@ -75,24 +75,32 @@
             </div>
         }
 
-        <div class="stations-map-panel">
-            <div class="map-wrapper">
-                <google-map
-                    [height]="'100%'"
-                    [width]="'100%'"
-                    [center]="center"
-                    [zoom]="zoom"
-                >
-                    @for (marker of markers; track marker.position) {
-                        <map-marker
-                            [position]="marker.position"
-                            [icon]="marker.icon"
-                            (mapClick)="onMarkerClick(marker)"
-                        ></map-marker>
-                    }
-                </google-map>
-            </div>
+            <div class="stations-map-panel">
+      <div class="map-wrapper">
+        <google-map
+          [height]="'100%'"
+          [width]="'100%'"
+          [center]="center"
+          [zoom]="zoom"
+        >
+          @for (marker of markers; track marker.position) {
+            <map-marker
+              [position]="marker.position"
+              [icon]="marker.icon"
+              (mapClick)="onMarkerClick(marker)"
+            ></map-marker>
+          }
+        </google-map>
+      </div>
+      
+      <!-- Add New Station Button -->
+      <div class="add-station-btn" (click)="onAddNewStation()">
+        <div class="add-station-icon">
+         <img src="megaplug/station-list/add-station-icon.svg" alt="">
         </div>
+        <span class="add-station-text">Add New Station</span>
+      </div>
+    </div>
         <!-- Drawer remains as is -->
     </div>
     <div class="station-drawer" [class.open]="drawerOpen">
@@ -223,7 +231,10 @@
                     </div>
                 </div>
                 <!-- Details Button -->
-                <button class="station-details-btn" (click)="onStationDetailsClick()">Station Details</button>
+                <button class="station-details-btn flex justify-center items-center gap-2" (click)="onStationDetailsClick()">
+                    <img src="megaplug/station-list/station-details.svg" class="w-[18px] h-[16px]" alt="Station Details" />
+                    <span>Station Details</span>
+                </button>
             </div>
         }
     </div>
