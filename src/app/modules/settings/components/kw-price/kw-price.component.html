@@ -1,0 +1,56 @@
+<form [formGroup]="kwPriceForm" (ngSubmit)="save()" class="space-y-6">
+  <div class="flex flex-col sm:flex-row gap-6">
+    <mat-form-field appearance="outline" class="flex-1">
+      <mat-label>AC KW price</mat-label>
+      <input matInput formControlName="ac" maxlength="6" type="number" step="0.01" min="0" max="999.99" placeholder="0.00">
+      <span matSuffix class="egp-suffix">EGP</span>
+      <mat-error *ngIf="ac?.hasError('required')">
+        This field is required
+      </mat-error>
+      <mat-error *ngIf="ac?.hasError('pattern') || ac?.hasError('min')">
+        Enter a valid positive number
+      </mat-error>
+      <mat-error *ngIf="ac?.hasError('max')">
+        Max. is 999.99
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="flex-1">
+      <mat-label>DC KW price</mat-label>
+      <input matInput formControlName="dc" maxlength="6" type="number" step="0.01" min="0" max="999.99" placeholder="0.00">
+      <span matSuffix class="egp-suffix">EGP</span>
+      <mat-error *ngIf="dc?.hasError('required')">
+        This field is required
+      </mat-error>
+      <mat-error *ngIf="dc?.hasError('pattern') || dc?.hasError('min')">
+        Enter a valid positive number
+      </mat-error>
+      <mat-error *ngIf="dc?.hasError('max')">
+        Max. is 999.99
+      </mat-error>
+    </mat-form-field>
+  </div>
+  <div class="flex gap-4">
+    <button mat-raised-button color="primary" type="submit" [disabled]="isSaving">Save</button>
+    <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+  </div>
+  <div *ngIf="showSuccess" class="text-green-600 mt-2">Saved successfully</div>
+  <div *ngIf="showCancel" class="text-gray-500 mt-2">Changes discarded</div>
+</form>
+
+<div class="mt-10">
+  <div class="flex items-center gap-2 mb-2">
+    <mat-icon>timeline</mat-icon>
+    <span>History Log</span>
+  </div>
+  <div *ngIf="history.length === 0" class="text-gray-400">No history yet.</div>
+  <div *ngFor="let entry of history" class="border rounded p-3 mb-2">
+    <div class="flex justify-between text-xs text-gray-500">
+      <span>{{ entry.date | date:'short' }}</span>
+      <span>By: {{ entry.by }}</span>
+    </div>
+    <div class="mt-1">
+      <span>AC: {{ entry.old.ac }} → {{ entry.new.ac }}</span> | 
+      <span>DC: {{ entry.old.dc }} → {{ entry.new.dc }}</span>
+    </div>
+  </div>
+</div> 

@@ -157,6 +157,22 @@ export const appRoutes: Route[] = [
             },
         ],
     },
-
+    {
+        path: 'settings',
+        component: LayoutComponent,
+        canActivate: [AuthGuard, RoutePermissionGuard],
+        resolve: {
+            initialData: initialDataResolver,
+        },
+        data: {
+            permissions: ['view_connector_type'],
+        },
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('app/modules/settings/main-settings.routes'),
+            },
+        ],
+    },
     { path: '**', redirectTo: 'example' },
 ];

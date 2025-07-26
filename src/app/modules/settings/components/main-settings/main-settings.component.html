@@ -1,0 +1,21 @@
+<div class="flex min-w-0 flex-auto flex-col">
+    <app-page-header
+        [breadcrumbs]="[
+            { name: 'Main Settings', link: '/settings/main-settings' },
+        ]"
+        [title]="'Main Settings'"
+    >
+    </app-page-header>
+
+    <div class="flex-auto p-6 sm:p-10">
+        <mat-tab-group>
+            <mat-tab label="KW Prices">
+                <!-- KW Prices content goes here -->
+                <app-kw-price></app-kw-price>
+            </mat-tab>
+            <mat-tab label="Loyalty Points">
+                <app-loyalty-points></app-loyalty-points>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

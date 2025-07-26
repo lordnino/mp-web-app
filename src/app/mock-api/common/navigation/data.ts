@@ -18,6 +18,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
         link: '/connector-types/all-connector-types',
         permission: ['view_connector_type'],
     },
+    {
+        id: 'main-settings',
+        title: 'Main Settings',
+        type: 'basic',
+        icon: 'heroicons_outline:cog',
+        link: '/settings/main-settings',
+        permission: ['view_connector_type'],
+    },
     // {
     //     id: 'roles-and-permissions',
     //     title: 'Roles & Permissions',
