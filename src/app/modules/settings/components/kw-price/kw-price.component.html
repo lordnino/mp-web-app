@@ -53,4 +53,30 @@
       <span>DC: {{ entry.old.dc }} → {{ entry.new.dc }}</span>
     </div>
   </div>
+  
+  <!-- Pagination -->
+  <div *ngIf="totalPages > 1" class="flex justify-between items-center mt-4">
+    <div class="text-sm text-gray-500">
+      Showing {{ (currentPage - 1) * perPage + 1 }} to {{ Math.min(currentPage * perPage, totalItems) }} of {{ totalItems }} entries
+    </div>
+    <div class="flex gap-2">
+      <button 
+        mat-stroked-button 
+        [disabled]="currentPage === 1"
+        (click)="onPageChange(currentPage - 1)"
+        class="text-sm">
+        Previous
+      </button>
+      <span class="flex items-center px-3 text-sm">
+        Page {{ currentPage }} of {{ totalPages }}
+      </span>
+      <button 
+        mat-stroked-button 
+        [disabled]="currentPage === totalPages"
+        (click)="onPageChange(currentPage + 1)"
+        class="text-sm">
+        Next
+      </button>
+    </div>
+  </div>
 </div> 

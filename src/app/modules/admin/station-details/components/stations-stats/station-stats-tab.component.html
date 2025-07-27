@@ -4,44 +4,65 @@
     <div class="stats-header">
       <div>
         <div class="stats-title">Consumed kW/h</div>
-        <div class="stats-subtitle">Your Consumed KW in a Year</div>
+        <div class="stats-subtitle">Your Consumed KW in a {{ chartFilters.consumedKw.period }}</div>
       </div>
-      <button class="stats-menu" mat-button [matMenuTriggerFor]="periodMenu"><mat-icon>more_vert</mat-icon></button>
+      <div class="stats-menu-group">
+        <button class="stats-menu" mat-button [matMenuTriggerFor]="periodMenu1" [disabled]="chartLoading.consumedKw">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </div>
     </div>
-    <div class="stats-main">
-      <div class="stats-icon gradient">
-        <img src="megaplug/station/stats/wat-chart.png" alt="fast-charge" class="w-[19px] h-[19px]" />
-      </div>
-      <div>
-        <div class="stats-label">Total Consumed kW</div>
-        <div class="stats-value-row">
-          <span class="stats-value">{{ consumedKwValue }}</span>
-          <span class="stats-change up">
-            {{ consumedKwChange.replace('+', '') }}
-            <img src="megaplug/station/stats/carret-up.png" alt="up" class="w-[19px] h-[19px]">
-          </span>
+    
+    <!-- Ghost UI for Consumed KW -->
+    <div *ngIf="chartLoading.consumedKw" class="stats-ghost">
+      <div class="stats-main">
+        <div class="stats-icon gradient skeleton-icon"></div>
+        <div class="skeleton-content">
+          <div class="skeleton-label"></div>
+          <div class="skeleton-value"></div>
         </div>
       </div>
-      <mat-menu #periodMenu="matMenu">
-        <button mat-menu-item (click)="selectPeriod('Week')">Week</button>
-        <button mat-menu-item (click)="selectPeriod('Month')">Month</button>
-        <button mat-menu-item (click)="selectPeriod('Year')">Year</button>
-      </mat-menu>
+      <div class="skeleton-chart"></div>
     </div>
-    <apx-chart
-      [series]="consumedKwChartOptions.series"
-      [chart]="consumedKwChartOptions.chart"
-      [xaxis]="consumedKwChartOptions.xaxis"
-      [yaxis]="consumedKwChartOptions.yaxis"
-      [dataLabels]="consumedKwChartOptions.dataLabels"
-      [stroke]="consumedKwChartOptions.stroke"
-      [tooltip]="consumedKwChartOptions.tooltip"
-      [markers]="consumedKwChartOptions.markers"
-      [grid]="consumedKwChartOptions.grid"
-      [legend]="consumedKwChartOptions.legend"
-      [colors]="consumedKwChartOptions.colors"
-      [fill]="consumedKwChartOptions.fill">
-    </apx-chart>
+
+    <!-- Actual content -->
+    <div *ngIf="!chartLoading.consumedKw">
+      <div class="stats-main">
+        <div class="stats-icon gradient">
+          <img src="megaplug/station/stats/wat-chart.png" alt="fast-charge" class="w-[19px] h-[19px]" />
+        </div>
+        <div>
+          <div class="stats-label">Total Consumed kW</div>
+          <div class="stats-value-row">
+            <span class="stats-value">{{ consumedKwValue }}</span>
+            <span class="stats-change up">
+              {{ consumedKwChange.replace('+', '') }}
+              <img src="megaplug/station/stats/carret-up.png" alt="up" class="w-[19px] h-[19px]">
+            </span>
+          </div>
+        </div>
+      </div>
+      <apx-chart
+        [series]="consumedKwChartOptions.series"
+        [chart]="consumedKwChartOptions.chart"
+        [xaxis]="consumedKwChartOptions.xaxis"
+        [yaxis]="consumedKwChartOptions.yaxis"
+        [dataLabels]="consumedKwChartOptions.dataLabels"
+        [stroke]="consumedKwChartOptions.stroke"
+        [tooltip]="consumedKwChartOptions.tooltip"
+        [markers]="consumedKwChartOptions.markers"
+        [grid]="consumedKwChartOptions.grid"
+        [legend]="consumedKwChartOptions.legend"
+        [colors]="consumedKwChartOptions.colors"
+        [fill]="consumedKwChartOptions.fill">
+      </apx-chart>
+    </div>
+
+    <mat-menu #periodMenu1="matMenu">
+      <button mat-menu-item (click)="selectPeriod('week', 'consumed_kw')">Week</button>
+      <button mat-menu-item (click)="selectPeriod('month', 'consumed_kw')">Month</button>
+      <button mat-menu-item (click)="selectPeriod('year', 'consumed_kw')">Year</button>
+    </mat-menu>
   </div>
 
   <!-- Charging Sessions -->
@@ -49,42 +70,65 @@
     <div class="stats-header">
       <div>
         <div class="stats-title">Charging Sessions</div>
-        <div class="stats-subtitle">Your Charging Sessions in a Year</div>
+        <div class="stats-subtitle">Your Charging Sessions in a {{ chartFilters.chargingSessions.period }}</div>
       </div>
-      <button class="stats-menu"><mat-icon>more_vert</mat-icon></button>
+      <div class="stats-menu-group">
+        <button class="stats-menu" mat-button [matMenuTriggerFor]="periodMenu2" [disabled]="chartLoading.chargingSessions">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </div>
     </div>
-    <div class="stats-main">
-      <!-- <div class="stats-icon" style="background: linear-gradient(180deg, #FFB200 0%, #FFCB52 100%); color: #FFB200;">
-        <mat-icon>power</mat-icon>
-      </div> -->
-      <div class="stats-icon gradient power">
-        <img src="megaplug/station/stats/power.svg" alt="power" class="w-[10px] h-[18px]" />
-      </div>
-      <div>
-        <div class="stats-label">Total Charging Sessions</div>
-        <div class="stats-value-row">
-          <span class="stats-value">{{ sessionsValue }}</span>
-          <span class="stats-change down" style="color: #FF5B5B;">
-            {{ sessionsChange.replace('-', '') }}
-            <img src="megaplug/station/stats/carret-down.svg" alt="down" class="w-[19px] h-[19px]" style="vertical-align: middle;">
-          </span>
+    
+    <!-- Ghost UI for Charging Sessions -->
+    <div *ngIf="chartLoading.chargingSessions" class="stats-ghost">
+      <div class="stats-main">
+        <div class="stats-icon gradient power skeleton-icon"></div>
+        <div class="skeleton-content">
+          <div class="skeleton-label"></div>
+          <div class="skeleton-value"></div>
         </div>
       </div>
+      <div class="skeleton-chart"></div>
     </div>
-    <apx-chart
-      [series]="sessionsChartOptions.series"
-      [chart]="sessionsChartOptions.chart"
-      [xaxis]="sessionsChartOptions.xaxis"
-      [yaxis]="sessionsChartOptions.yaxis"
-      [dataLabels]="sessionsChartOptions.dataLabels"
-      [stroke]="sessionsChartOptions.stroke"
-      [tooltip]="sessionsChartOptions.tooltip"
-      [markers]="sessionsChartOptions.markers"
-      [grid]="sessionsChartOptions.grid"
-      [legend]="sessionsChartOptions.legend"
-      [colors]="sessionsChartOptions.colors"
-      [fill]="sessionsChartOptions.fill">
-    </apx-chart>
+
+    <!-- Actual content -->
+    <div *ngIf="!chartLoading.chargingSessions">
+      <div class="stats-main">
+        <div class="stats-icon gradient power">
+          <img src="megaplug/station/stats/power.svg" alt="power" class="w-[10px] h-[18px]" />
+        </div>
+        <div>
+          <div class="stats-label">Total Charging Sessions</div>
+          <div class="stats-value-row">
+            <span class="stats-value">{{ sessionsValue }}</span>
+            <span class="stats-change down" style="color: #FF5B5B;">
+              {{ sessionsChange.replace('-', '') }}
+              <img src="megaplug/station/stats/carret-down.svg" alt="down" class="w-[19px] h-[19px]" style="vertical-align: middle;">
+            </span>
+          </div>
+        </div>
+      </div>
+      <apx-chart
+        [series]="sessionsChartOptions.series"
+        [chart]="sessionsChartOptions.chart"
+        [xaxis]="sessionsChartOptions.xaxis"
+        [yaxis]="sessionsChartOptions.yaxis"
+        [dataLabels]="sessionsChartOptions.dataLabels"
+        [stroke]="sessionsChartOptions.stroke"
+        [tooltip]="sessionsChartOptions.tooltip"
+        [markers]="sessionsChartOptions.markers"
+        [grid]="sessionsChartOptions.grid"
+        [legend]="sessionsChartOptions.legend"
+        [colors]="sessionsChartOptions.colors"
+        [fill]="sessionsChartOptions.fill">
+      </apx-chart>
+    </div>
+
+    <mat-menu #periodMenu2="matMenu">
+      <button mat-menu-item (click)="selectPeriod('week', 'charging_sessions')">Week</button>
+      <button mat-menu-item (click)="selectPeriod('month', 'charging_sessions')">Month</button>
+      <button mat-menu-item (click)="selectPeriod('year', 'charging_sessions')">Year</button>
+    </mat-menu>
   </div>
 
   <!-- Revenue -->
@@ -92,39 +136,65 @@
     <div class="stats-header">
       <div>
         <div class="stats-title">Revenue</div>
-        <div class="stats-subtitle">Your Revenue in a Year</div>
+        <div class="stats-subtitle">Your Revenue in a {{ chartFilters.revenue.period }}</div>
       </div>
-      <button class="stats-menu"><mat-icon>more_vert</mat-icon></button>
+      <div class="stats-menu-group">
+        <button class="stats-menu" mat-button [matMenuTriggerFor]="periodMenu3" [disabled]="chartLoading.revenue">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </div>
     </div>
-    <div class="stats-main">
-      <div class="stats-icon gradient revenue">
-        <img src="megaplug/station/stats/money.svg" alt="revenue" class="w-[18px] h-[18px]" />
-      </div>
-      <div>
-        <div class="stats-label">Total Revenue</div>
-        <div class="stats-value-row">
-          <span class="stats-value">{{ revenueValue }}</span>
-          <span class="stats-change up" style="color: #16c784;">
-            {{ revenueChange.replace('+', '') }}
-            <img src="megaplug/station/stats/carret-up.png" alt="up" class="w-[19px] h-[19px]">
-          </span>
+    
+    <!-- Ghost UI for Revenue -->
+    <div *ngIf="chartLoading.revenue" class="stats-ghost">
+      <div class="stats-main">
+        <div class="stats-icon gradient revenue skeleton-icon"></div>
+        <div class="skeleton-content">
+          <div class="skeleton-label"></div>
+          <div class="skeleton-value"></div>
         </div>
       </div>
+      <div class="skeleton-chart"></div>
     </div>
-    <apx-chart
-      [series]="revenueChartOptions.series"
-      [chart]="revenueChartOptions.chart"
-      [xaxis]="revenueChartOptions.xaxis"
-      [yaxis]="revenueChartOptions.yaxis"
-      [dataLabels]="revenueChartOptions.dataLabels"
-      [stroke]="revenueChartOptions.stroke"
-      [tooltip]="revenueChartOptions.tooltip"
-      [markers]="revenueChartOptions.markers"
-      [grid]="revenueChartOptions.grid"
-      [legend]="revenueChartOptions.legend"
-      [colors]="revenueChartOptions.colors"
-      [fill]="revenueChartOptions.fill">
-    </apx-chart>
+
+    <!-- Actual content -->
+    <div *ngIf="!chartLoading.revenue">
+      <div class="stats-main">
+        <div class="stats-icon gradient revenue">
+          <img src="megaplug/station/stats/money.svg" alt="revenue" class="w-[18px] h-[18px]" />
+        </div>
+        <div>
+          <div class="stats-label">Total Revenue</div>
+          <div class="stats-value-row">
+            <span class="stats-value">{{ revenueValue }}</span>
+            <span class="stats-change up" style="color: #16c784;">
+              {{ revenueChange.replace('+', '') }}
+              <img src="megaplug/station/stats/carret-up.png" alt="up" class="w-[19px] h-[19px]">
+            </span>
+          </div>
+        </div>
+      </div>
+      <apx-chart
+        [series]="revenueChartOptions.series"
+        [chart]="revenueChartOptions.chart"
+        [xaxis]="revenueChartOptions.xaxis"
+        [yaxis]="revenueChartOptions.yaxis"
+        [dataLabels]="revenueChartOptions.dataLabels"
+        [stroke]="revenueChartOptions.stroke"
+        [tooltip]="revenueChartOptions.tooltip"
+        [markers]="revenueChartOptions.markers"
+        [grid]="revenueChartOptions.grid"
+        [legend]="revenueChartOptions.legend"
+        [colors]="revenueChartOptions.colors"
+        [fill]="revenueChartOptions.fill">
+      </apx-chart>
+    </div>
+
+    <mat-menu #periodMenu3="matMenu">
+      <button mat-menu-item (click)="selectPeriod('week', 'revenue')">Week</button>
+      <button mat-menu-item (click)="selectPeriod('month', 'revenue')">Month</button>
+      <button mat-menu-item (click)="selectPeriod('year', 'revenue')">Year</button>
+    </mat-menu>
   </div>
 
   <!-- Failure Rate -->
@@ -132,38 +202,64 @@
     <div class="stats-header">
       <div>
         <div class="stats-title">failure rate</div>
-        <div class="stats-subtitle">Your failure rate in a Year</div>
+        <div class="stats-subtitle">Your failure rate in a {{ chartFilters.failureRate.period }}</div>
       </div>
-      <button class="stats-menu"><mat-icon>more_vert</mat-icon></button>
+      <div class="stats-menu-group">
+        <button class="stats-menu" mat-button [matMenuTriggerFor]="periodMenu4" [disabled]="chartLoading.failureRate">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </div>
     </div>
-    <div class="stats-main">
-      <div class="stats-icon gradient failure">
-        <img src="megaplug/station/stats/failure.svg" alt="failure" class="w-[18px] h-[18px]" />
-      </div>
-      <div>
-        <div class="stats-label">Total failure rate</div>
-        <div class="stats-value-row">
-          <span class="stats-value">{{ failureValue }}</span>
-          <span class="stats-change down" style="color: #FF5B5B;">
-            {{ failureChange.replace('-', '') }}
-            <img src="megaplug/station/stats/carret-down.svg" alt="down" class="w-[19px] h-[19px]" style="vertical-align: middle;">
-          </span>
+    
+    <!-- Ghost UI for Failure Rate -->
+    <div *ngIf="chartLoading.failureRate" class="stats-ghost">
+      <div class="stats-main">
+        <div class="stats-icon gradient failure skeleton-icon"></div>
+        <div class="skeleton-content">
+          <div class="skeleton-label"></div>
+          <div class="skeleton-value"></div>
         </div>
       </div>
+      <div class="skeleton-chart"></div>
     </div>
-    <apx-chart
-      [series]="failureChartOptions.series"
-      [chart]="failureChartOptions.chart"
-      [xaxis]="failureChartOptions.xaxis"
-      [yaxis]="failureChartOptions.yaxis"
-      [dataLabels]="failureChartOptions.dataLabels"
-      [stroke]="failureChartOptions.stroke"
-      [tooltip]="failureChartOptions.tooltip"
-      [markers]="failureChartOptions.markers"
-      [grid]="failureChartOptions.grid"
-      [legend]="failureChartOptions.legend"
-      [colors]="failureChartOptions.colors"
-      [fill]="failureChartOptions.fill">
-    </apx-chart>
+
+    <!-- Actual content -->
+    <div *ngIf="!chartLoading.failureRate">
+      <div class="stats-main">
+        <div class="stats-icon gradient failure">
+          <img src="megaplug/station/stats/failure.svg" alt="failure" class="w-[18px] h-[18px]" />
+        </div>
+        <div>
+          <div class="stats-label">Total failure rate</div>
+          <div class="stats-value-row">
+            <span class="stats-value">{{ failureValue }}</span>
+            <span class="stats-change down" style="color: #FF5B5B;">
+              {{ failureChange.replace('-', '') }}
+              <img src="megaplug/station/stats/carret-down.svg" alt="down" class="w-[19px] h-[19px]" style="vertical-align: middle;">
+            </span>
+          </div>
+        </div>
+      </div>
+      <apx-chart
+        [series]="failureChartOptions.series"
+        [chart]="failureChartOptions.chart"
+        [xaxis]="failureChartOptions.xaxis"
+        [yaxis]="failureChartOptions.yaxis"
+        [dataLabels]="failureChartOptions.dataLabels"
+        [stroke]="failureChartOptions.stroke"
+        [tooltip]="failureChartOptions.tooltip"
+        [markers]="failureChartOptions.markers"
+        [grid]="failureChartOptions.grid"
+        [legend]="failureChartOptions.legend"
+        [colors]="failureChartOptions.colors"
+        [fill]="failureChartOptions.fill">
+      </apx-chart>
+    </div>
+
+    <mat-menu #periodMenu4="matMenu">
+      <button mat-menu-item (click)="selectPeriod('week', 'failure_rate')">Week</button>
+      <button mat-menu-item (click)="selectPeriod('month', 'failure_rate')">Month</button>
+      <button mat-menu-item (click)="selectPeriod('year', 'failure_rate')">Year</button>
+    </mat-menu>
   </div>
 </div>

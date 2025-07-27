@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-
+import { KwPriceService } from '../../services/kw-price.service';
 @Component({
   selector: 'app-kw-price',
   standalone: true,
@@ -26,8 +26,14 @@ export class KwPriceComponent {
   showSuccess = false;
   showCancel = false;
   history = [];
+  currentKwPriceId: number | null = null;
+  currentPage = 1;
+  totalPages = 1;
+  totalItems = 0;
+  perPage = 30;
+  Math = Math; // Make Math available in template
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private kwPriceService: KwPriceService) {
     this.kwPriceForm = this.fb.group({
       ac: [null, [Validators.required, Validators.pattern(/^(\d{1,3})(\.\d{1,2})?$/), Validators.max(999.99), Validators.min(0)]],
       dc: [null, [Validators.required, Validators.pattern(/^(\d{1,3})(\.\d{1,2})?$/), Validators.max(999.99), Validators.min(0)]]
@@ -37,21 +43,85 @@ export class KwPriceComponent {
   get ac() { return this.kwPriceForm.get('ac'); }
   get dc() { return this.kwPriceForm.get('dc'); }
 
+  ngOnInit() {
+    this.getKwPrice();
+    this.getKwPriceHistory();
+  }
+
+  getKwPrice() {
+    this.kwPriceService.getKwPrice().subscribe((res) => {
+      if (res && res.data && Array.isArray(res.data)) {
+        const acPrice = res.data.find((item: any) => item.type === 'AC');
+        const dcPrice = res.data.find((item: any) => item.type === 'DC');
+        
+        this.kwPriceForm.patchValue({
+          ac: acPrice ? acPrice.price_per_kw : null,
+          dc: dcPrice ? dcPrice.price_per_kw : null
+        });
+        
+        // Store the first ID for updates (assuming we'll update the first record)
+        if (res.data.length > 0) {
+          this.currentKwPriceId = res.data[0].id;
+        }
+      }
+    });
+  }
+
+  getKwPriceHistory(page: number = 1) {
+    this.kwPriceService.getKwPriceHistory(page, this.perPage).subscribe((res) => {
+        if (res && res.data && res.data.data && Array.isArray(res.data.data)) {
+            this.history = res.data.data.map((item: any) => ({
+                date: new Date(item.created_at),
+                by: item.user?.name || 'Unknown User',
+                old: {
+                    ac: item.type === 'AC' ? item.old_price : null,
+                    dc: item.type === 'DC' ? item.old_price : null
+                },
+                new: {
+                    ac: item.type === 'AC' ? item.new_price : null,
+                    dc: item.type === 'DC' ? item.new_price : null
+                }
+            }));
+            
+            // Update pagination metadata
+            this.currentPage = res.data.current_page || 1;
+            this.totalPages = res.data.last_page || 1;
+            this.totalItems = res.data.total || 0;
+        } else {
+            this.history = [];
+        }
+    });
+  }
+
+  onPageChange(page: number) {
+    this.currentPage = page;
+    this.getKwPriceHistory(page);
+  }
+
   save() {
     if (this.kwPriceForm.valid) {
       this.isSaving = true;
-      // Simulate save and add to history
-      setTimeout(() => {
-        this.isSaving = false;
-        this.showSuccess = true;
-        // Add to history (placeholder)
-        this.history.unshift({
-          date: new Date(),
-          by: 'Current User',
-          old: { ac: 0, dc: 0 }, // Replace with real old values
-          new: { ac: this.ac?.value, dc: this.dc?.value }
-        });
-      }, 1000);
+      const payload = {
+        ac_price: this.ac?.value,
+        dc_price: this.dc?.value
+      };
+
+      this.kwPriceService.updateKwPrice(this.currentKwPriceId!, payload).subscribe(
+        (res) => {
+          this.isSaving = false;
+          this.showSuccess = true;
+          // Refresh data after successful update
+          this.getKwPrice();
+          // Hide success message after 3 seconds
+          setTimeout(() => {
+            this.showSuccess = false;
+          }, 3000);
+        },
+        (error) => {
+          this.isSaving = false;
+          console.error('Error updating KW prices:', error);
+        }
+      );
     } else {
       this.kwPriceForm.markAllAsTouched();
     }

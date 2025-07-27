@@ -19,23 +19,27 @@ export const defaultNavigation: FuseNavigationItem[] = [
         permission: ['view_connector_type'],
     },
     {
-        id: 'main-settings',
-        title: 'Main Settings',
-        type: 'basic',
-        icon: 'heroicons_outline:cog',
-        link: '/settings/main-settings',
-        permission: ['view_connector_type'],
+        id: 'users',
+        title: 'Users',
+        type: 'collapsable',
+        icon: 'heroicons_outline:user',
+        permission: ['view_user'],
+        children: [
+            {
+                id: 'view-users',
+                title: 'View Users',
+                type: 'basic',
+                link: '/users/all-users',
+            },
+            {
+                id: 'add-user',
+                title: 'Add User',
+                type: 'basic',
+                link: '/users/add-user',
+                permission: ['create_user']
+            },
+        ],
     },
-    // {
-    //     id: 'roles-and-permissions',
-    //     title: 'Roles & Permissions',
-    //     type: 'basic',
-    //     icon: 'heroicons_outline:role',
-    //     link: '/roles-and-permissions',
-    //     permission: [
-    //         'view_role',
-    //     ],
-    // },
     {
         id: 'roles-and-permissions',
         title: 'Roles & Permissions',
@@ -59,66 +63,11 @@ export const defaultNavigation: FuseNavigationItem[] = [
         ],
     },
     {
-        id: 'users',
-        title: 'Users',
-        type: 'collapsable',
-        icon: 'heroicons_outline:user',
-        permission: ['view_user'],
-        children: [
-            {
-                id: 'view-users',
-                title: 'View Users',
-                type: 'basic',
-                link: '/users/all-users',
-            },
-            {
-                id: 'add-user',
-                title: 'Add User',
-                type: 'basic',
-                link: '/users/add-user',
-                permission: ['create_user']
-            },
-        ],
-    },
-    {
-        id: 'treatment-categories',
-        title: 'Treatments & Services',
-        type: 'collapsable',
-        icon: 'heroicons_outline:tag',
-        permission: ['view_treatment_category'],
-        children: [
-            {
-                id: 'view-treatment-categories',
-                title: 'View Treatment Categories',
-                type: 'basic',
-                link: '/treatment-categories/all-treatment-categories',
-                permission: ['view_treatment_category'],
-            },
-            {
-                id: 'add-treatment-category',
-                title: 'Add Treatment Category',
-                type: 'basic',
-                link: '/treatment-categories/add-treatment-category',
-                permission: ['create_treatment_category'],
-            },
-            {
-                id: 'view-treatments',
-                title: 'View Treatments',
-                type: 'basic',
-                link: '/treatment-categories/all-treatments',
-            },
-            {
-                id: 'view-services',
-                title: 'View Services',
-                type: 'basic',
-                link: '/treatment-categories/services',
-            },
-            {
-                id: 'view-health-goals',
-                title: 'View Health Goals',
-                type: 'basic',
-                link: '/treatment-categories/health-goals',
-            },
-        ],
+        id: 'main-settings',
+        title: 'Settings',
+        type: 'basic',
+        icon: 'heroicons_outline:cog',
+        link: '/settings/main-settings',
+        permission: ['view_connector_type'],
     },
 ];

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { User } from 'app/core/user/user.types';
 import { map, Observable, ReplaySubject, tap } from 'rxjs';
@@ -11,5 +11,10 @@ export class StationsService {
 
     getStationsDetails(stationId: string) {
         return this._httpClient.get<Station>(`${environment.apiUrl}stations/${stationId}/details`);
+    }
+
+    getStationStats(stationId: string, period: string, metric: string) {
+        const params = new HttpParams().set('period', period).set('metric', metric);
+        return this._httpClient.get<any>(`${environment.apiUrl}stations/${stationId}/statistics?${params.toString()}`);
     }
 }
