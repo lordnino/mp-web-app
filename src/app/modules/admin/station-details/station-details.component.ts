@@ -116,17 +116,17 @@ export class StationDetailsComponent implements AfterViewInit {
             .subscribe((station: any) => {
                 console.log(station);
                 this.station = {
-                    name: 'Chilout Madinaty (DC)',
-                    status: 'Available',
-                    address: 'Cairo , nasser city , 31 abas el akad',
-                    openHours: '10:00 - 23:00',
-                    isOpen: true,
-                    rating: 4.9,
-                    connectors: 8,
-                    power: '22-50 KW',
-                    type: 'AC Station',
-                    charges: '30,000',
-                    isActive: true,
+                    // name: 'Chilout Madinaty (DC)',
+                    // status: 'Available',
+                    // address: 'Cairo , nasser city , 31 abas el akad',
+                    // openHours: '10:00 - 23:00',
+                    // isOpen: true,
+                    // rating: 4.9,
+                    // connectors: 8,
+                    // power: '22-50 KW',
+                    // type: 'AC Station',
+                    // charges: '30,000',
+                    // isActive: true,
                     ...station.station,
                     reviews: station.reviews,
                     // images: [
@@ -140,6 +140,7 @@ export class StationDetailsComponent implements AfterViewInit {
                     charging_history: station.charging_history,
                     log_history: station.log_history,
                     statistics: station.statistics,
+                    amenities: station.station.amenities,
                 };
                 console.log(this.station);
                 this.loading = false; // Set loading to false after data is loaded

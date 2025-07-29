@@ -27,23 +27,23 @@ import { CommonModule } from '@angular/common';
 })
 export class AmenitiesTabComponent {
     @Input() stationId: string;
-    // @Input() amenities: any[];
+    @Input() amenities: any[];
 
-    amenities = [
-        { icon: 'wifi', label: 'Free Wi-Fi' },
-        { icon: 'store', label: 'Mini Market' },
-        { icon: 'restaurant', label: 'Restaurant' },
-        { icon: 'build', label: 'Vehicle Services' },
-        { icon: 'wc', label: 'Restrooms' },
-        { icon: 'battery_charging_full', label: 'Electronics charge' },
-        { icon: 'child_care', label: 'Kids Area' },
-        { icon: 'wifi', label: 'Free Wi-Fi' },
-        { icon: 'store', label: 'Mini Market' },
-        { icon: 'restaurant', label: 'Restaurant' },
-        { icon: 'build', label: 'Vehicle Services' },
-        { icon: 'wc', label: 'Restrooms' },
-        { icon: 'battery_charging_full', label: 'Electronics charge' },
-        { icon: 'child_care', label: 'Kids Area' },
-    ];
+    // amenities = [
+    //     { icon: 'wifi', label: 'Free Wi-Fi' },
+    //     { icon: 'store', label: 'Mini Market' },
+    //     { icon: 'restaurant', label: 'Restaurant' },
+    //     { icon: 'build', label: 'Vehicle Services' },
+    //     { icon: 'wc', label: 'Restrooms' },
+    //     { icon: 'battery_charging_full', label: 'Electronics charge' },
+    //     { icon: 'child_care', label: 'Kids Area' },
+    //     { icon: 'wifi', label: 'Free Wi-Fi' },
+    //     { icon: 'store', label: 'Mini Market' },
+    //     { icon: 'restaurant', label: 'Restaurant' },
+    //     { icon: 'build', label: 'Vehicle Services' },
+    //     { icon: 'wc', label: 'Restrooms' },
+    //     { icon: 'battery_charging_full', label: 'Electronics charge' },
+    //     { icon: 'child_care', label: 'Kids Area' },
+    // ];
     constructor() {}
 }

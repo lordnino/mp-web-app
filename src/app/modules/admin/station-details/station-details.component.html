@@ -94,9 +94,11 @@
                 <div>
                     <h2>
                         <span class="text-[1rem] text-[#231F20]">
-                            {{ station.name_en }} ({{
-                                station.type.slice(0, 2).toUpperCase()
-                            }})
+                            {{ station.name_en }} @if(station.type) {
+                                ({{
+                                    station.type?.slice(0, 2).toUpperCase()
+                                }})
+                            }
                         </span>
                         <span class="status available">{{
                             station.status
@@ -154,7 +156,7 @@
                             station.connector_powers.join('- ')
                         }}</span>
                     </div>
-                    <div class="info-item">
+                    <div class="info-item" *ngIf="station.type">
                         <img
                             src="megaplug/station/fast-charge.svg"
                             alt="fast-charge"

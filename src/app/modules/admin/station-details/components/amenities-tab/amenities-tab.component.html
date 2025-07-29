@@ -1,14 +1,17 @@
 <div class="amenities-card">
     <div class="amenities-header">
       <span class="amenities-title">Station Amenities</span>
-      <span class="amenities-count">(33 Amenity)</span>
+      @if (amenities) {
+        <span class="amenities-count">({{amenities.length}})</span>
+      }
     </div>
     <div class="amenities-list">
       <div class="amenity" *ngFor="let amenity of amenities">
         <div class="amenity-icon">
-          <mat-icon style="color: #fff;">{{ amenity.icon }}</mat-icon>
+          <!-- <mat-icon style="color: #fff;">{{ amenity.icon }}</mat-icon> -->
+          <img [src]="amenity.image_url" alt="{{ amenity.name_en }}" class="amenity-icon-img">
         </div>
-        <div class="amenity-label">{{ amenity.label }}</div>
+        <div class="amenity-label">{{ amenity.name_en }}</div>
       </div>
     </div>
   </div>
