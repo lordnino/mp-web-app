@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { CommonModule } from '@angular/common';
 import { FirebaseService } from 'app/core/services/firebase.service';
 import { StationCardComponent } from './station-card.component';
 import { StationListMap, ConnectorType } from './station-list-map.model';
 import { Router } from '@angular/router';
+import { StationsService } from 'app/core/stations/stations.service';
 declare const google: any;
 
 @Component({
@@ -15,7 +17,7 @@ declare const google: any;
     standalone   : true,
     templateUrl  : './example.component.html',
     encapsulation: ViewEncapsulation.None,
-    imports: [GoogleMapsModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, StationCardComponent],
+    imports: [GoogleMapsModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, CommonModule, StationCardComponent],
     styleUrls: ['./example.component.scss']
 })
 export class ExampleComponent implements OnInit, OnDestroy {
@@ -34,11 +36,19 @@ export class ExampleComponent implements OnInit, OnDestroy {
     filterChargePower: string = '';
     filteredStations: any[] = [];
 
-    constructor(private ngZone: NgZone, private firebaseService: FirebaseService, private router: Router) {}
+    // Filter options from API
+    connectorTypeOptions: any[] = [];
+    chargingPowerOptions: any[] = [];
+    statusFilterOptions: any[] = [];
+
+    constructor(private ngZone: NgZone, private firebaseService: FirebaseService, private router: Router, private stationsService: StationsService) {}
 
     ngOnInit() {
         // Set sample station data
         this.selectedStation = this.getSampleStationData();
+        
+        // Load filter settings first
+        this.loadFilterSettings();
         
         this.unsubscribeStations = this.firebaseService.listenToStations((stations) => {
             console.log('Raw stations data:', stations);
@@ -81,6 +91,80 @@ export class ExampleComponent implements OnInit, OnDestroy {
         console.log('Google Maps API available:', !!window['google']?.maps);
         console.log('Center coordinates:', this.center);
         console.log('Map component initialized');
+    }
+
+    loadFilterSettings() {
+        console.log('Loading filter settings...');
+        this.getStationFiltersSettings();
+    }
+
+    getStationFiltersSettings() {
+        console.log('Fetching station filter settings...');
+        this.stationsService.getStationFiltersSettings().subscribe({
+            next: (res) => {
+                console.log('Filter settings response:', res);
+                
+                // Map connector types
+                if (res && res.connector_types && Array.isArray(res.connector_types)) {
+                    this.connectorTypeOptions = res.connector_types.map((type: any) => ({
+                        value: type.name_en,
+                        label: type.name_en,
+                        id: type.id,
+                        is_dc: type.is_dc
+                    }));
+                    console.log('Connector types mapped:', this.connectorTypeOptions);
+                } else {
+                    console.warn('No connector_types found in response:', res);
+                }
+                
+                // Map charging powers
+                if (res && res.charging_powers && Array.isArray(res.charging_powers)) {
+                    this.chargingPowerOptions = res.charging_powers.map((power: any) => ({
+                        value: power.name_en,
+                        label: power.name_en,
+                        id: power.id
+                    }));
+                    console.log('Charging powers mapped:', this.chargingPowerOptions);
+                } else {
+                    console.warn('No charging_powers found in response:', res);
+                }
+                
+                // Map status filters
+                if (res && res.status_filters && Array.isArray(res.status_filters)) {
+                    this.statusFilterOptions = res.status_filters.map((status: any) => ({
+                        value: status.key,
+                        label: status.value
+                    }));
+                    console.log('Status filters mapped:', this.statusFilterOptions);
+                } else {
+                    console.warn('No status_filters found in response:', res);
+                }
+                
+                console.log('Final mapped options:', {
+                    connectorTypes: this.connectorTypeOptions,
+                    chargingPowers: this.chargingPowerOptions,
+                    statusFilters: this.statusFilterOptions
+                });
+            },
+            error: (error) => {
+                console.error('Error fetching station filter settings:', error);
+                // Set some default options for testing
+                this.connectorTypeOptions = [
+                    { value: 'CHAdeMO', label: 'CHAdeMO', id: 16, is_dc: true },
+                    { value: 'CCS Combo 2', label: 'CCS Combo 2', id: 15, is_dc: true }
+                ];
+                this.chargingPowerOptions = [
+                    { value: '22 KW', label: '22 KW', id: 11 },
+                    { value: '40 KW', label: '40 KW', id: 12 },
+                    { value: '60 KW', label: '60 KW', id: 13 }
+                ];
+                this.statusFilterOptions = [
+                    { value: 'Available', label: 'Available' },
+                    { value: 'InUse', label: 'In use' }
+                ];
+                console.log('Set default options due to error');
+            }
+        });
     }
 
     private getSampleStationData(): StationListMap {

@@ -17,4 +17,8 @@ export class StationsService {
         const params = new HttpParams().set('period', period).set('metric', metric);
         return this._httpClient.get<any>(`${environment.apiUrl}stations/${stationId}/statistics?${params.toString()}`);
     }
+
+    getStationFiltersSettings() {
+        return this._httpClient.get<any>(`${environment.apiUrl}filter-stations-setting`);
+    }
 }

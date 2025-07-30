@@ -1,6 +1,9 @@
 <div class="stations-page-layout">
     <!-- Filters bar (full width) -->
     <div class="stations-filters-bar">
+        <!-- Debug info -->
+        
+        
         <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>Station Name</mat-label>
             <input
@@ -13,28 +16,33 @@
             <mat-label>Station Availability</mat-label>
             <mat-select [(ngModel)]="filterAvailability">
                 <mat-option value="">Select Availability</mat-option>
-                <mat-option value="Available">Available</mat-option>
-                <mat-option value="InUse">In use</mat-option>
-                <mat-option value="Unavailable">Unavailable</mat-option>
+                <mat-option *ngFor="let status of statusFilterOptions" [value]="status.value">
+                    {{ status.label }}
+                </mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>Connector Type</mat-label>
             <mat-select [(ngModel)]="filterConnectorType">
                 <mat-option value="">Select Connector Type</mat-option>
-                <!-- Populate dynamically if needed -->
+                <mat-option *ngFor="let type of connectorTypeOptions" [value]="type.value">
+                    {{ type.label }}
+                </mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>Charge Power</mat-label>
             <mat-select [(ngModel)]="filterChargePower">
                 <mat-option value="">Select Charge Power</mat-option>
-                <!-- Populate dynamically if needed -->
+                <mat-option *ngFor="let power of chargingPowerOptions" [value]="power.value">
+                    {{ power.label }}
+                </mat-option>
             </mat-select>
         </mat-form-field>
         <button mat-flat-button color="primary" class="filter-btn">
             Filter Stations
         </button>
+
     </div>
         <!-- Main content: station list + map -->
     <div class="stations-main-content bg-[#FCFBFB]">
