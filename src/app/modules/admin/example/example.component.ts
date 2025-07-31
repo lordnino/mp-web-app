@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FirebaseService } from 'app/core/services/firebase.service';
 import { StationCardComponent } from './station-card.component';
@@ -17,7 +19,7 @@ declare const google: any;
     standalone   : true,
     templateUrl  : './example.component.html',
     encapsulation: ViewEncapsulation.None,
-    imports: [GoogleMapsModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, CommonModule, StationCardComponent],
+    imports: [GoogleMapsModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatSlideToggleModule, MatIconModule, CommonModule, StationCardComponent],
     styleUrls: ['./example.component.scss']
 })
 export class ExampleComponent implements OnInit, OnDestroy {
@@ -470,5 +472,21 @@ export class ExampleComponent implements OnInit, OnDestroy {
 
     onStationDetailsClick() {
       this.router.navigate(['/station/', this.selectedStation?.id]);
+    }
+
+    onToggleActive(event: any) {
+      console.log('Station active status changed:', event.checked);
+      // Here you can add API call to update the station's is_active status
+      if (this.selectedStation) {
+        // Example API call (you'll need to implement this in your service)
+        // this.stationsService.updateStationStatus(this.selectedStation.id, event.checked).subscribe({
+        //   next: (response) => {
+        //     console.log('Station status updated successfully');
+        //   },
+        //   error: (error) => {
+        //     console.error('Error updating station status:', error);
+        //   }
+        // });
+      }
     }
 }

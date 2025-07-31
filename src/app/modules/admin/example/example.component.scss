@@ -148,8 +148,64 @@ google-map {
   background: #22c58b;
 }
 
+.station-rating-toggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+}
+
+.station-rating-toggle .station-rating {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+  color: #f7b500;
+  font-weight: 600;
+  gap: 0.25rem;
+}
+
+.station-rating-toggle mat-slide-toggle {
+  --mdc-switch-selected-track-color: #5a48fa;
+  --mdc-switch-selected-thumb-color: #5a48fa;
+  --mdc-switch-selected-focus-track-color: #5a48fa;
+  --mdc-switch-selected-hover-track-color: #5a48fa;
+  --mdc-switch-selected-pressed-track-color: #5a48fa;
+}
+
 .station-rating .star {
   font-size: 1.1rem;
+}
+
+.station-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.station-actions mat-slide-toggle {
+  margin-bottom: 8px;
+  --mdc-switch-selected-track-color: #5a48fa;
+  --mdc-switch-selected-thumb-color: #5a48fa;
+  --mdc-switch-selected-focus-track-color: #5a48fa;
+  --mdc-switch-selected-hover-track-color: #5a48fa;
+  --mdc-switch-selected-pressed-track-color: #5a48fa;
+}
+
+.station-actions .rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #f7b500;
+  font-weight: 600;
+}
+
+.station-actions .rating mat-icon {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
 }
 
 .station-info {
