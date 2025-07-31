@@ -21,4 +21,29 @@ export class StationsService {
     getStationFiltersSettings() {
         return this._httpClient.get<any>(`${environment.apiUrl}filter-stations-setting`);
     }
+
+    filterStations(params: any) {
+        console.log('Filter params:', params);
+        
+        // Build query parameters
+        let queryParams = new HttpParams();
+        
+        // Handle each parameter
+        Object.keys(params).forEach(key => {
+            const value = params[key];
+            
+            if (Array.isArray(value)) {
+                // Handle array parameters like charging_powers[]
+                value.forEach(item => {
+                    queryParams = queryParams.append(`${key}[]`, item.toString());
+                });
+            } else if (value !== null && value !== undefined && value !== '') {
+                // Handle regular parameters
+                queryParams = queryParams.set(key, value.toString());
+            }
+        });
+        
+        // Send parameters as query parameters for GET request
+        return this._httpClient.get<any>(`${environment.apiUrl}stations/filter?${queryParams.toString()}`);
+    }
 }

@@ -32,6 +32,7 @@ export class KwPriceComponent {
   totalItems = 0;
   perPage = 30;
   Math = Math; // Make Math available in template
+  initialValues: any = null; // Store initial values from API
 
   constructor(private fb: FormBuilder, private kwPriceService: KwPriceService) {
     this.kwPriceForm = this.fb.group({
@@ -54,10 +55,15 @@ export class KwPriceComponent {
         const acPrice = res.data.find((item: any) => item.type === 'AC');
         const dcPrice = res.data.find((item: any) => item.type === 'DC');
         
-        this.kwPriceForm.patchValue({
+        const formValues = {
           ac: acPrice ? acPrice.price_per_kw : null,
           dc: dcPrice ? dcPrice.price_per_kw : null
-        });
+        };
+        
+        // Store initial values for cancel functionality
+        this.initialValues = { ...formValues };
+        
+        this.kwPriceForm.patchValue(formValues);
         
         // Store the first ID for updates (assuming we'll update the first record)
         if (res.data.length > 0) {
@@ -128,7 +134,11 @@ export class KwPriceComponent {
   }
 
   cancel() {
-    this.kwPriceForm.reset();
+    if (this.initialValues) {
+      this.kwPriceForm.patchValue(this.initialValues);
+    } else {
+      this.kwPriceForm.reset();
+    }
     this.showCancel = true;
   }
 } 

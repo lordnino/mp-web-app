@@ -21,9 +21,6 @@
       <mat-error *ngIf="burnedPointPrice?.hasError('required')">
         This field is required
       </mat-error>
-      <mat-error *ngIf="burnedPointPrice?.hasError('pattern') || burnedPointPrice?.hasError('min')">
-        Enter a valid positive number
-      </mat-error>
       <mat-error *ngIf="burnedPointPrice?.hasError('max')">
         Max. is 99999.99
       </mat-error>

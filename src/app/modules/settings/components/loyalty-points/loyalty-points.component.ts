@@ -40,6 +40,7 @@ export class LoyaltyPointsComponent {
     perPage = 30;
     Math = Math; // Make Math available in template
     currentLoyaltyPointsId: number | null = null;
+    initialValues: any = null; // Store initial values from API
 
     constructor(
         private fb: FormBuilder,
@@ -86,11 +87,16 @@ export class LoyaltyPointsComponent {
     getLoyaltyPoints() {
         this.loyaltyPointsService.getLoyaltyPoints().subscribe((res) => {
             if (res && res.data) {
-                this.loyaltyPointsForm.patchValue({
+                const formValues = {
                     earnedPointPrice: res.data.earned_points_price,
                     burnedPointPrice: res.data.burned_points_price,
                     isActive: res.data.is_active
-                });
+                };
+                
+                // Store initial values for cancel functionality
+                this.initialValues = { ...formValues };
+                
+                this.loyaltyPointsForm.patchValue(formValues);
                 this.currentLoyaltyPointsId = res.data.id;
             }
         });
@@ -160,7 +166,11 @@ export class LoyaltyPointsComponent {
     }
 
     cancel() {
-        this.loyaltyPointsForm.reset({ isActive: true });
+        if (this.initialValues) {
+            this.loyaltyPointsForm.patchValue(this.initialValues);
+        } else {
+            this.loyaltyPointsForm.reset({ isActive: true });
+        }
         this.showCancel = true;
     }
 }

@@ -31,9 +31,9 @@ export class ExampleComponent implements OnInit, OnDestroy {
     isStationPanelCollapsed = false;
     private unsubscribeStations: () => void;
     filterName: string = '';
-    filterAvailability: string = '';
-    filterConnectorType: string = '';
-    filterChargePower: string = '';
+    filterAvailability: string[] = [];
+    filterConnectorType: string[] = [];
+    filterChargePower: string[] = [];
     filteredStations: any[] = [];
 
     // Filter options from API
@@ -86,7 +86,7 @@ export class ExampleComponent implements OnInit, OnDestroy {
                 this.addLabelOverlays();
             }, 1000);
 
-            this.applyFilters();
+            // this.applyFilters();
         });
         console.log('Google Maps API available:', !!window['google']?.maps);
         console.log('Center coordinates:', this.center);
@@ -96,6 +96,64 @@ export class ExampleComponent implements OnInit, OnDestroy {
     loadFilterSettings() {
         console.log('Loading filter settings...');
         this.getStationFiltersSettings();
+    }
+
+    // Add filter API call method
+    applyFilters() {
+        console.log('Applying filters...');
+        console.log('Current filter values:', {
+            name: this.filterName,
+            availability: this.filterAvailability,
+            connectorType: this.filterConnectorType,
+            chargePower: this.filterChargePower
+        });
+
+        // Prepare query parameters
+        const params: any = {};
+
+        // Add connector types if selected
+        if (this.filterConnectorType && this.filterConnectorType.length > 0) {
+            console.log('Selected connector types:', this.filterConnectorType);
+            console.log('Available connector type options:', this.connectorTypeOptions);
+            
+            const selectedConnectors = this.connectorTypeOptions
+                .filter(option => this.filterConnectorType.includes(option.value))
+                .map(option => option.id);
+            
+            console.log('Mapped connector type IDs:', selectedConnectors);
+            params.connector_types = selectedConnectors;
+        }
+
+        // Add statuses if selected
+        if (this.filterAvailability && this.filterAvailability.length > 0) {
+            params.statuses = this.filterAvailability;
+        }
+
+        // Add charging powers if selected
+        if (this.filterChargePower && this.filterChargePower.length > 0) {
+            console.log('Selected charging powers:', this.filterChargePower);
+            console.log('Available charging power options:', this.chargingPowerOptions);
+            
+            const selectedPowers = this.chargingPowerOptions
+                .filter(option => this.filterChargePower.includes(option.value))
+                .map(option => option.id);
+            
+            console.log('Mapped charging power IDs:', selectedPowers);
+            params.charging_powers = selectedPowers;
+        }
+
+        console.log('API parameters:', params);
+
+        // Call the filter API
+        this.stationsService.filterStations(params).subscribe({
+            next: (response) => {
+                console.log('Filter API response:', response);
+                // TODO: Process the response later
+            },
+            error: (error) => {
+                console.error('Error calling filter API:', error);
+            }
+        });
     }
 
     getStationFiltersSettings() {
@@ -391,24 +449,6 @@ export class ExampleComponent implements OnInit, OnDestroy {
       };
       
       return iconMap[connectorType] || '/megaplug/icons/connector.svg';
-    }
-
-    applyFilters() {
-        if (!this.markers) {
-            this.filteredStations = [];
-            return;
-        }
-        this.filteredStations = this.markers.filter(station => {
-            // Filter by name
-            const matchesName = !this.filterName || (station.label && station.label.toLowerCase().includes(this.filterName.toLowerCase()));
-            // Filter by availability
-            const matchesAvailability = !this.filterAvailability || (station.status && station.status.toLowerCase() === this.filterAvailability.toLowerCase());
-            // Filter by connector type
-            const matchesConnectorType = !this.filterConnectorType || (this.getConnectorTypes(station).some(type => type.name === this.filterConnectorType));
-            // Filter by charge power (as string match)
-            const matchesChargePower = !this.filterChargePower || (this.getPowerRange(station).includes(this.filterChargePower));
-            return matchesName && matchesAvailability && matchesConnectorType && matchesChargePower;
-        });
     }
 
     onStationCardClick(station: StationListMap) {
