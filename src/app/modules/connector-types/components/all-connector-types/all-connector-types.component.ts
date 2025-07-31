@@ -108,16 +108,34 @@ export class AllConnectorTypesComponent implements OnInit {
 
     ngAfterViewInit() {
         // Update the columns configuration with the template references
-        this.columns = this.columns.map(col => {
-
-            if (col.key === 'symbol') {
-                return { ...col, template: this.symbolTemplate };
-            }
-            if (col.key === 'image') {
-                return { ...col, template: this.imageTemplate };
-            }
-            return col;
+        console.log('ngAfterViewInit - Templates available:', {
+            imageTemplate: !!this.imageTemplate,
+            symbolTemplate: !!this.symbolTemplate
         });
+        this.updateColumnsWithTemplates();
+    }
+
+    updateColumnsWithTemplates() {
+        console.log('updateColumnsWithTemplates - Checking templates:', {
+            imageTemplate: !!this.imageTemplate,
+            symbolTemplate: !!this.symbolTemplate
+        });
+        
+        // Only update if templates are available
+        if (this.imageTemplate && this.symbolTemplate) {
+            this.columns = this.columns.map(col => {
+                if (col.key === 'symbol') {
+                    return { ...col, template: this.symbolTemplate };
+                }
+                if (col.key === 'image') {
+                    return { ...col, template: this.imageTemplate };
+                }
+                return col;
+            });
+            console.log('Columns updated with templates:', this.columns);
+        } else {
+            console.log('Templates not available yet');
+        }
     }
 
     getAllConnectorTypes(params: any = {}) {
@@ -133,6 +151,12 @@ export class AllConnectorTypesComponent implements OnInit {
                 console.log('Connector Types:', this.connectorTypes);
                 console.log('Connector Types Meta:', this.connectorTypesMeta);
                 this.loading = false;
+                
+                // Update columns with templates after data is loaded
+                setTimeout(() => {
+                    console.log('Updating templates after data load');
+                    this.updateColumnsWithTemplates();
+                });
             },
             error: () => { this.loading = false; }
         });
@@ -234,5 +258,9 @@ export class AllConnectorTypesComponent implements OnInit {
             maxWidth: '90vw',
             maxHeight: '90vh'
         });
+    }
+
+    get columnsWithTemplatesCount(): number {
+        return this.columns.filter(c => c.template).length;
     }
 } 

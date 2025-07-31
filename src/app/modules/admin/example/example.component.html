@@ -14,7 +14,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>Station Availability</mat-label>
-            <mat-select [(ngModel)]="filterAvailability" multiple>
+            <mat-select [(ngModel)]="filterAvailability" multiple placeholder="Select availability status">
                 <mat-option *ngFor="let status of statusFilterOptions" [value]="status.value">
                     {{ status.label }}
                 </mat-option>
@@ -22,7 +22,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>Connector Type</mat-label>
-            <mat-select [(ngModel)]="filterConnectorType" multiple>
+            <mat-select [(ngModel)]="filterConnectorType" multiple placeholder="Select connector types">
                 <mat-option *ngFor="let type of connectorTypeOptions" [value]="type.value">
                     {{ type.label }}
                 </mat-option>
@@ -30,7 +30,7 @@
         </mat-form-field>
         <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>Charge Power</mat-label>
-            <mat-select [(ngModel)]="filterChargePower" multiple>
+            <mat-select [(ngModel)]="filterChargePower" multiple placeholder="Select charge powers">
                 <mat-option *ngFor="let power of chargingPowerOptions" [value]="power.value">
                     {{ power.label }}
                 </mat-option>
