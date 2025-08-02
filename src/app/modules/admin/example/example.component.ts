@@ -37,6 +37,11 @@ export class ExampleComponent implements OnInit, OnDestroy {
     filterConnectorType: string[] = [];
     filterChargePower: string[] = [];
     filteredStations: any[] = [];
+    
+    // Store all original stations for filtering
+    allStations: StationListMap[] = [];
+    isFiltered: boolean = false;
+    isLoading: boolean = true;
 
     // Filter options from API
     connectorTypeOptions: any[] = [];
@@ -54,7 +59,8 @@ export class ExampleComponent implements OnInit, OnDestroy {
         
         this.unsubscribeStations = this.firebaseService.listenToStations((stations) => {
             console.log('Raw stations data:', stations);
-            this.markers = stations.map(station => {
+            // Store all original stations for filtering
+            this.allStations = stations.map(station => {
                 const lat = Number(station.latitude ?? station.lat);
                 const lng = Number(station.longitude ?? station.lng);
 
@@ -63,32 +69,27 @@ export class ExampleComponent implements OnInit, OnDestroy {
                     return null;
                 }
 
-                // Choose icon URL based on status
-                let iconUrl = '/megaplug/station-available-marker.svg';
-                if (station.status === 'unavailable') {
-                    iconUrl = '/megaplug/stastion-unavailable-marker.svg';
-                } else if (station.status === 'InUse') {
-                    iconUrl = '/megaplug/station-in-use-marker.svg';
-                }
-
                 return {
                     ...station,
                     position: { lat, lng },
                     label: station.name_en || station.name_ar || station.id,
                     icon: {
-                        url: iconUrl,
+                        url: this.getStationIcon(station.status),
                         scaledSize: { width: 42, height: 42 }
                     }
                 } as StationListMap;
             }).filter((marker): marker is StationListMap => marker !== null);
+
+            // Initially show all stations
+            this.markers = [...this.allStations];
+            this.isFiltered = false;
+            this.isLoading = false;
 
             console.log('Processed markers:', this.markers);
 
             setTimeout(() => {
                 this.addLabelOverlays();
             }, 1000);
-
-            // this.applyFilters();
         });
         console.log('Google Maps API available:', !!window['google']?.maps);
         console.log('Center coordinates:', this.center);
@@ -109,6 +110,9 @@ export class ExampleComponent implements OnInit, OnDestroy {
             connectorType: this.filterConnectorType,
             chargePower: this.filterChargePower
         });
+
+        // Set loading state during filtering
+        this.isLoading = true;
 
         // Prepare query parameters
         const params: any = {};
@@ -150,10 +154,43 @@ export class ExampleComponent implements OnInit, OnDestroy {
         this.stationsService.filterStations(params).subscribe({
             next: (response) => {
                 console.log('Filter API response:', response);
-                // TODO: Process the response later
+                
+                if (response && Array.isArray(response)) {
+                    // Extract station IDs from the response
+                    const filteredStationIds = response.map((item: any) => item.station_id);
+                    console.log('Filtered station IDs:', filteredStationIds);
+                    
+                    // Filter the original stations based on station IDs
+                    this.markers = this.allStations.filter(station => 
+                        filteredStationIds.includes(Number(station.id))
+                    );
+                    
+                    this.isFiltered = true;
+                    console.log('Filtered markers:', this.markers);
+                } else {
+                    // If no filters applied or no results, show all stations
+                    this.markers = [...this.allStations];
+                    this.isFiltered = false;
+                }
+                
+                // Set loading to false after filtering
+                this.isLoading = false;
+                
+                // Re-add overlays with filtered data
+                setTimeout(() => {
+                    this.addLabelOverlays();
+                }, 100);
             },
             error: (error) => {
                 console.error('Error calling filter API:', error);
+                // On error, show all stations
+                this.markers = [...this.allStations];
+                this.isFiltered = false;
+                this.isLoading = false;
+                
+                setTimeout(() => {
+                    this.addLabelOverlays();
+                }, 100);
             }
         });
     }
@@ -453,6 +490,19 @@ export class ExampleComponent implements OnInit, OnDestroy {
       return iconMap[connectorType] || '/megaplug/icons/connector.svg';
     }
 
+    private getStationIcon(status: string): string {
+      switch (status) {
+        case 'Available':
+          return '/megaplug/station-available-marker.svg';
+        case 'InUse':
+          return '/megaplug/station-in-use-marker.svg';
+        case 'unavailable':
+          return '/megaplug/stastion-unavailable-marker.svg';
+        default:
+          return '/megaplug/station-available-marker.svg'; // Default icon
+      }
+    }
+
     onStationCardClick(station: StationListMap) {
       if (station?.position) {
         this.center = { ...station.position };
@@ -488,5 +538,33 @@ export class ExampleComponent implements OnInit, OnDestroy {
         //   }
         // });
       }
+    }
+
+    clearFilters() {
+      console.log('Clearing filters...');
+      this.filterName = '';
+      this.filterAvailability = [];
+      this.filterConnectorType = [];
+      this.filterChargePower = [];
+      
+      // Show all stations
+      this.markers = [...this.allStations];
+      this.isFiltered = false;
+      
+      setTimeout(() => {
+        this.addLabelOverlays();
+      }, 100);
+      
+      console.log('Filters cleared, showing all stations');
+    }
+
+    // Check if any filter values are present
+    hasFilterValues(): boolean {
+      return !!(
+        this.filterName?.trim() ||
+        this.filterAvailability?.length > 0 ||
+        this.filterConnectorType?.length > 0 ||
+        this.filterChargePower?.length > 0
+      );
     }
 }

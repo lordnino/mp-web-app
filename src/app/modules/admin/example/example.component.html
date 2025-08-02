@@ -2,8 +2,7 @@
     <!-- Filters bar (full width) -->
     <div class="stations-filters-bar">
         <!-- Debug info -->
-        
-        
+
         <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>Station Name</mat-label>
             <input
@@ -14,106 +13,222 @@
         </mat-form-field>
         <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>Station Availability</mat-label>
-            <mat-select [(ngModel)]="filterAvailability" multiple placeholder="Select availability status">
-                <mat-option *ngFor="let status of statusFilterOptions" [value]="status.value">
+            <mat-select
+                [(ngModel)]="filterAvailability"
+                multiple
+                placeholder="Select availability status"
+            >
+                <mat-option
+                    *ngFor="let status of statusFilterOptions"
+                    [value]="status.value"
+                >
                     {{ status.label }}
                 </mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>Connector Type</mat-label>
-            <mat-select [(ngModel)]="filterConnectorType" multiple placeholder="Select connector types">
-                <mat-option *ngFor="let type of connectorTypeOptions" [value]="type.value">
+            <mat-select
+                [(ngModel)]="filterConnectorType"
+                multiple
+                placeholder="Select connector types"
+            >
+                <mat-option
+                    *ngFor="let type of connectorTypeOptions"
+                    [value]="type.value"
+                >
                     {{ type.label }}
                 </mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field appearance="outline" floatLabel="always">
             <mat-label>Charge Power</mat-label>
-            <mat-select [(ngModel)]="filterChargePower" multiple placeholder="Select charge powers">
-                <mat-option *ngFor="let power of chargingPowerOptions" [value]="power.value">
+            <mat-select
+                [(ngModel)]="filterChargePower"
+                multiple
+                placeholder="Select charge powers"
+            >
+                <mat-option
+                    *ngFor="let power of chargingPowerOptions"
+                    [value]="power.value"
+                >
                     {{ power.label }}
                 </mat-option>
             </mat-select>
         </mat-form-field>
-        <button mat-flat-button color="primary" class="filter-btn" (click)="applyFilters()">
+        <button
+            mat-flat-button
+            color="primary"
+            class="filter-btn"
+            (click)="applyFilters()"
+            [disabled]="!hasFilterValues()"
+        >
             Filter Stations
         </button>
-
+        <button
+            mat-stroked-button
+            color="primary"
+            class="clear-btn"
+            (click)="clearFilters()"
+            *ngIf="isFiltered"
+        >
+            Clear Filters
+        </button>
     </div>
-        <!-- Main content: station list + map -->
+    <!-- Main content: station list + map -->
     <div class="stations-main-content bg-[#FCFBFB]">
-      <!-- Floating Toggle Button -->
-      <div class="floating-toggle-btn" (click)="toggleStationPanel()">
-        <i class="toggle-icon" [class.expanded]="!isStationPanelCollapsed">
-          {{ isStationPanelCollapsed ? '←' : '→' }}
-        </i>
-      </div>
-      
-      <!-- Total Stations Display -->
-      @if (markers) {
-        <div class="d-flex flex-col gap-3 px-10 py-5 station-right-panel" [class.collapsed]="isStationPanelCollapsed">
+        <!-- Floating Toggle Button -->
+        <div class="floating-toggle-btn" (click)="toggleStationPanel()">
+            <i class="toggle-icon" [class.expanded]="!isStationPanelCollapsed">
+                {{ isStationPanelCollapsed ? '←' : '→' }}
+            </i>
+        </div>
+
+        <!-- Total Stations Display -->
+        @if (markers) {
+            <div
+                class="d-flex station-right-panel flex-col gap-3 px-10 py-5"
+                [class.collapsed]="isStationPanelCollapsed"
+            >
                 <div class="total-stations-display px-4 py-2">
-                    <div class="total-stations-info">
-                        <span class="total-label">Total Stations</span>
-                        <span class="total-count"
-                            >{{ markers.length }} Station{{
-                                markers.length !== 1 ? 's' : ''
-                            }}</span
-                        >
-                    </div>
+                    <!-- Ghost Total Stations -->
+                    @if (isLoading) {
+                        <div class="ghost-total-stations">
+                            <div class="ghost-total-label"></div>
+                            <div class="ghost-total-count"></div>
+                        </div>
+                    }
+                    
+                    <!-- Actual Total Stations -->
+                    @if (!isLoading) {
+                        <div class="total-stations-info">
+                            <span class="total-label">Total Stations</span>
+                            <span class="total-count"
+                                >{{ markers.length }} Station{{
+                                    markers.length !== 1 ? 's' : ''
+                                }}</span
+                            >
+                        </div>
+                    }
                 </div>
                 <div class="stations-list-panel">
-                    <div class="stations-list">
-                        @for (station of markers; track station.id) {
-                            <app-station-card
-                                [station]="station"
-                                [selected]="
-                                    selectedStation &&
-                                    selectedStation.id === station.id
-                                "
-                                (cardClick)="onStationCardClick($event)"
-                            ></app-station-card>
-                        }
-                    </div>
+                    <!-- Loading Ghost UI -->
+                    @if (isLoading) {
+                        <div class="ghost-ui-container">
+                            @for (item of [1, 2, 3, 4, 5]; track item) {
+                                <div class="ghost-station-card">
+                                    <div class="ghost-card-header">
+                                        <div class="ghost-image"></div>
+                                        <div class="ghost-status"></div>
+                                    </div>
+                                    <div class="ghost-content">
+                                        <div class="ghost-title"></div>
+                                        <div class="ghost-subtitle"></div>
+                                        <div class="ghost-info">
+                                            <div class="ghost-info-item"></div>
+                                            <div class="ghost-info-item"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+
+                    <!-- Empty State Message -->
+                    @if (!isLoading && markers && markers.length === 0) {
+                        <div class="empty-state-container">
+                            <div class="empty-state-content">
+                                <div class="empty-state-icon">
+                                    <img
+                                        src="/megaplug/ev-station-placeholder.svg"
+                                        alt="No Stations"
+                                    />
+                                </div>
+                                <h3 class="empty-state-title">No Stations Found</h3>
+                                <p class="empty-state-description">
+                                    @if (isFiltered) {
+                                        No stations match your current filters. Try
+                                        adjusting your search criteria.
+                                    } @else {
+                                        No stations are currently available. Check back
+                                        later or add a new station.
+                                    }
+                                </p>
+                            </div>
+                        </div>
+                    }
+
+                    <!-- Station List -->
+                    @if (!isLoading && markers && markers.length > 0) {
+                        <div class="stations-list">
+                            @for (station of markers; track station.id) {
+                                <app-station-card
+                                    [station]="station"
+                                    [selected]="
+                                        selectedStation &&
+                                        selectedStation.id === station.id
+                                    "
+                                    (cardClick)="onStationCardClick($event)"
+                                ></app-station-card>
+                            }
+                        </div>
+                    }
                 </div>
             </div>
         }
 
-            <div class="stations-map-panel">
-      <div class="map-wrapper">
-        <google-map
-          [height]="'100%'"
-          [width]="'100%'"
-          [center]="center"
-          [zoom]="zoom"
-        >
-          @for (marker of markers; track marker.position) {
-            <map-marker
-              [position]="marker.position"
-              [icon]="marker.icon"
-              (mapClick)="onMarkerClick(marker)"
-            ></map-marker>
-          }
-        </google-map>
-      </div>
-      
-      <!-- Add New Station Button -->
-      <div class="add-station-btn" (click)="onAddNewStation()">
-        <div class="add-station-icon">
-         <img src="megaplug/station-list/add-station-icon.svg" alt="">
+        <div class="stations-map-panel">
+            <div class="map-wrapper">
+                <!-- Ghost Map UI -->
+                @if (isLoading) {
+                    <div class="ghost-map-container">
+                        <div class="ghost-map-content">
+                            <div class="ghost-map-placeholder"></div>
+                            <div class="ghost-map-overlay">
+                                <div class="ghost-map-text">Loading stations...</div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                
+                <!-- Actual Map -->
+                @if (!isLoading) {
+                    <google-map
+                        [height]="'100%'"
+                        [width]="'100%'"
+                        [center]="center"
+                        [zoom]="zoom"
+                    >
+                        @for (marker of markers; track marker.position) {
+                            <map-marker
+                                [position]="marker.position"
+                                [icon]="marker.icon"
+                                (mapClick)="onMarkerClick(marker)"
+                            ></map-marker>
+                        }
+                    </google-map>
+                }
+            </div>
+
+            <!-- Add New Station Button -->
+            <div class="add-station-btn" (click)="onAddNewStation()">
+                <div class="add-station-icon">
+                    <img
+                        src="megaplug/station-list/add-station-icon.svg"
+                        alt=""
+                    />
+                </div>
+                <span class="add-station-text whitespace-nowrap"
+                    >Add New Station</span
+                >
+            </div>
         </div>
-        <span class="add-station-text whitespace-nowrap">Add New Station</span>
-      </div>
-    </div>
         <!-- Drawer remains as is -->
     </div>
     <div class="station-drawer" [class.open]="drawerOpen">
         <div class="station-drawer-header">
             <span class="quick-view-title">Quick View</span>
-            <button class="close-btn" (click)="drawerOpen = false">
-                ×
-            </button>
+            <button class="close-btn" (click)="drawerOpen = false">×</button>
         </div>
         @if (selectedStation) {
             <div class="station-quick-view">
@@ -135,8 +250,7 @@
                     <span
                         class="station-status"
                         [class.available]="
-                            selectedStation.status.toLowerCase() ===
-                            'available'
+                            selectedStation.status.toLowerCase() === 'available'
                         "
                         [class.inuse]="
                             selectedStation.status.toLowerCase() === 'inuse'
@@ -196,17 +310,27 @@
                     <!-- Station Information -->
                     <div class="station-info">
                         <div class="flex items-center gap-2">
-                            <img src="megaplug/station-list/watt-green.svg" class="w-[18px] h-[18px]" alt="Connectors" />
-                            <span class="text-[#64758B] font-regular whitespace-nowrap">
-                                {{
-                                    getConnectorCount(selectedStation)
-                                }}
+                            <img
+                                src="megaplug/station-list/watt-green.svg"
+                                class="h-[18px] w-[18px]"
+                                alt="Connectors"
+                            />
+                            <span
+                                class="font-regular whitespace-nowrap text-[#64758B]"
+                            >
+                                {{ getConnectorCount(selectedStation) }}
                                 connectors
                             </span>
                         </div>
                         <div class="flex items-center gap-2">
-                            <img src="megaplug/station-list/fast-charge-yellow.svg" class="w-[18px] h-[18px]" alt="Power" />
-                            <span class="text-[#64758B] font-regular whitespace-nowrap">
+                            <img
+                                src="megaplug/station-list/fast-charge-yellow.svg"
+                                class="h-[18px] w-[18px]"
+                                alt="Power"
+                            />
+                            <span
+                                class="font-regular whitespace-nowrap text-[#64758B]"
+                            >
                                 {{ getPowerRange(selectedStation) }}
                             </span>
                         </div>
@@ -242,17 +366,26 @@
                             track power
                         ) {
                             <span class="power-badge flex items-center gap-2"
-                                ><img src="megaplug/station-list/watt-light-grey.svg" class="w-[13px] h-[13px]" alt="watt" />  
-                                <span>
-                                    {{ power }} KW
-                                </span>
+                                ><img
+                                    src="megaplug/station-list/watt-light-grey.svg"
+                                    class="h-[13px] w-[13px]"
+                                    alt="watt"
+                                />
+                                <span> {{ power }} KW </span>
                             </span>
                         }
                     </div>
                 </div>
                 <!-- Details Button -->
-                <button class="station-details-btn flex justify-center items-center gap-2" (click)="onStationDetailsClick()">
-                    <img src="megaplug/station-list/station-details.svg" class="w-[18px] h-[16px]" alt="Station Details" />
+                <button
+                    class="station-details-btn flex items-center justify-center gap-2"
+                    (click)="onStationDetailsClick()"
+                >
+                    <img
+                        src="megaplug/station-list/station-details.svg"
+                        class="h-[16px] w-[18px]"
+                        alt="Station Details"
+                    />
                     <span class="whitespace-nowrap">Station Details</span>
                 </button>
             </div>
