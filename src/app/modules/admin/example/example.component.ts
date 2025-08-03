@@ -32,7 +32,7 @@ export class ExampleComponent implements OnInit, OnDestroy {
     drawerOpen = false;
     isStationPanelCollapsed = false;
     private unsubscribeStations: () => void;
-    filterName: string = '';
+    name: string = '';
     filterAvailability: string[] = [];
     filterConnectorType: string[] = [];
     filterChargePower: string[] = [];
@@ -105,7 +105,7 @@ export class ExampleComponent implements OnInit, OnDestroy {
     applyFilters() {
         console.log('Applying filters...');
         console.log('Current filter values:', {
-            name: this.filterName,
+            name: this.name,
             availability: this.filterAvailability,
             connectorType: this.filterConnectorType,
             chargePower: this.filterChargePower
@@ -146,6 +146,10 @@ export class ExampleComponent implements OnInit, OnDestroy {
             
             console.log('Mapped charging power IDs:', selectedPowers);
             params.charging_powers = selectedPowers;
+        }
+
+        if (this.name) {
+            params.name = this.name;
         }
 
         console.log('API parameters:', params);
@@ -542,7 +546,7 @@ export class ExampleComponent implements OnInit, OnDestroy {
 
     clearFilters() {
       console.log('Clearing filters...');
-      this.filterName = '';
+      this.name = '';
       this.filterAvailability = [];
       this.filterConnectorType = [];
       this.filterChargePower = [];
@@ -561,7 +565,7 @@ export class ExampleComponent implements OnInit, OnDestroy {
     // Check if any filter values are present
     hasFilterValues(): boolean {
       return !!(
-        this.filterName?.trim() ||
+        this.name?.trim() ||
         this.filterAvailability?.length > 0 ||
         this.filterConnectorType?.length > 0 ||
         this.filterChargePower?.length > 0

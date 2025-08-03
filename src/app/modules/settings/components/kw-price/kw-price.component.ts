@@ -27,6 +27,8 @@ export class KwPriceComponent {
   showCancel = false;
   history = [];
   currentKwPriceId: number | null = null;
+  acPriceId: number | null = null;
+  dcPriceId: number | null = null;
   currentPage = 1;
   totalPages = 1;
   totalItems = 0;
@@ -65,7 +67,11 @@ export class KwPriceComponent {
         
         this.kwPriceForm.patchValue(formValues);
         
-        // Store the first ID for updates (assuming we'll update the first record)
+        // Store IDs for both AC and DC prices
+        this.acPriceId = acPrice ? acPrice.id : null;
+        this.dcPriceId = dcPrice ? dcPrice.id : null;
+        
+        // Keep the first ID for backward compatibility (will be removed in future)
         if (res.data.length > 0) {
           this.currentKwPriceId = res.data[0].id;
         }
@@ -107,17 +113,32 @@ export class KwPriceComponent {
   save() {
     if (this.kwPriceForm.valid) {
       this.isSaving = true;
-      const payload = {
-        ac_price: this.ac?.value,
-        dc_price: this.dc?.value
-      };
+      
+      const prices = [];
+      
+      // Add AC price if it has changed and ID exists
+      if (this.acPriceId && this.ac?.value !== null) {
+        prices.push({
+          id: this.acPriceId,
+          price_per_kw: this.ac.value
+        });
+      }
+      
+      // Add DC price if it has changed and ID exists
+      if (this.dcPriceId && this.dc?.value !== null) {
+        prices.push({
+          id: this.dcPriceId,
+          price_per_kw: this.dc.value
+        });
+      }
 
-      this.kwPriceService.updateKwPrice(this.currentKwPriceId!, payload).subscribe(
+      this.kwPriceService.updateKwPrice(prices).subscribe(
         (res) => {
           this.isSaving = false;
           this.showSuccess = true;
           // Refresh data after successful update
-          this.getKwPrice();
+          // this.getKwPrice();
+          this.getKwPriceHistory();
           // Hide success message after 3 seconds
           setTimeout(() => {
             this.showSuccess = false;

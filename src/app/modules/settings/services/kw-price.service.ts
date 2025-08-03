@@ -13,8 +13,8 @@ export class KwPriceService {
         return this.http.get<any>(this._kwPriceBaseUrl);
     }
 
-    updateKwPrice(id: number, data: any): Observable<any> {
-        return this.http.put<any>(`${this._kwPriceBaseUrl}/${id}`, data);
+    updateKwPrice(prices: Array<{id: number, price_per_kw: number}>): Observable<any> {
+        return this.http.put<any>(`${environment.apiUrl}connector-prices`, { prices });
     }
 
     getKwPriceHistory(page: number = 1, perPage: number = 30): Observable<any> {
