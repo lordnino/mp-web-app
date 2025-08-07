@@ -1,7 +1,7 @@
 export const environment = {
     production: true,
     // apiUrl: 'https://staging-api.megaplugstarter.com/api',
-    apiUrl: 'https://app.mega-plug.com/api/admin/',
+    apiUrl: 'https://dev.mega-plug.com/api/admin/',
     version: '1.0.0',
     defaultLanguage: 'en',
     supportedLanguages: ['en', 'tr'],

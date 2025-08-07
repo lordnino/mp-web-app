@@ -1,6 +1,6 @@
 export const environment = {
     production: false,
-    apiUrl: 'https://app.mega-plug.com/api/admin/',
+    apiUrl: 'https://dev.mega-plug.com/api/admin/',
     appName: 'MegaPlug Starter',
     version: '1.0.0',
     defaultLanguage: 'en',
