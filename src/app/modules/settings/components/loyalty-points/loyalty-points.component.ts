@@ -104,27 +104,74 @@ export class LoyaltyPointsComponent {
 
     getLoyaltyPointsHistory(page: number = 1) {
         this.loyaltyPointsService.getLoyaltyPointsHistory(page, this.perPage).subscribe((res) => {
-            if (res && res.data) {
-                this.history = res.data.map((item: any) => ({
-                    date: new Date(item.created_at),
-                    by: item.user?.name || 'Unknown User',
-                    old: {
-                        earnedPointPrice: item.old_earned_points_price,
-                        burnedPointPrice: item.old_burned_points_price,
-                        isActive: item.old_active_status
-                    },
-                    new: {
-                        earnedPointPrice: item.new_earned_points_price,
-                        burnedPointPrice: item.new_burned_points_price,
-                        isActive: item.new_active_status
-                    }
-                }));
+            console.log('Loyalty Points History API Response:', res);
+            // Check if data is directly in res.data or res.data.data
+            const historyData = res?.data?.data || res?.data;
+            if (res && historyData && Array.isArray(historyData)) {
+                console.log('Processing history data:', historyData);
+                // Group changes by timestamp to combine all changes
+                const groupedChanges = new Map();
                 
-                // Update pagination metadata
-                this.currentPage = res.current_page || 1;
-                this.totalPages = res.last_page || 1;
-                this.totalItems = res.total || 0;
+                historyData.forEach((item: any) => {
+                    const timestamp = item.created_at;
+                    const user = item.user?.name || 'Unknown User';
+                    
+                    if (!groupedChanges.has(timestamp)) {
+                        groupedChanges.set(timestamp, {
+                            date: new Date(timestamp),
+                            by: user,
+                            old: { 
+                                earnedPointPrice: null, 
+                                burnedPointPrice: null, 
+                                isActive: null 
+                            },
+                            new: { 
+                                earnedPointPrice: null, 
+                                burnedPointPrice: null, 
+                                isActive: null 
+                            }
+                        });
+                    }
+                    
+                    const change = groupedChanges.get(timestamp);
+                    // Map the fields based on the API response structure
+                    if (item.old_earned_points_price !== undefined) {
+                        change.old.earnedPointPrice = item.old_earned_points_price;
+                        change.new.earnedPointPrice = item.new_earned_points_price;
+                    }
+                    if (item.old_burned_points_price !== undefined) {
+                        change.old.burnedPointPrice = item.old_burned_points_price;
+                        change.new.burnedPointPrice = item.new_burned_points_price;
+                    }
+                    if (item.old_is_active !== undefined) {
+                        change.old.isActive = item.old_is_active;
+                        change.new.isActive = item.new_is_active;
+                    }
+                });
+                
+                console.log('Grouped changes:', Array.from(groupedChanges.values()));
+                
+                // Convert to array and filter out entries with no actual changes
+                this.history = Array.from(groupedChanges.values())
+                    .filter(change => {
+                        const earnedChanged = change.old.earnedPointPrice !== change.new.earnedPointPrice;
+                        const burnedChanged = change.old.burnedPointPrice !== change.new.burnedPointPrice;
+                        const statusChanged = change.old.isActive !== change.new.isActive;
+                        const hasChange = earnedChanged || burnedChanged || statusChanged;
+                        console.log('Change check:', { earnedChanged, burnedChanged, statusChanged, hasChange, change });
+                        return hasChange;
+                    })
+                    .sort((a, b) => b.date.getTime() - a.date.getTime()); // Sort by date descending
+                
+                console.log('Final history:', this.history);
+                
+                // Update pagination metadata - handle both possible structures
+                const meta = res.data || res;
+                this.currentPage = meta.current_page || 1;
+                this.totalPages = meta.last_page || 1;
+                this.totalItems = meta.total || 0;
             } else {
+                console.log('No valid data structure found');
                 this.history = [];
             }
         });
@@ -172,5 +219,34 @@ export class LoyaltyPointsComponent {
             this.loyaltyPointsForm.reset({ isActive: true });
         }
         this.showCancel = true;
+    }
+
+    // Helper methods for template
+    hasEarnedChange(entry: any): boolean {
+        return entry.old.earnedPointPrice !== entry.new.earnedPointPrice;
+    }
+
+    hasBurnedChange(entry: any): boolean {
+        return entry.old.burnedPointPrice !== entry.new.burnedPointPrice;
+    }
+
+    hasStatusChange(entry: any): boolean {
+        return entry.old.isActive !== entry.new.isActive;
+    }
+
+    formatValue(value: any): string {
+        if (value !== null && value !== undefined) {
+            // Convert to number and round to 2 decimal places
+            const numValue = parseFloat(value);
+            if (!isNaN(numValue)) {
+                return numValue.toFixed(2);
+            }
+            return value.toString();
+        }
+        return '—';
+    }
+
+    formatStatus(value: boolean): string {
+        return value ? 'Active' : 'Inactive';
     }
 }

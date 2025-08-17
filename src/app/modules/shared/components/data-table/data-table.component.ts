@@ -97,8 +97,18 @@ export class DataTableComponent implements OnChanges, AfterViewInit {
         
         // Check if it's a string that can be parsed as a date
         if (typeof value === 'string') {
-            const date = new Date(value);
-            return !isNaN(date.getTime());
+            // More strict date detection - only accept ISO date strings or common date formats
+            const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/; // ISO format
+            const simpleDateRegex = /^\d{4}-\d{2}-\d{2}$/; // YYYY-MM-DD format
+            const slashDateRegex = /^\d{1,2}\/\d{1,2}\/\d{4}$/; // MM/DD/YYYY format
+            
+            // Only treat as date if it matches a clear date pattern
+            if (dateRegex.test(value) || simpleDateRegex.test(value) || slashDateRegex.test(value)) {
+                const date = new Date(value);
+                return !isNaN(date.getTime());
+            }
+            
+            return false;
         }
         
         return false;

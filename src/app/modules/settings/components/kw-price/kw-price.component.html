@@ -49,8 +49,15 @@
       <span>By: {{ entry.by }}</span>
     </div>
     <div class="mt-1">
-      <span>AC: {{ entry.old.ac }} → {{ entry.new.ac }}</span> | 
-      <span>DC: {{ entry.old.dc }} → {{ entry.new.dc }}</span>
+      <ng-container *ngIf="hasAcChange(entry)">
+        <span class="text-blue-600">AC: {{ formatValue(entry.old.ac) }} → {{ formatValue(entry.new.ac) }}</span>
+      </ng-container>
+      <ng-container *ngIf="hasAcChange(entry) && hasDcChange(entry)">
+        <span class="mx-2">|</span>
+      </ng-container>
+      <ng-container *ngIf="hasDcChange(entry)">
+        <span class="text-green-600">DC: {{ formatValue(entry.old.dc) }} → {{ formatValue(entry.new.dc) }}</span>
+      </ng-container>
     </div>
   </div>
   

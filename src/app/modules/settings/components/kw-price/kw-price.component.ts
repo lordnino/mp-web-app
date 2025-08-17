@@ -82,18 +82,40 @@ export class KwPriceComponent {
   getKwPriceHistory(page: number = 1) {
     this.kwPriceService.getKwPriceHistory(page, this.perPage).subscribe((res) => {
         if (res && res.data && res.data.data && Array.isArray(res.data.data)) {
-            this.history = res.data.data.map((item: any) => ({
-                date: new Date(item.created_at),
-                by: item.user?.name || 'Unknown User',
-                old: {
-                    ac: item.type === 'AC' ? item.old_price : null,
-                    dc: item.type === 'DC' ? item.old_price : null
-                },
-                new: {
-                    ac: item.type === 'AC' ? item.new_price : null,
-                    dc: item.type === 'DC' ? item.new_price : null
+            // Group changes by timestamp to combine AC and DC changes
+            const groupedChanges = new Map();
+            
+            res.data.data.forEach((item: any) => {
+                const timestamp = item.created_at;
+                const user = item.user?.name || 'Unknown User';
+                
+                if (!groupedChanges.has(timestamp)) {
+                    groupedChanges.set(timestamp, {
+                        date: new Date(timestamp),
+                        by: user,
+                        old: { ac: null, dc: null },
+                        new: { ac: null, dc: null }
+                    });
                 }
-            }));
+                
+                const change = groupedChanges.get(timestamp);
+                if (item.type === 'AC') {
+                    change.old.ac = item.old_price;
+                    change.new.ac = item.new_price;
+                } else if (item.type === 'DC') {
+                    change.old.dc = item.old_price;
+                    change.new.dc = item.new_price;
+                }
+            });
+            
+            // Convert to array and filter out entries with no actual changes
+            this.history = Array.from(groupedChanges.values())
+                .filter(change => {
+                    const acChanged = change.old.ac !== change.new.ac;
+                    const dcChanged = change.old.dc !== change.new.dc;
+                    return acChanged || dcChanged;
+                })
+                .sort((a, b) => b.date.getTime() - a.date.getTime()); // Sort by date descending
             
             // Update pagination metadata
             this.currentPage = res.data.current_page || 1;
@@ -161,5 +183,26 @@ export class KwPriceComponent {
       this.kwPriceForm.reset();
     }
     this.showCancel = true;
+  }
+
+  // Helper methods for template
+  hasAcChange(entry: any): boolean {
+    return entry.old.ac !== entry.new.ac;
+  }
+
+  hasDcChange(entry: any): boolean {
+    return entry.old.dc !== entry.new.dc;
+  }
+
+  formatValue(value: any): string {
+    if (value !== null && value !== undefined) {
+      // Convert to number and round to 2 decimal places
+      const numValue = parseFloat(value);
+      if (!isNaN(numValue)) {
+        return numValue.toFixed(2);
+      }
+      return value.toString();
+    }
+    return '—';
   }
 } 
