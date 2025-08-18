@@ -232,6 +232,7 @@
         </div>
         @if (selectedStation) {
             <div class="station-quick-view">
+                <div class="station-scroll-content">
                 <!-- Station Image -->
                 <div class="station-image-wrapper">
                     @if (selectedStation.image) {
@@ -376,18 +377,21 @@
                         }
                     </div>
                 </div>
-                <!-- Details Button -->
-                <button
+                </div>
+                <!-- Details Button (fixed footer) -->
+                <div class="station-details-footer">
+                  <button
                     class="station-details-btn flex items-center justify-center gap-2"
                     (click)="onStationDetailsClick()"
-                >
+                  >
                     <img
-                        src="megaplug/station-list/station-details.svg"
-                        class="h-[16px] w-[18px]"
-                        alt="Station Details"
+                      src="megaplug/station-list/station-details.svg"
+                      class="h-[16px] w-[18px]"
+                      alt="Station Details"
                     />
                     <span class="whitespace-nowrap">Station Details</span>
-                </button>
+                  </button>
+                </div>
             </div>
         }
     </div>

@@ -159,6 +159,14 @@ export class KwPriceComponent {
           this.isSaving = false;
           this.showSuccess = true;
           // Refresh data after successful update
+          // Update the baseline values so Cancel reverts to the latest saved values
+          this.initialValues = {
+            ac: this.ac?.value,
+            dc: this.dc?.value
+          };
+          // Optionally mark the form pristine/untouched after save
+          this.kwPriceForm.markAsPristine();
+          this.kwPriceForm.markAsUntouched();
           // this.getKwPrice();
           this.getKwPriceHistory();
           // Hide success message after 3 seconds
@@ -183,6 +191,13 @@ export class KwPriceComponent {
       this.kwPriceForm.reset();
     }
     this.showCancel = true;
+    // Mark the form pristine/untouched when discarding changes
+    this.kwPriceForm.markAsPristine();
+    this.kwPriceForm.markAsUntouched();
+    // Hide cancel message after a short delay for consistency
+    setTimeout(() => {
+      this.showCancel = false;
+    }, 2000);
   }
 
   // Helper methods for template

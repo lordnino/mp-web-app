@@ -155,4 +155,30 @@ export class StationDetailsComponent implements AfterViewInit {
         });
         return connectors;
     }
+
+    getAcChargingPointsCount(): number {
+        if (!this.station || !Array.isArray(this.station.charging_points)) {
+            return 0;
+        }
+        let acCount = 0;
+        this.station.charging_points.forEach((chargingPoint: any) => {
+            if (chargingPoint && chargingPoint.is_dc === false) {
+                acCount += 1;
+            }
+        });
+        return acCount;
+    }
+
+    getDcChargingPointsCount(): number {
+        if (!this.station || !Array.isArray(this.station.charging_points)) {
+            return 0;
+        }
+        let dcCount = 0;
+        this.station.charging_points.forEach((chargingPoint: any) => {
+            if (chargingPoint && chargingPoint.is_dc === true) {
+                dcCount += 1;
+            }
+        });
+        return dcCount;
+    }
 }

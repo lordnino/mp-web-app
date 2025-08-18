@@ -31,7 +31,7 @@
   </div>
   <div class="flex gap-4">
     <button mat-raised-button color="primary" type="submit" [disabled]="isSaving">Save</button>
-    <button mat-stroked-button type="button" (click)="cancel()">Cancel</button>
+    <button mat-stroked-button type="button" (click)="cancel()" [disabled]="isSaving">Cancel</button>
   </div>
   <div *ngIf="showSuccess" class="text-green-600 mt-2">Saved successfully</div>
   <div *ngIf="showCancel" class="text-gray-500 mt-2">Changes discarded</div>

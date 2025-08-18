@@ -174,7 +174,15 @@
                             alt="charges"
                             class="h-[19px] w-[19px]"
                         />
-                        <span class="text-[#64758B]">5 AC Charging Points</span>
+                        <span class="text-[#64758B]">{{ getAcChargingPointsCount() }} AC Charging Points</span>
+                    </div>
+                    <div class="info-item">
+                        <img
+                            src="megaplug/station/details/fast-charge.svg"
+                            alt="dc-charges"
+                            class="h-[19px] w-[19px]"
+                        />
+                        <span class="text-[#64758B]">{{ getDcChargingPointsCount() }} DC Charging Points</span>
                     </div>
                     <div class="info-item">
                         <img

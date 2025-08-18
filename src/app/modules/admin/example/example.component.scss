@@ -46,7 +46,7 @@ google-map {
   transform: translateX(100%);
   transition: transform 0.3s cubic-bezier(.4,0,.2,1);
   z-index: 1000;
-  padding: 0;
+  padding: 0 0 16px 0; /* ensure space at bottom of drawer */
   display: flex;
   flex-direction: column;
 }
@@ -79,13 +79,40 @@ google-map {
   gap: 1.5rem;
   font-family: 'Inter', Arial, sans-serif;
   color: #222;
-  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  padding: 2rem 1.5rem 0 1.5rem;
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 0; /* allow inner scroll area to shrink */
+  /* fixed media sizing */
+  --station-image-height: 180px;
+}
+
+/* Scrollable content inside quick view */
+.station-scroll-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding-right: 6px; /* small gutter so scrollbar doesn't overlap content */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* consistent spacing between inner sections */
+}
+
+/* Footer area with fixed button at bottom of the panel */
+.station-details-footer {
+  position: sticky;
+  bottom: 0;
+  background: #fff;
+  // padding: 16px 0 24px 0; /* includes space under the button */
+  box-shadow: 0 -4px 12px rgba(0,0,0,0.04);
 }
 
 .station-image-wrapper {
   position: relative;
   width: 100%;
-  height: 110px;
+  height: var(--station-image-height);
+  min-height: var(--station-image-height);
+  max-height: var(--station-image-height);
   border-radius: 12px;
   overflow: hidden;
   margin-top: 0.5rem;
@@ -93,6 +120,7 @@ google-map {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex: 0 0 auto;
 }
 .station-image {
   width: 100%;
@@ -118,7 +146,7 @@ google-map {
 .station-header {
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.35rem;
 }
 .station-header h2 {
   font-size: 1.1rem;
@@ -214,7 +242,7 @@ google-map {
   font-size: 0.98rem;
   color: #4caf50;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.75rem;
 }
 .station-info .icon {
   margin-right: 0.4em;
@@ -239,9 +267,9 @@ google-map {
 .connector-types li {
   display: flex;
   align-items: center;
-  gap: 0.7em;
+  gap: 0.8em;
   font-size: 1rem;
-  margin-bottom: 0.7em;
+  margin-bottom: 0.8em;
 }
 .connector-icon {
   width: 36px;
@@ -282,7 +310,8 @@ google-map {
   border: none;
   border-radius: 8px;
   padding: 0.9em 0;
-  margin-top: 1.2em;
+  // margin-top: 1.2em;
+  margin-bottom: 1.2em; /* add space under the button */
   cursor: pointer;
   transition: background 0.2s;
 }

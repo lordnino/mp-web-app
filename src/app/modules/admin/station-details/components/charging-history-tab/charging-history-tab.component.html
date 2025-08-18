@@ -6,10 +6,17 @@
     </div>
     <!-- <div class="card-subtitle">Tesla Car</div> -->
     <div class="card-info-row">
-        <img src="megaplug/station/charging-history/plug.svg" alt="evbox" class="w-[18px] h-[18px]" />
-        <span class="card-info-text">#{{history.transaction_id}} {{history.connector_type}}</span>
-        <img src="megaplug/station/charging-history/charging.svg" alt="evbox" class="w-[18px] h-[18px]" />
-      <span class="card-info-text">Charging {{history.soc ? history.soc + '%' : '100%'}} - {{history.energy_consumed}} KW</span>
+        <!-- Transaction ID -->
+        <span class="card-info-text">#{{ history.transaction_id }}</span>
+        <!-- Connector type -->
+        <img src="megaplug/station/charging-history/plug.svg" alt="connector" class="w-[18px] h-[18px]" />
+        <span class="card-info-text">{{ history.connector_type }}</span>
+        <!-- Charging point serial -->
+        <img src="megaplug/station/details/serial.svg" alt="serial" class="w-[18px] h-[18px]" />
+        <span class="card-info-text">{{ history.charging_point_serial || history.serial_number || (history.charging_point?.serial_number) || 'N/A' }}</span>
+        <!-- Charging progress -->
+        <img src="megaplug/station/charging-history/charging.svg" alt="charging" class="w-[18px] h-[18px]" />
+        <span class="card-info-text">Charging {{ history.soc ? history.soc + '%' : '100%' }} - {{ history.energy_consumed }} KW</span>
     </div>
     <div class="card-date">{{history.end_time | date: 'd MMM y, h:mm a'}}</div>
   </div>

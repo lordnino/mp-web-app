@@ -195,6 +195,15 @@ export class LoyaltyPointsComponent {
                 (res) => {
                     this.isSaving = false;
                     this.showSuccess = true;
+                    // Update the baseline values so Cancel reverts to the latest saved values
+                    this.initialValues = {
+                        earnedPointPrice: this.earnedPointPrice?.value,
+                        burnedPointPrice: this.burnedPointPrice?.value,
+                        isActive: this.isActive?.value,
+                    };
+                    // Mark the form pristine/untouched after save
+                    this.loyaltyPointsForm.markAsPristine();
+                    this.loyaltyPointsForm.markAsUntouched();
                     // Refresh history after successful update
                     this.getLoyaltyPointsHistory(this.currentPage);
                     // Hide success message after 3 seconds
@@ -219,6 +228,13 @@ export class LoyaltyPointsComponent {
             this.loyaltyPointsForm.reset({ isActive: true });
         }
         this.showCancel = true;
+        // Mark the form pristine/untouched when discarding changes
+        this.loyaltyPointsForm.markAsPristine();
+        this.loyaltyPointsForm.markAsUntouched();
+        // Hide cancel message after a short delay for consistency
+        setTimeout(() => {
+            this.showCancel = false;
+        }, 2000);
     }
 
     // Helper methods for template
