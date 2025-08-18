@@ -3,11 +3,11 @@ import { FuseNavigationItem } from '@fuse/components/navigation';
 
 export const defaultNavigation: FuseNavigationItem[] = [
     {
-        id: 'example',
+        id: 'stations',
         title: 'Stations',
         type: 'basic',
         icon: 'heroicons_outline:building-office',
-        link: '/example',
+        link: '/stations',
         permission: ['view_station'],
     },
     {

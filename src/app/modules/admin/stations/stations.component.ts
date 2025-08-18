@@ -15,14 +15,14 @@ import { StationsService } from 'app/core/stations/stations.service';
 declare const google: any;
 
 @Component({
-    selector     : 'example',
+    selector     : 'stations',
     standalone   : true,
-    templateUrl  : './example.component.html',
+    templateUrl  : './stations.component.html',
     encapsulation: ViewEncapsulation.None,
     imports: [GoogleMapsModule, FormsModule, MatFormFieldModule, MatInputModule, MatSelectModule, MatSlideToggleModule, MatIconModule, CommonModule, StationCardComponent],
-    styleUrls: ['./example.component.scss']
+    styleUrls: ['./stations.component.scss']
 })
-export class ExampleComponent implements OnInit, OnDestroy {
+export class StationsComponent implements OnInit, OnDestroy {
     @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
     zoom = 12;
     center: google.maps.LatLngLiteral = { lat: 30.0444, lng: 31.2357 };

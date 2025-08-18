@@ -11,8 +11,8 @@ import { StationDetailsComponent } from './modules/admin/station-details/station
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 export const appRoutes: Route[] = [
 
-    // Redirect empty path to '/example'
-    { path: '', pathMatch: 'full', redirectTo: 'example' },
+    // Redirect empty path to '/stations'
+    { path: '', pathMatch: 'full', redirectTo: 'stations' },
     // Redirect signed-in user to the '/example'
     //
     // After the user signs in, the sign-in page will redirect the user to the 'signed-in-redirect'
@@ -70,7 +70,7 @@ export const appRoutes: Route[] = [
             initialData: initialDataResolver
         },
         children: [
-            {path: 'example', loadChildren: () => import('app/modules/admin/example/example.routes')},
+            {path: 'stations', loadChildren: () => import('app/modules/admin/stations/stations.routes')},
             {path: 'station/:id', component: StationDetailsComponent},
         ]
     },
@@ -174,5 +174,5 @@ export const appRoutes: Route[] = [
             },
         ],
     },
-    { path: '**', redirectTo: 'example' },
+    { path: '**', redirectTo: 'stations' },
 ];
