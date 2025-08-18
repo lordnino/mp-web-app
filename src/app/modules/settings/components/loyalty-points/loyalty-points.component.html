@@ -51,9 +51,21 @@
       <span>By: {{ entry.by }}</span>
     </div>
     <div class="mt-1">
-      <span>Earned: {{ entry.old.earnedPointPrice }} → {{ entry.new.earnedPointPrice }}</span> | 
-      <span>Burned: {{ entry.old.burnedPointPrice }} → {{ entry.new.burnedPointPrice }}</span> |
-      <span>Status: {{ entry.old.isActive ? 'Active' : 'Inactive' }} → {{ entry.new.isActive ? 'Active' : 'Inactive' }}</span>
+      <ng-container *ngIf="hasEarnedChange(entry)">
+        <span class="text-blue-600">Earned: {{ formatValue(entry.old.earnedPointPrice) }} → {{ formatValue(entry.new.earnedPointPrice) }}</span>
+      </ng-container>
+      <ng-container *ngIf="hasEarnedChange(entry) && (hasBurnedChange(entry) || hasStatusChange(entry))">
+        <span class="mx-2">|</span>
+      </ng-container>
+      <ng-container *ngIf="hasBurnedChange(entry)">
+        <span class="text-green-600">Burned: {{ formatValue(entry.old.burnedPointPrice) }} → {{ formatValue(entry.new.burnedPointPrice) }}</span>
+      </ng-container>
+      <ng-container *ngIf="hasBurnedChange(entry) && hasStatusChange(entry)">
+        <span class="mx-2">|</span>
+      </ng-container>
+      <ng-container *ngIf="hasStatusChange(entry)">
+        <span class="text-purple-600">Status: {{ formatStatus(entry.old.isActive) }} → {{ formatStatus(entry.new.isActive) }}</span>
+      </ng-container>
     </div>
   </div>
   
