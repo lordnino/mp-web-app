@@ -1,0 +1,19 @@
+:host {
+    display: flex;
+    flex: 1 1 auto;
+    width: 100%;
+}
+
+mat-form-field {
+    width: 100%;
+}
+
+.bg-primary {
+    background-color: var(--fuse-primary);
+}
+
+mat-chip {
+    padding: 4px 12px;
+    font-size: 0.875rem;
+    border-radius: 9999px;
+}

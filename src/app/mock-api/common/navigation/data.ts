@@ -11,6 +11,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
         permission: ['view_station'],
     },
     {
+        id: 'customers',
+        title: 'Customers',
+        type: 'basic',
+        icon: 'heroicons_outline:users',
+        link: '/customers/all-customers',
+        permission: ['view_station'],
+    },
+    {
         id: 'connector-type',
         title: 'Connector Types',
         type: 'basic',
