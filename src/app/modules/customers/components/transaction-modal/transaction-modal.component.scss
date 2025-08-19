@@ -1,5 +1,11 @@
 ::ng-deep .mat-mdc-dialog-container {
     max-width: 90vw !important;
+    max-height: 95vh !important;
+    
+    .mat-mdc-dialog-surface {
+        max-height: 95vh !important;
+        overflow: hidden;
+    }
 }
 
 .mat-mdc-table {

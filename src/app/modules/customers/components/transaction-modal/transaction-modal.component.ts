@@ -47,7 +47,7 @@ export class TransactionModalComponent implements OnInit {
     filterForm: FormGroup;
     transactionsMeta: PaginationMeta;
     
-    displayedColumns: string[] = ['type', 'amount', 'balance_before', 'balance_after', 'description', 'created_at'];
+    displayedColumns: string[] = ['id', 'type', 'amount', 'description', 'created_at'];
     
     transactionTypes = [
         { value: 'credit', label: 'Credit', color: 'bg-green-100 text-green-800' },
