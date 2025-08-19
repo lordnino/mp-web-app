@@ -1,0 +1,18 @@
+::ng-deep .mat-mdc-dialog-container {
+    max-width: 90vw !important;
+}
+
+.mat-mdc-table {
+    background: white;
+    width: 100%;
+    min-width: max-content;
+}
+
+.mat-mdc-row:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.mat-mdc-header-cell {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.87);
+}

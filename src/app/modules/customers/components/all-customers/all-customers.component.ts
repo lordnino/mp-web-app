@@ -21,6 +21,8 @@ import { Customer } from '../../models/customer.model';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
+import { MatMenuModule } from '@angular/material/menu';
+import { TransactionModalComponent } from '../transaction-modal/transaction-modal.component';
 
 interface TableColumn {
     key: string;
@@ -47,6 +49,7 @@ interface TableColumn {
         MatChipsModule,
         MatProgressSpinnerModule,
         MatSelectModule,
+        MatMenuModule,
         CheckPermissionDirective
     ],
     templateUrl: './all-customers.component.html',
@@ -55,7 +58,6 @@ interface TableColumn {
 export class AllCustomersComponent implements OnInit, AfterViewInit {
     @ViewChild('avatarTemplate') avatarTemplate: TemplateRef<any>;
     @ViewChild('statusTemplate') statusTemplate: TemplateRef<any>;
-    @ViewChild('verifiedTemplate') verifiedTemplate: TemplateRef<any>;
     @ViewChild('actionsTemplate') actionsTemplate: TemplateRef<any>;
 
     customers: Customer[] = [];
@@ -65,10 +67,10 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
         { key: 'name', label: 'Name', sortable: true },
         { key: 'email', label: 'Email', sortable: true },
         { key: 'phone', label: 'Phone', sortable: false },
-        { key: 'status', label: 'Status', template: null },
+        { key: 'is_active', label: 'Status', template: null },
         { key: 'loyalty_points', label: 'Loyalty Points', sortable: true },
-        { key: 'verified', label: 'Verified', template: null },
         { key: 'created_at', label: 'Created At', sortable: true },
+        { key: 'actions', label: 'Actions', template: null }
     ];
     loading = false;
     customersMeta: PaginationMeta;
@@ -82,24 +84,12 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
     filterForm: FormGroup;
 
     tableActions = [
-        // { 
-        //     label: 'View', 
-        //     icon: 'visibility', 
-        //     action: 'view',
-        //     show: (row: any) => true
-        // },
-        // { 
-        //     label: 'Edit', 
-        //     icon: 'edit', 
-        //     action: 'edit',
-        //     show: (row: any) => true
-        // },
-        // { 
-        //     label: 'Delete', 
-        //     icon: 'delete', 
-        //     action: 'delete',
-        //     show: (row: any) => true
-        // }
+        { 
+            label: 'View Transactions', 
+            icon: 'receipt_long', 
+            action: 'view_transactions',
+            show: (row: any) => true
+        }
     ];
     sortActive = 'created_at';
     sortDirection: 'asc' | 'desc' = 'desc';
@@ -127,16 +117,16 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
     }
 
     updateColumnsWithTemplates() {
-        if (this.avatarTemplate && this.statusTemplate && this.verifiedTemplate) {
+        if (this.avatarTemplate && this.statusTemplate && this.actionsTemplate) {
             this.columns = this.columns.map(col => {
                 if (col.key === 'avatar') {
                     return { ...col, template: this.avatarTemplate };
                 }
-                if (col.key === 'status') {
+                if (col.key === 'is_active') {
                     return { ...col, template: this.statusTemplate };
                 }
-                if (col.key === 'verified') {
-                    return { ...col, template: this.verifiedTemplate };
+                if (col.key === 'actions') {
+                    return { ...col, template: this.actionsTemplate };
                 }
                 return col;
             });
@@ -174,10 +164,10 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
     onFilter() {
         const filters = this.filterForm.value;
         const cleanedFilters = Object.keys(filters).reduce((acc, key) => {
-            // Handle is_active separately since it's a boolean
+            // Handle is_active separately since it's 0 or 1
             if (key === 'is_active') {
-                // Only include is_active if it's explicitly true or false (not null)
-                if (filters[key] === true || filters[key] === false) {
+                // Only include is_active if it's explicitly 0 or 1 (not null)
+                if (filters[key] !== null && filters[key] !== undefined) {
                     acc[key] = filters[key];
                 }
             } else if (filters[key]) {
@@ -225,8 +215,13 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
         this.getAllCustomers();
     }
 
-    onActionClick(action: string, customer: Customer) {
+    onActionClick(event: {action: string, row: Customer}) {
+        const { action, row: customer } = event;
+        
         switch(action) {
+            case 'view_transactions':
+                this.openTransactionModal(customer);
+                break;
             case 'view':
                 this.router.navigate(['/customers/view', customer.id]);
                 break;
@@ -237,6 +232,15 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
                 // Implement delete logic with confirmation dialog
                 break;
         }
+    }
+
+    openTransactionModal(customer: Customer): void {
+        this._dialog.open(TransactionModalComponent, {
+            width: '90vw',
+            maxWidth: '1200px',
+            data: { customer },
+            panelClass: 'transaction-modal'
+        });
     }
 
     formatDate(date: string): string {

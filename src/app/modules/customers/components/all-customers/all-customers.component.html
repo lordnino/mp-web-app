@@ -30,8 +30,8 @@
                     <mat-label>Active Status</mat-label>
                     <mat-select formControlName="is_active">
                         <mat-option [value]="null">All</mat-option>
-                        <mat-option [value]="true">Active</mat-option>
-                        <mat-option [value]="false">Inactive</mat-option>
+                        <mat-option [value]="1">Active</mat-option>
+                        <mat-option [value]="0">Inactive</mat-option>
                     </mat-select>
                     <mat-icon matPrefix class="text-gray-400">toggle_on</mat-icon>
                 </mat-form-field>
@@ -55,7 +55,7 @@
             </div>
         </form>
 
-        <div class="bg-card flex flex-col overflow-hidden rounded-2xl shadow">
+        <div class="bg-card flex flex-col rounded-2xl shadow">
             @if(loading && customers.length === 0) {
                 <div class="flex items-center justify-center h-64">
                     <mat-spinner diameter="40"></mat-spinner>
@@ -73,7 +73,7 @@
                     [loading]="loading"
                     [actions]="tableActions"
                     (sortChange)="onSortChange($event)"
-                    (actionClick)="onActionClick($event, $event)"
+                    (actionClick)="onActionClick($event)"
                     [sortActive]="sortActive"
                     [sortDirection]="sortDirection"
                     class="w-full"
@@ -96,50 +96,31 @@
                     </ng-template>
 
                     <ng-template #statusTemplate let-row>
-                        @if (row.status) {
+                        @if (row.is_active !== null && row.is_active !== undefined) {
                             <mat-chip 
-                                [class]="row.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'"
+                                [class]="(row.is_active === 1 || row.is_active === true) ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'"
                                 class="font-medium">
-                                {{ row.status | titlecase }}
+                                {{ (row.is_active === 1 || row.is_active === true) ? 'Active' : 'Inactive' }}
                             </mat-chip>
                         } @else {
                             <span class="text-gray-500">-</span>
                         }
                     </ng-template>
 
-                    <ng-template #verifiedTemplate let-row>
-                        @if (row.verified) {
-                            <mat-icon class="text-green-600" title="Verified">verified</mat-icon>
-                        } @else {
-                            <mat-icon class="text-gray-400" title="Not Verified">cancel</mat-icon>
-                        }
-                    </ng-template>
-
                     <ng-template #actionsTemplate let-row>
-                        <div class="flex gap-2">
-                            <button 
-                                mat-icon-button 
-                                (click)="onActionClick('view', row)"
-                                title="View Customer"
-                                *checkPermission="['view_station']">
-                                <mat-icon>visibility</mat-icon>
-                            </button>
-                            <button 
-                                mat-icon-button 
-                                (click)="onActionClick('edit', row)"
-                                title="Edit Customer"
-                                *checkPermission="['update_customer']">
-                                <mat-icon>edit</mat-icon>
-                            </button>
-                            <button 
-                                mat-icon-button 
-                                (click)="onActionClick('delete', row)"
-                                title="Delete Customer"
-                                class="text-red-600"
-                                *checkPermission="['delete_customer']">
-                                <mat-icon>delete</mat-icon>
-                            </button>
-                        </div>
+                        <button mat-icon-button [matMenuTriggerFor]="menu">
+                            <mat-icon>more_vert</mat-icon>
+                        </button>
+                        <mat-menu #menu="matMenu">
+                            @for (action of tableActions; track action.action) {
+                                @if (!action.show || action.show(row)) {
+                                    <button mat-menu-item (click)="onActionClick(action, row)">
+                                        <mat-icon>{{ action.icon }}</mat-icon>
+                                        <span>{{ action.label }}</span>
+                                    </button>
+                                }
+                            }
+                        </mat-menu>
                     </ng-template>
                 </app-data-table>
 

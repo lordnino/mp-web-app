@@ -1,6 +1,7 @@
 .mat-mdc-table {
     background: white;
     width: 100%;
+    min-width: max-content;
 }
 
 .mat-mdc-row:hover {

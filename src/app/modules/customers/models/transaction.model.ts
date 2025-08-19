@@ -1,24 +1,18 @@
-export interface Customer {
+export interface Transaction {
     id: number;
-    name: string;
-    email: string;
-    phone?: string;
-    avatar?: string;
-    is_active?: boolean | 0 | 1;  // Backend sends boolean, we display/filter as 0/1
+    customer_id: number;
+    type: 'credit' | 'debit' | 'charge' | 'refund';
+    amount: number;
+    balance_before: number;
+    balance_after: number;
+    description?: string;
+    reference_id?: string;
     created_at: string;
     updated_at?: string;
-    address?: string;
-    city?: string;
-    country?: string;
-    postal_code?: string;
-    loyalty_points?: number;
-    total_charges?: number;
-    last_charge_date?: string;
-    registration_date?: string;
 }
 
-export interface CustomersResponse {
-    data: Customer[];
+export interface TransactionsResponse {
+    data: Transaction[];
     links?: {
         first: string;
         last: string;
@@ -39,4 +33,12 @@ export interface CustomersResponse {
         to: number;
         total: number;
     };
+}
+
+export interface TransactionFilters {
+    type?: 'credit' | 'debit' | 'charge' | 'refund';
+    from_date?: string;
+    to_date?: string;
+    page?: number;
+    per_page?: number;
 }
