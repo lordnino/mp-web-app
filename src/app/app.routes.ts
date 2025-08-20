@@ -75,6 +75,25 @@ export const appRoutes: Route[] = [
         ]
     },
 
+    // customers routes
+    {
+        path: 'customers',
+        component: LayoutComponent,
+        canActivate: [AuthGuard, RoutePermissionGuard],
+        resolve: {
+            initialData: initialDataResolver,
+        },
+        data: {
+            permissions: ['view_station'],
+        },
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('app/modules/customers/customers.routes'),
+            },
+        ],
+    },
+
     // roles routes
     {
         path: 'roles-and-permissions',

@@ -1,0 +1,61 @@
+::ng-deep .mat-mdc-dialog-container {
+    .mat-mdc-dialog-surface {
+        overflow: hidden;
+    }
+}
+
+.balance-card {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 24px;
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e5e7eb;
+    transition: all 0.2s;
+
+    &:hover {
+        box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.08);
+        transform: translateY(-2px);
+    }
+}
+
+.balance-card-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+
+    mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+    }
+}
+
+.balance-card-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.balance-card-label {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 4px;
+    font-weight: 500;
+}
+
+.balance-card-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #111827;
+    line-height: 1.2;
+
+    span {
+        font-weight: 500;
+        color: #6b7280;
+    }
+}

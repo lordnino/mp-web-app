@@ -1,0 +1,76 @@
+::ng-deep .mat-mdc-dialog-container {
+    max-width: 90vw !important;
+    max-height: 95vh !important;
+    
+    .mat-mdc-dialog-surface {
+        max-height: 95vh !important;
+        overflow: hidden;
+    }
+}
+
+.charging-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.charging-history-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px 0 rgba(16, 30, 54, 0.06);
+    padding: 24px 24px 16px 24px;
+    position: relative;
+    min-width: 0;
+    transition: box-shadow 0.2s;
+    
+    &:hover {
+        box-shadow: 0 4px 12px 0 rgba(16, 30, 54, 0.1);
+    }
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 12px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #23272f;
+}
+
+.card-price {
+    background: #23293e;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 700;
+    border-radius: 0 0 8px 8px;
+    padding: 8px 20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+}
+
+.card-info-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 15px;
+    color: #7c8db5;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+}
+
+.card-info-text {
+    font-size: 15px;
+    color: #7c8db5;
+}
+
+.card-date {
+    font-size: 14px;
+    color: #7c8db5;
+    text-align: right;
+    margin-top: 8px;
+}

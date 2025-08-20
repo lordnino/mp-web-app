@@ -1,0 +1,72 @@
+<div class="w-full max-w-2xl">
+    <div class="flex items-center justify-between p-6 border-b">
+        <div>
+            <h2 class="text-2xl font-semibold">Account Balance</h2>
+            <p class="text-gray-600 mt-1">{{ customer.name }} - {{ customer.email }}</p>
+        </div>
+        <button mat-icon-button (click)="close()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <div class="p-6">
+        @if (loading) {
+            <div class="flex items-center justify-center py-12">
+                <mat-spinner diameter="40"></mat-spinner>
+            </div>
+        } @else if (error) {
+            <div class="flex flex-col items-center justify-center py-12 text-red-500">
+                <mat-icon class="text-5xl mb-3">error_outline</mat-icon>
+                <p class="text-lg">{{ error }}</p>
+                <button mat-flat-button (click)="loadBalance()" class="mt-4">
+                    <mat-icon class="mr-2">refresh</mat-icon>
+                    Retry
+                </button>
+            </div>
+        } @else if (balanceData) {
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Balance Card -->
+                <div class="balance-card">
+                    <div class="balance-card-icon bg-green-100">
+                        <mat-icon class="text-green-600">account_balance_wallet</mat-icon>
+                    </div>
+                    <div class="balance-card-content">
+                        <p class="balance-card-label">Wallet Balance</p>
+                        <p class="balance-card-value">{{ formatAmount(balanceData.balance) }} <span class="text-lg">EGP</span></p>
+                    </div>
+                </div>
+
+                <!-- Loyalty Points Card -->
+                <div class="balance-card">
+                    <div class="balance-card-icon bg-purple-100">
+                        <mat-icon class="text-purple-600">stars</mat-icon>
+                    </div>
+                    <div class="balance-card-content">
+                        <p class="balance-card-label">Loyalty Points</p>
+                        <p class="balance-card-value">{{ balanceData.loyalty_points || 0 }} <span class="text-lg">Points</span></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Additional Info -->
+            <div class="mt-8 p-4 bg-gray-50 rounded-lg">
+                <div class="flex items-start gap-2">
+                    <mat-icon class="text-gray-400 mt-0.5">info</mat-icon>
+                    <div class="text-sm text-gray-600">
+                        <p class="mb-2">• Wallet balance can be used for charging sessions</p>
+                        <p>• Loyalty points are earned with each charging session and can be redeemed for rewards</p>
+                    </div>
+                </div>
+            </div>
+        } @else {
+            <div class="flex flex-col items-center justify-center py-12 text-gray-500">
+                <mat-icon class="text-5xl mb-3">account_balance_wallet</mat-icon>
+                <p class="text-lg">No balance information available</p>
+            </div>
+        }
+    </div>
+
+    <div class="flex justify-end p-6 border-t">
+        <button mat-button (click)="close()">Close</button>
+    </div>
+</div>

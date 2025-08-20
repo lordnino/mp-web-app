@@ -1,0 +1,42 @@
+::ng-deep .mat-mdc-dialog-container {
+    max-width: 90vw !important;
+    max-height: 95vh !important;
+    
+    .mat-mdc-dialog-surface {
+        max-height: 95vh !important;
+        overflow: hidden;
+    }
+}
+
+.mat-mdc-table {
+    background: white;
+    width: 100%;
+    min-width: max-content;
+}
+
+.mat-mdc-row:hover {
+    background: rgba(0, 0, 0, 0.04);
+}
+
+.mat-mdc-header-cell {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.87);
+}
+
+.transaction-type-label {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    
+    &.positive {
+        background-color: #dcfce7;
+        color: #166534;
+    }
+    
+    &.negative {
+        background-color: #fee2e2;
+        color: #991b1b;
+    }
+}
