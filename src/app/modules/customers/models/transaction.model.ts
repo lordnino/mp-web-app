@@ -1,7 +1,8 @@
 export interface Transaction {
     id: number;
     customer_id: number;
-    type: 'credit' | 'debit' | 'charge' | 'refund';
+    type: string;
+    type_label: string;
     amount: number;
     balance_before: number;
     balance_after: number;
