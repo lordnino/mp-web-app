@@ -24,6 +24,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { TransactionModalComponent } from '../transaction-modal/transaction-modal.component';
 import { ChargingHistoryModalComponent } from '../charging-history-modal/charging-history-modal.component';
+import { BalanceModalComponent } from '../balance-modal/balance-modal.component';
 
 interface TableColumn {
     key: string;
@@ -95,6 +96,12 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
             label: 'View Charging History', 
             icon: 'ev_station', 
             action: 'view_charging_history',
+            show: (row: any) => true
+        },
+        { 
+            label: 'View Balance', 
+            icon: 'account_balance_wallet', 
+            action: 'view_balance',
             show: (row: any) => true
         }
     ];
@@ -232,6 +239,9 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
             case 'view_charging_history':
                 this.openChargingHistoryModal(customer);
                 break;
+            case 'view_balance':
+                this.openBalanceModal(customer);
+                break;
             case 'view':
                 this.router.navigate(['/customers/view', customer.id]);
                 break;
@@ -259,6 +269,15 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
             maxWidth: '1200px',
             data: { customer },
             panelClass: 'charging-history-modal'
+        });
+    }
+
+    openBalanceModal(customer: Customer): void {
+        this._dialog.open(BalanceModalComponent, {
+            width: '600px',
+            maxWidth: '90vw',
+            data: { customer },
+            panelClass: 'balance-modal'
         });
     }
 

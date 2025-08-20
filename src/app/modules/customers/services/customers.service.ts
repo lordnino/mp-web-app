@@ -63,4 +63,10 @@ export class CustomersService {
             { params }
         );
     }
+
+    getCustomerBalance(customerId: number): Observable<any> {
+        return this.http.get<any>(
+            `${environment.apiUrl}admin/customers/${customerId}/balance`
+        );
+    }
 }
