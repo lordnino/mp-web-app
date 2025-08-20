@@ -1,0 +1,105 @@
+<div class="w-full max-w-6xl flex flex-col h-[90vh]">
+    <div class="flex items-center justify-between p-6 border-b flex-shrink-0">
+        <div>
+            <h2 class="text-2xl font-semibold">Charging History</h2>
+            <p class="text-gray-600 mt-1">{{ customer.name }} - {{ customer.email }}</p>
+        </div>
+        <button mat-icon-button (click)="close()">
+            <mat-icon>close</mat-icon>
+        </button>
+    </div>
+
+    <div class="flex-1 overflow-y-auto p-6">
+        <!-- Filter Form -->
+        <form [formGroup]="filterForm" class="mb-6 p-4 bg-gray-50 rounded-lg">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                <mat-form-field appearance="outline">
+                    <mat-label>From Date</mat-label>
+                    <input matInput [matDatepicker]="fromPicker" formControlName="from_date">
+                    <mat-datepicker-toggle matIconSuffix [for]="fromPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #fromPicker></mat-datepicker>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>To Date</mat-label>
+                    <input matInput [matDatepicker]="toPicker" formControlName="to_date">
+                    <mat-datepicker-toggle matIconSuffix [for]="toPicker"></mat-datepicker-toggle>
+                    <mat-datepicker #toPicker></mat-datepicker>
+                </mat-form-field>
+
+                <div class="flex items-center gap-2">
+                    <button mat-flat-button type="button" (click)="onFilter()" class="bg-primary text-white">
+                        <mat-icon class="mr-1">filter_list</mat-icon>
+                        Filter
+                    </button>
+                    <button mat-stroked-button type="button" (click)="onResetFilters()" [disabled]="!hasActiveFilters">
+                        Reset
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Charging History List -->
+        @if (loading) {
+            <div class="flex items-center justify-center h-64">
+                <mat-spinner diameter="40"></mat-spinner>
+            </div>
+        } @else if (chargingHistory.length === 0) {
+            <div class="flex flex-col items-center justify-center h-64 text-gray-500">
+                <mat-icon class="text-6xl mb-4">ev_station</mat-icon>
+                <p class="text-xl font-medium">No charging history found</p>
+                <p class="text-sm mt-2">Try adjusting your filters</p>
+            </div>
+        } @else {
+            <div class="charging-history-list">
+                @for (history of chargingHistory; track history.id) {
+                    <div class="charging-history-card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">{{ history.user_name || customer.name }}</div>
+                                @if (history.station_name) {
+                                    <div class="text-sm text-gray-500 mt-1">Station: {{ history.station_name }}</div>
+                                }
+                            </div>
+                            <div class="card-price">{{ formatAmount(history.cost || history.session_price || 0) }} EGP</div>
+                        </div>
+                        <div class="card-info-row">
+                            <!-- Transaction ID -->
+                            <span class="card-info-text">#{{ history.transaction_id }}</span>
+                            
+                            <!-- Connector type -->
+                            <img src="megaplug/station/charging-history/plug.svg" alt="connector" class="w-[18px] h-[18px]" />
+                            <span class="card-info-text">{{ history.connector_type }}</span>
+                            
+                            <!-- Charging point serial -->
+                            <img src="megaplug/station/details/serial.svg" alt="serial" class="w-[18px] h-[18px]" />
+                            <span class="card-info-text">{{ getSerialNumber(history) }}</span>
+                            
+                            <!-- Charging progress -->
+                            <img src="megaplug/station/charging-history/charging.svg" alt="charging" class="w-[18px] h-[18px]" />
+                            <span class="card-info-text">Charging {{ history.soc ? history.soc + '%' : '100%' }} - {{ history.consumed_kw || history.energy_consumed || 0 }}</span>
+                        </div>
+                        <div class="card-date">{{ history.end_time | date: 'd MMM y, h:mm a' }}</div>
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            @if (chargingHistoryMeta?.total > 0) {
+                <div class="w-full flex justify-center p-4 border-t mt-6">
+                    <app-pagination
+                        [meta]="chargingHistoryMeta"
+                        [currentPage]="params.page"
+                        (pageChange)="pageChanger($event)"
+                        (pageSizeChange)="onPageSizeChange($event)"
+                        [per_page]="params.per_page">
+                    </app-pagination>
+                </div>
+            }
+        }
+    </div>
+
+    <div class="flex justify-end p-6 border-t flex-shrink-0">
+        <button mat-button (click)="close()">Close</button>
+    </div>
+</div>

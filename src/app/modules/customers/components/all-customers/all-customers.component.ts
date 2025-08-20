@@ -23,6 +23,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSelectModule } from '@angular/material/select';
 import { MatMenuModule } from '@angular/material/menu';
 import { TransactionModalComponent } from '../transaction-modal/transaction-modal.component';
+import { ChargingHistoryModalComponent } from '../charging-history-modal/charging-history-modal.component';
 
 interface TableColumn {
     key: string;
@@ -88,6 +89,12 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
             label: 'View Transactions', 
             icon: 'receipt_long', 
             action: 'view_transactions',
+            show: (row: any) => true
+        },
+        { 
+            label: 'View Charging History', 
+            icon: 'ev_station', 
+            action: 'view_charging_history',
             show: (row: any) => true
         }
     ];
@@ -222,6 +229,9 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
             case 'view_transactions':
                 this.openTransactionModal(customer);
                 break;
+            case 'view_charging_history':
+                this.openChargingHistoryModal(customer);
+                break;
             case 'view':
                 this.router.navigate(['/customers/view', customer.id]);
                 break;
@@ -240,6 +250,15 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
             maxWidth: '1200px',
             data: { customer },
             panelClass: 'transaction-modal'
+        });
+    }
+
+    openChargingHistoryModal(customer: Customer): void {
+        this._dialog.open(ChargingHistoryModalComponent, {
+            width: '90vw',
+            maxWidth: '1200px',
+            data: { customer },
+            panelClass: 'charging-history-modal'
         });
     }
 

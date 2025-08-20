@@ -47,4 +47,20 @@ export class CustomersService {
             { params }
         );
     }
+
+    getCustomerChargingHistory(customerId: number, filters?: any): Observable<any> {
+        const params: any = {};
+        
+        if (filters) {
+            if (filters.from_date) params.from_date = filters.from_date;
+            if (filters.to_date) params.to_date = filters.to_date;
+            if (filters.page) params.page = filters.page;
+            if (filters.per_page) params.per_page = filters.per_page;
+        }
+
+        return this.http.get<any>(
+            `${environment.apiUrl}customers/${customerId}/charging-history`,
+            { params }
+        );
+    }
 }
