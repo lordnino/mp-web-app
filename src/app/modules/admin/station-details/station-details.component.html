@@ -101,11 +101,11 @@
                             }
                         </span>
                         <span class="status" [ngClass]="{
-                            'available': station.status === 'Available',
-                            'in-use': station.status === 'InUse',
-                            'unavailable': station.status === 'Unavailable'
+                            'available': station.is_active && station.status === 'Available',
+                            'in-use': station.is_active && station.status === 'InUse',
+                            'unavailable': !station.is_active || station.status === 'Unavailable'
                           }">{{
-                            station.status
+                            !station.is_active ? 'Disabled' : station.status
                         }}</span>
                     </h2>
                     <div
@@ -130,6 +130,7 @@
                     <mat-slide-toggle
                         color="primary"
                         [(ngModel)]="station.is_active"
+                        (change)="onToggleActive($event)"
                     ></mat-slide-toggle>
                     <div class="rating">
                         <mat-icon color="warn">star</mat-icon>

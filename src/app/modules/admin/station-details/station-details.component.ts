@@ -15,9 +15,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleModule, MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { ActivatedRoute } from '@angular/router';
 import { StationsService } from 'app/core/stations/stations.service';
+import Swal from 'sweetalert2';
 import { LayoutService } from 'app/modules/shared/services/layout.service';
 import { AmenitiesTabComponent } from './components/amenities-tab/amenities-tab.component';
 import { ChargingHistoryTabComponent } from './components/charging-history-tab/charging-history-tab.component';
@@ -180,5 +181,61 @@ export class StationDetailsComponent implements AfterViewInit {
             }
         });
         return dcCount;
+    }
+
+    onToggleActive(event: MatSlideToggleChange) {
+        if (!this.station) return;
+        
+        const newStatus = event.checked;
+        const action = newStatus ? 'enable' : 'disable';
+        const stationName = this.station.name_en || this.station.name_ar || 'this station';
+        
+        // Show confirmation dialog
+        Swal.fire({
+            title: `${action.charAt(0).toUpperCase() + action.slice(1)} Station?`,
+            text: `Are you sure you want to ${action} ${stationName}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: `Yes, ${action} it!`,
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Call API to toggle station status
+                this._stationsService.toggleStationStatus(String(this.station.id), newStatus).subscribe({
+                    next: (response) => {
+                        // Update station status locally
+                        this.station.is_active = newStatus;
+                        
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: `Station has been ${action}d successfully.`,
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    },
+                    error: (error) => {
+                        console.error('Error updating station status:', error);
+                        
+                        // Revert the toggle
+                        this.station.is_active = !newStatus;
+                        
+                        // Show error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: `Failed to ${action} the station. Please try again.`,
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            } else {
+                // User cancelled, revert the toggle
+                this.station.is_active = !newStatus;
+            }
+        });
     }
 }
