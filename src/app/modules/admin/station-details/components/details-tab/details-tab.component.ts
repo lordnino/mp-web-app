@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation, Input, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ViewEncapsulation, Input, OnInit, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { GoogleMapsModule, GoogleMap } from '@angular/google-maps';
 import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,8 +6,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 import { ChargingPoint } from 'app/models/station.model';
+import { StationsService } from 'app/core/stations/stations.service';
+import Swal from 'sweetalert2';
 
 @Component({
     selector     : 'details-tab',
@@ -22,12 +26,15 @@ import { ChargingPoint } from 'app/models/station.model';
         MatInputModule,
         MatSelectModule,
         MatSlideToggleModule,
-        MatIconModule
+        MatIconModule,
+        MatMenuModule,
+        MatButtonModule
     ],
     styleUrls: ['./details-tab.component.scss']
 })
 export class DetailsTabComponent implements OnInit, OnChanges {
     @Input() stationId: string;
+    @Output() chargingPointUpdated = new EventEmitter<void>();
 
     // chargingPoints = [
     //   {
@@ -129,7 +136,7 @@ export class DetailsTabComponent implements OnInit, OnChanges {
 
     @Input() charging_points: ChargingPoint[] = [];
     @Input() location: string;
-    constructor() {}
+    constructor(private _stationsService: StationsService) {}
     center: google.maps.LatLngLiteral = { lat: 0, lng: 0 };
     zoom = 15;
     markers: Array<{ position: google.maps.LatLngLiteral; icon?: any }> = [];
@@ -178,5 +185,69 @@ export class DetailsTabComponent implements OnInit, OnChanges {
       } catch (e) {
         // Invalid location JSON
       }
+    }
+
+    /**
+     * Toggles the active status of a charging point
+     * Shows a confirmation dialog before making the API call
+     * Updates the local state and emits an event on success
+     * @param chargingPoint - The charging point object to toggle
+     */
+    toggleChargingPointStatus(chargingPoint: any) {
+        const newStatus = !chargingPoint.is_active;
+        const action = newStatus ? 'enable' : 'disable';
+        const pointName = `Charging Point #${chargingPoint.id}`;
+        
+        // Show confirmation dialog
+        Swal.fire({
+            title: `${action.charAt(0).toUpperCase() + action.slice(1)} Charging Point?`,
+            text: `Are you sure you want to ${action} ${pointName}?`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: `Yes, ${action} it!`,
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Call API to toggle charging point status
+                this._stationsService.toggleChargingPointStatus(String(chargingPoint.id), newStatus).subscribe({
+                    next: (response) => {
+                        // Update charging point status locally
+                        chargingPoint.is_active = newStatus;
+                        
+                        // Update status display
+                        if (!newStatus) {
+                            chargingPoint.status = 'Unavailable';
+                        } else if (chargingPoint.status === 'Unavailable' && newStatus) {
+                            chargingPoint.status = 'Available';
+                        }
+                        
+                        // Emit event to refresh parent component if needed
+                        this.chargingPointUpdated.emit();
+                        
+                        // Show success message
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Success!',
+                            text: `Charging point has been ${action}d successfully.`,
+                            timer: 2000,
+                            showConfirmButton: false
+                        });
+                    },
+                    error: (error) => {
+                        console.error('Error updating charging point status:', error);
+                        
+                        // Show error message
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Error!',
+                            text: `Failed to ${action} the charging point. Please try again.`,
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                });
+            }
+        });
     }
 }

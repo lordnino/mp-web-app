@@ -50,4 +50,14 @@ export class StationsService {
     toggleStationStatus(stationId: string, isActive: boolean): Observable<any> {
         return this._httpClient.patch<any>(`${environment.apiUrl}stations/${stationId}/toggle-status`, { is_active: isActive });
     }
+
+    /**
+     * Toggles the active status of a charging point
+     * @param chargingPointId - The ID of the charging point to toggle
+     * @param isActive - The new active status (true to enable, false to disable)
+     * @returns Observable with the API response
+     */
+    toggleChargingPointStatus(chargingPointId: string, isActive: boolean): Observable<any> {
+        return this._httpClient.patch<any>(`${environment.apiUrl}charging-points/${chargingPointId}/toggle-status`, { is_active: isActive });
+    }
 }
