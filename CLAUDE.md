@@ -147,3 +147,10 @@ The application follows Angular's modular architecture with lazy-loaded feature 
 - Use Fuse components when available
 - Implement responsive design using Tailwind utilities
 - Handle loading states and errors appropriately
+
+## Git Commit Guidelines
+
+When creating git commits:
+- Write clear, concise commit messages focusing on the "why" rather than the "what"
+- Follow the existing commit message style in the repository
+- DO NOT add any automated signatures or attribution messages to commits
