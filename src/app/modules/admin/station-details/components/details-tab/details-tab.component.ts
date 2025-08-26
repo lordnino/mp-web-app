@@ -8,9 +8,11 @@ import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
 import { ChargingPoint } from 'app/models/station.model';
 import { StationsService } from 'app/core/stations/stations.service';
+import { FuseConfirmationService } from '@fuse/services/confirmation';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -136,7 +138,12 @@ export class DetailsTabComponent implements OnInit, OnChanges {
 
     @Input() charging_points: ChargingPoint[] = [];
     @Input() location: string;
-    constructor(private _stationsService: StationsService) {}
+    
+    constructor(
+        private _stationsService: StationsService,
+        private _dialog: MatDialog,
+        private _confirmationService: FuseConfirmationService
+    ) {}
     center: google.maps.LatLngLiteral = { lat: 0, lng: 0 };
     zoom = 15;
     markers: Array<{ position: google.maps.LatLngLiteral; icon?: any }> = [];
@@ -246,6 +253,90 @@ export class DetailsTabComponent implements OnInit, OnChanges {
                             confirmButtonText: 'OK'
                         });
                     }
+                });
+            }
+        });
+    }
+
+    /**
+     * Opens a modal to move the charging point to another station
+     * @param chargingPoint - The charging point to move
+     */
+    moveChargingPointToStation(chargingPoint: any) {
+        import('../move-station-modal/move-station-modal.component').then((module) => {
+            const dialogRef = this._dialog.open(module.MoveStationModalComponent, {
+                width: '600px',
+                maxWidth: '90vw',
+                data: { 
+                    chargingPoint,
+                    currentStationId: this.stationId 
+                }
+            });
+
+            dialogRef.afterClosed().subscribe(result => {
+                if (result && result.station_id) {
+                    this.confirmMove(chargingPoint, result.station_id);
+                }
+            });
+        });
+    }
+
+    /**
+     * Shows confirmation dialog before moving the charging point
+     * @param chargingPoint - The charging point to move
+     * @param targetStationId - The ID of the target station
+     */
+    confirmMove(chargingPoint: any, targetStationId: number): void {
+        const confirmation = this._confirmationService.open({
+            title: 'Confirm Move',
+            message: `Are you sure you want to move charging point ${chargingPoint.serial_number} to the selected station?`,
+            actions: {
+                confirm: {
+                    label: 'Move',
+                    color: 'primary'
+                },
+                cancel: {
+                    label: 'Cancel'
+                }
+            }
+        });
+
+        confirmation.afterClosed().subscribe(result => {
+            if (result === 'confirmed') {
+                this.moveChargingPoint(chargingPoint.id, targetStationId);
+            }
+        });
+    }
+
+    /**
+     * Calls API to move the charging point to another station
+     * @param chargingPointId - The ID of the charging point
+     * @param targetStationId - The ID of the target station
+     */
+    moveChargingPoint(chargingPointId: number, targetStationId: number): void {
+        this._stationsService.moveChargingPoint(chargingPointId, targetStationId).subscribe({
+            next: (response) => {
+                // Show success message
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: 'Charging point has been moved successfully.',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                
+                // Emit event to refresh station details
+                this.chargingPointUpdated.emit();
+            },
+            error: (error) => {
+                console.error('Error moving charging point:', error);
+                
+                // Show error message
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Failed to move the charging point. Please try again.',
+                    confirmButtonText: 'OK'
                 });
             }
         });

@@ -60,4 +60,17 @@ export class StationsService {
     toggleChargingPointStatus(chargingPointId: string, isActive: boolean): Observable<any> {
         return this._httpClient.patch<any>(`${environment.apiUrl}charging-points/${chargingPointId}/toggle-status`, { is_active: isActive });
     }
+
+    /**
+     * Moves a charging point from its current station to another station
+     * @param chargingPointId - The ID of the charging point to move
+     * @param targetStationId - The ID of the target station
+     * @returns Observable with the API response
+     */
+    moveChargingPoint(chargingPointId: number, targetStationId: number): Observable<any> {
+        const payload = {
+            target_station_id: targetStationId
+        };
+        return this._httpClient.patch<any>(`${environment.apiUrl}charging-points/${chargingPointId}/move`, payload);
+    }
 }

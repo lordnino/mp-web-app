@@ -27,6 +27,11 @@
                     </mat-icon>
                     <span>{{ point.is_active ? 'Disable' : 'Enable' }} Charging Point</span>
                 </button>
+                <!-- Move to Another Station action -->
+                <button mat-menu-item (click)="moveChargingPointToStation(point)">
+                    <mat-icon color="primary">swap_horiz</mat-icon>
+                    <span>Move to Another Station</span>
+                </button>
             </mat-menu>
         </div>
         <div class="point-info-row">
