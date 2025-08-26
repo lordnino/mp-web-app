@@ -44,6 +44,33 @@ export class StationsService {
         });
         
         // Send parameters as query parameters for GET request
-        return this._httpClient.get<any>(`${environment.apiUrl}stations/filter?${queryParams.toString()}`);
+        return this._httpClient.get<any>(`${environment.apiUrl}stations/list?${queryParams.toString()}`);
+    }
+
+    toggleStationStatus(stationId: string, isActive: boolean): Observable<any> {
+        return this._httpClient.patch<any>(`${environment.apiUrl}stations/${stationId}/toggle-status`, { is_active: isActive });
+    }
+
+    /**
+     * Toggles the active status of a charging point
+     * @param chargingPointId - The ID of the charging point to toggle
+     * @param isActive - The new active status (true to enable, false to disable)
+     * @returns Observable with the API response
+     */
+    toggleChargingPointStatus(chargingPointId: string, isActive: boolean): Observable<any> {
+        return this._httpClient.patch<any>(`${environment.apiUrl}charging-points/${chargingPointId}/toggle-status`, { is_active: isActive });
+    }
+
+    /**
+     * Moves a charging point from its current station to another station
+     * @param chargingPointId - The ID of the charging point to move
+     * @param targetStationId - The ID of the target station
+     * @returns Observable with the API response
+     */
+    moveChargingPoint(chargingPointId: number, targetStationId: number): Observable<any> {
+        const payload = {
+            target_station_id: targetStationId
+        };
+        return this._httpClient.patch<any>(`${environment.apiUrl}charging-points/${chargingPointId}/move`, payload);
     }
 }

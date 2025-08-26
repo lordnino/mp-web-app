@@ -177,6 +177,23 @@ export const appRoutes: Route[] = [
         ],
     },
     {
+        path: 'unassigned-charging-points',
+        component: LayoutComponent,
+        canActivate: [AuthGuard, RoutePermissionGuard],
+        resolve: {
+            initialData: initialDataResolver,
+        },
+        data: {
+            permissions: ['view_connector_type'],
+        },
+        children: [
+            {
+                path: '',
+                loadChildren: () => import('app/modules/unassigned-charging-points/unassigned-charging-points.routes'),
+            },
+        ],
+    },
+    {
         path: 'settings',
         component: LayoutComponent,
         canActivate: [AuthGuard, RoutePermissionGuard],

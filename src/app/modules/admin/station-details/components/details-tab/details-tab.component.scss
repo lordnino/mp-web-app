@@ -59,6 +59,11 @@
     background: #F41F52;
     color: #fff;
 }
+/* Style for disabled charging points */
+.point-status.disabled {
+    background: #6B7280;
+    color: #fff;
+}
 
 .point-id {
     font-size: 13px;

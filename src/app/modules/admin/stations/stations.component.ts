@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSlideToggleModule, MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { FirebaseService } from 'app/core/services/firebase.service';
@@ -12,6 +12,7 @@ import { StationCardComponent } from './station-card.component';
 import { StationListMap, ConnectorType } from './station-list-map.model';
 import { Router } from '@angular/router';
 import { StationsService } from 'app/core/stations/stations.service';
+import Swal from 'sweetalert2';
 declare const google: any;
 
 @Component({
@@ -74,7 +75,7 @@ export class StationsComponent implements OnInit, OnDestroy {
                     position: { lat, lng },
                     label: station.name_en || station.name_ar || station.id,
                     icon: {
-                        url: this.getStationIcon(station.status),
+                        url: this.getStationIcon(station.status, station.is_active),
                         scaledSize: { width: 42, height: 42 }
                     }
                 } as StationListMap;
@@ -494,7 +495,12 @@ export class StationsComponent implements OnInit, OnDestroy {
       return iconMap[connectorType] || '/megaplug/icons/connector.svg';
     }
 
-    private getStationIcon(status: string): string {
+    private getStationIcon(status: string, isActive: boolean = true): string {
+      // If station is disabled, always show unavailable icon
+      if (!isActive) {
+        return '/megaplug/stastion-unavailable-marker.svg';
+      }
+      
       switch (status) {
         case 'Available':
           return '/megaplug/station-available-marker.svg';
@@ -528,20 +534,99 @@ export class StationsComponent implements OnInit, OnDestroy {
       this.router.navigate(['/station/', this.selectedStation?.id]);
     }
 
-    onToggleActive(event: any) {
-      console.log('Station active status changed:', event.checked);
-      // Here you can add API call to update the station's is_active status
-      if (this.selectedStation) {
-        // Example API call (you'll need to implement this in your service)
-        // this.stationsService.updateStationStatus(this.selectedStation.id, event.checked).subscribe({
-        //   next: (response) => {
-        //     console.log('Station status updated successfully');
-        //   },
-        //   error: (error) => {
-        //     console.error('Error updating station status:', error);
-        //   }
-        // });
+    onToggleActive(event: MatSlideToggleChange) {
+      if (!this.selectedStation) return;
+      
+      const newStatus = event.checked;
+      const action = newStatus ? 'enable' : 'disable';
+      const stationName = this.selectedStation.name_en || this.selectedStation.name_ar || 'this station';
+      
+      // Show confirmation dialog
+      Swal.fire({
+        title: `${action.charAt(0).toUpperCase() + action.slice(1)} Station?`,
+        text: `Are you sure you want to ${action} ${stationName}?`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: `Yes, ${action} it!`,
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Call API to toggle station status
+          this.stationsService.toggleStationStatus(String(this.selectedStation.id), newStatus).subscribe({
+            next: (response) => {
+              // Update station status in all relevant places
+              this.updateStationStatus(this.selectedStation.id, newStatus);
+              
+              // Show success message
+              Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: `Station has been ${action}d successfully.`,
+                timer: 2000,
+                showConfirmButton: false
+              });
+            },
+            error: (error) => {
+              console.error('Error updating station status:', error);
+              
+              // Revert the toggle
+              this.selectedStation.is_active = !newStatus;
+              
+              // Show error message
+              Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: `Failed to ${action} the station. Please try again.`,
+                confirmButtonText: 'OK'
+              });
+            }
+          });
+        } else {
+          // User cancelled, revert the toggle
+          this.selectedStation.is_active = !newStatus;
+        }
+      });
+    }
+
+    private updateStationStatus(stationId: string, isActive: boolean) {
+      // Update status in the selected station
+      if (this.selectedStation && this.selectedStation.id === stationId) {
+        this.selectedStation.is_active = isActive;
       }
+      
+      // Update status in all stations array
+      const stationInAll = this.allStations.find(s => s.id === stationId);
+      if (stationInAll) {
+        stationInAll.is_active = isActive;
+      }
+      
+      // Update status in filtered markers array
+      const stationInMarkers = this.markers.find(s => s.id === stationId);
+      if (stationInMarkers) {
+        stationInMarkers.is_active = isActive;
+        
+        // Update marker icon based on active status
+        if (!isActive) {
+          // If station is disabled, use unavailable icon
+          stationInMarkers.icon = {
+            url: '/megaplug/stastion-unavailable-marker.svg',
+            scaledSize: { width: 42, height: 42 }
+          };
+        } else {
+          // If station is enabled, restore icon based on its status
+          stationInMarkers.icon = {
+            url: this.getStationIcon(stationInMarkers.status, true),
+            scaledSize: { width: 42, height: 42 }
+          };
+        }
+      }
+      
+      // Refresh overlays to update map
+      setTimeout(() => {
+        this.addLabelOverlays();
+      }, 100);
     }
 
     clearFilters() {

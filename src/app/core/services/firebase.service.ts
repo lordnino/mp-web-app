@@ -16,6 +16,7 @@ export interface Station {
   name_en?: string;
   name_ar?: string;
   status?: string;
+  is_active?: boolean;
 }
 
 @Injectable({ providedIn: 'root' })

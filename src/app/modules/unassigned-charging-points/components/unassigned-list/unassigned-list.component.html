@@ -1,0 +1,51 @@
+<div class="flex min-w-0 flex-auto flex-col">
+    <app-page-header 
+        title="Unassigned Charging Points"
+        subtitle="View all charging points that are not yet assigned to a station">
+    </app-page-header>
+
+    <div class="flex-auto p-6 sm:p-10">
+        <div class="overflow-x-auto">
+            <app-data-table
+                [data]="chargingPoints"
+                [columns]="columns"
+                [actions]="tableActions"
+                [loading]="loading"
+                [sortActive]="sortActive"
+                [sortDirection]="sortDirection"
+                (sortChange)="onSortChange($event)"
+                (actionClick)="onActionClick($event)">
+                
+                <ng-template #connectorsTemplate let-row>
+                    <div class="flex flex-wrap gap-1">
+                        <ng-container *ngIf="row?.connectors && row.connectors.length > 0; else noConnectors">
+                            <mat-chip-set>
+                                <mat-chip *ngFor="let connector of row.connectors" 
+                                    [ngClass]="{
+                                        'bg-blue-100 text-blue-800': !connector.connector_type?.is_dc,
+                                        'bg-orange-100 text-orange-800': connector.connector_type?.is_dc
+                                    }"
+                                    class="!px-2 !py-1 !text-xs !font-medium">
+                                    {{ connector.connector_type?.name_en || 'Unknown' }}
+                                </mat-chip>
+                            </mat-chip-set>
+                        </ng-container>
+                        <ng-template #noConnectors>
+                            <span class="text-gray-400 text-sm">No connectors</span>
+                        </ng-template>
+                    </div>
+                </ng-template>
+            </app-data-table>
+        </div>
+
+        <div class="mt-4 p-4 border-t" *ngIf="chargingPointsMeta">
+            <app-pagination
+                [totalItems]="chargingPointsMeta.total"
+                [currentPage]="params.page"
+                [itemsPerPage]="params.per_page"
+                (pageChange)="pageChanger($event)"
+                (pageSizeChange)="onPageSizeChange($event)">
+            </app-pagination>
+        </div>
+    </div>
+</div>
