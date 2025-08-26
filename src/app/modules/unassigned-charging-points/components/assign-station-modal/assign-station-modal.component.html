@@ -1,0 +1,102 @@
+<div class="flex flex-col max-w-2xl">
+    <!-- Header with icon -->
+    <div class="flex items-center gap-3 p-6 pb-4">
+        <div class="flex items-center justify-center w-12 h-12 rounded-full bg-primary-100">
+            <mat-icon class="text-primary-600">add_link</mat-icon>
+        </div>
+        <div>
+            <h2 class="text-2xl font-semibold m-0">Assign Charging Point</h2>
+            <p class="text-sm text-gray-500 m-0 mt-1">Link this charging point to a station</p>
+        </div>
+    </div>
+
+    <mat-dialog-content class="px-6 pb-4">
+        <!-- Charging Point Info Card -->
+        <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <div class="flex items-start gap-3">
+                <mat-icon class="text-gray-400 mt-1">ev_station</mat-icon>
+                <div class="flex-1">
+                    <h3 class="font-medium text-gray-900 mb-2">Charging Point Details</h3>
+                    <div class="grid grid-cols-2 gap-3 text-sm">
+                        <div>
+                            <span class="text-gray-500">Serial Number:</span>
+                            <p class="font-mono font-medium m-0">{{ data.chargingPoint.serial }}</p>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">Model:</span>
+                            <p class="font-medium m-0">{{ data.chargingPoint.model }}</p>
+                        </div>
+                        <div>
+                            <span class="text-gray-500">Vendor:</span>
+                            <p class="font-medium m-0">{{ data.chargingPoint.vendor }}</p>
+                        </div>
+                        <div *ngIf="data.chargingPoint.connectors?.length > 0">
+                            <span class="text-gray-500">Connectors:</span>
+                            <div class="flex flex-wrap gap-1 mt-1">
+                                <span *ngFor="let connector of data.chargingPoint.connectors" 
+                                    class="inline-block px-2 py-0.5 text-xs rounded-full"
+                                    [ngClass]="{
+                                        'bg-blue-100 text-blue-700': !connector.connector_type?.is_dc,
+                                        'bg-orange-100 text-orange-700': connector.connector_type?.is_dc
+                                    }">
+                                    {{ connector.connector_type?.name_en || 'Unknown' }}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Station Selection -->
+        <div class="space-y-2">
+            <label class="block text-sm font-medium text-gray-700">
+                Select Destination Station
+            </label>
+            <form [formGroup]="assignForm">
+                <mat-form-field appearance="outline" class="w-full">
+                    <mat-label>Choose a station</mat-label>
+                    <mat-icon matPrefix class="mr-2">location_on</mat-icon>
+                    <mat-select formControlName="station_id" [disabled]="loadingStations">
+                        <mat-option *ngFor="let station of stations" [value]="station.id">
+                            <div class="flex flex-col py-1">
+                                <span class="font-medium">{{ station.name_en }}</span>
+                                <span class="text-xs text-gray-500">{{ station.address_en }}</span>
+                            </div>
+                        </mat-option>
+                    </mat-select>
+                    <mat-hint *ngIf="loadingStations" class="flex items-center gap-1">
+                        <mat-spinner diameter="16"></mat-spinner>
+                        <span>Loading stations...</span>
+                    </mat-hint>
+                    <mat-error *ngIf="assignForm.get('station_id')?.hasError('required')">
+                        Please select a station
+                    </mat-error>
+                </mat-form-field>
+            </form>
+        </div>
+
+        <!-- Info Alert -->
+        <div class="flex items-start gap-2 p-3 bg-blue-50 rounded-lg mt-4">
+            <mat-icon class="text-blue-600 text-sm mt-0.5">info</mat-icon>
+            <p class="text-sm text-blue-700 m-0">
+                Once assigned, this charging point will be linked to the selected station and can be managed from the station's detail page.
+            </p>
+        </div>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="px-6 py-4 bg-gray-50 gap-2">
+        <button mat-stroked-button (click)="onCancel()" class="min-w-[100px]">
+            Cancel
+        </button>
+        <button 
+            mat-flat-button 
+            color="primary" 
+            (click)="onAssign()"
+            [disabled]="!assignForm.valid || loadingStations"
+            class="min-w-[100px]">
+            <mat-icon *ngIf="!loadingStations" class="mr-1 text-sm">check</mat-icon>
+            <span>Assign to Station</span>
+        </button>
+    </mat-dialog-actions>
+</div>

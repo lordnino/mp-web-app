@@ -44,7 +44,7 @@ export class StationsService {
         });
         
         // Send parameters as query parameters for GET request
-        return this._httpClient.get<any>(`${environment.apiUrl}stations/filter?${queryParams.toString()}`);
+        return this._httpClient.get<any>(`${environment.apiUrl}stations/list?${queryParams.toString()}`);
     }
 
     toggleStationStatus(stationId: string, isActive: boolean): Observable<any> {

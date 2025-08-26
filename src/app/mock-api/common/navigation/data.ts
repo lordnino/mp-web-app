@@ -27,6 +27,14 @@ export const defaultNavigation: FuseNavigationItem[] = [
         permission: ['view_connector_type'],
     },
     {
+        id: 'unassigned-charging-points',
+        title: 'Unassigned Charging Points',
+        type: 'basic',
+        icon: 'heroicons_outline:cpu-chip',
+        link: '/unassigned-charging-points/unassigned-list',
+        permission: ['view_connector_type'],
+    },
+    {
         id: 'users',
         title: 'Users',
         type: 'collapsable',
