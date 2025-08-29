@@ -70,7 +70,7 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
         { key: 'email', label: 'Email', sortable: true },
         { key: 'phone', label: 'Phone', sortable: false },
         { key: 'is_active', label: 'Status', template: null },
-        { key: 'loyalty_points', label: 'Loyalty Points', sortable: true },
+        // { key: 'loyalty_points', label: 'Loyalty Points', sortable: true },
         { key: 'created_at', label: 'Created At', sortable: true },
         { key: 'actions', label: 'Actions', template: null }
     ];
@@ -274,7 +274,7 @@ export class AllCustomersComponent implements OnInit, AfterViewInit {
 
     openBalanceModal(customer: Customer): void {
         this._dialog.open(BalanceModalComponent, {
-            width: '600px',
+            width: '700px',
             maxWidth: '90vw',
             data: { customer },
             panelClass: 'balance-modal'

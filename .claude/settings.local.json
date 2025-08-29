@@ -5,7 +5,8 @@
       "Bash(npm start)",
       "Bash(git checkout:*)",
       "Bash(git cherry-pick:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

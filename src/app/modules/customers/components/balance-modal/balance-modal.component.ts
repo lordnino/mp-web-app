@@ -61,9 +61,10 @@ export class BalanceModalComponent implements OnInit {
         });
     }
 
-    formatAmount(amount: number): string {
-        if (!amount || amount === 0) return '0.00';
-        return amount.toFixed(2);
+    formatAmount(amount: number | string | any): string {
+        const numAmount = Number(amount);
+        if (isNaN(numAmount) || numAmount === 0) return '0.00';
+        return numAmount.toFixed(2);
     }
 
     close(): void {
