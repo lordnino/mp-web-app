@@ -176,11 +176,24 @@ export class TransactionModalComponent implements OnInit {
 
     get hasActiveFilters(): boolean {
         const filters = this.filterForm.value;
+        
+        // Check if any filter has been changed from default
+        if (!filters.from_date || !filters.to_date) {
+            return false;
+        }
+        
         const today = new Date();
+        today.setHours(0, 0, 0, 0);
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(today.getDate() - 30);
+        thirtyDaysAgo.setHours(0, 0, 0, 0);
         
-        return filters.from_date?.getTime() !== thirtyDaysAgo.getTime() || 
-               filters.to_date?.getTime() !== today.getTime();
+        const fromDate = new Date(filters.from_date);
+        fromDate.setHours(0, 0, 0, 0);
+        const toDate = new Date(filters.to_date);
+        toDate.setHours(0, 0, 0, 0);
+        
+        return fromDate.getTime() !== thirtyDaysAgo.getTime() || 
+               toDate.getTime() !== today.getTime();
     }
 }
