@@ -12,17 +12,7 @@
     <div class="flex-1 overflow-y-auto p-6">
         <!-- Filter Form -->
         <form [formGroup]="filterForm" class="mb-6 p-4 bg-gray-50 rounded-lg">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <mat-form-field appearance="outline">
-                    <mat-label>Transaction Type</mat-label>
-                    <mat-select formControlName="type">
-                        <mat-option [value]="null">All Types</mat-option>
-                        <mat-option *ngFor="let type of transactionTypes" [value]="type.value">
-                            {{ type.label }}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <mat-form-field appearance="outline">
                     <mat-label>From Date</mat-label>
                     <input matInput [matDatepicker]="fromPicker" formControlName="from_date">

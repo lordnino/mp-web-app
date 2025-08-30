@@ -49,12 +49,6 @@ export class TransactionModalComponent implements OnInit {
     
     displayedColumns: string[] = ['id', 'type', 'amount', 'description', 'created_at'];
     
-    transactionTypes = [
-        { value: 'credit', label: 'Credit', color: 'bg-green-100 text-green-800' },
-        { value: 'debit', label: 'Debit', color: 'bg-red-100 text-red-800' },
-        { value: 'charge', label: 'Charge', color: 'bg-blue-100 text-blue-800' },
-        { value: 'refund', label: 'Refund', color: 'bg-orange-100 text-orange-800' }
-    ];
 
     params = {
         page: 1,
@@ -81,7 +75,6 @@ export class TransactionModalComponent implements OnInit {
         thirtyDaysAgo.setDate(today.getDate() - 30);
 
         this.filterForm = this.fb.group({
-            type: [null],
             from_date: [thirtyDaysAgo],
             to_date: [today]
         });
@@ -110,10 +103,6 @@ export class TransactionModalComponent implements OnInit {
     getFormFilters(): TransactionFilters {
         const formValue = this.filterForm.value;
         const filters: TransactionFilters = {};
-
-        if (formValue.type) {
-            filters.type = formValue.type;
-        }
 
         if (formValue.from_date) {
             filters.from_date = this.formatDate(formValue.from_date);
@@ -144,7 +133,6 @@ export class TransactionModalComponent implements OnInit {
         thirtyDaysAgo.setDate(today.getDate() - 30);
 
         this.filterForm.reset({
-            type: null,
             from_date: thirtyDaysAgo,
             to_date: today
         });
@@ -163,15 +151,6 @@ export class TransactionModalComponent implements OnInit {
         this.loadTransactions();
     }
 
-    getTransactionTypeClass(type: string): string {
-        const typeConfig = this.transactionTypes.find(t => t.value === type);
-        return typeConfig ? typeConfig.color : '';
-    }
-
-    getTransactionTypeLabel(type: string): string {
-        const typeConfig = this.transactionTypes.find(t => t.value === type);
-        return typeConfig ? typeConfig.label : type;
-    }
 
     formatDateTime(date: string): string {
         if (!date) return '-';
@@ -197,6 +176,11 @@ export class TransactionModalComponent implements OnInit {
 
     get hasActiveFilters(): boolean {
         const filters = this.filterForm.value;
-        return filters.type !== null;
+        const today = new Date();
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(today.getDate() - 30);
+        
+        return filters.from_date?.getTime() !== thirtyDaysAgo.getTime() || 
+               filters.to_date?.getTime() !== today.getTime();
     }
 }
