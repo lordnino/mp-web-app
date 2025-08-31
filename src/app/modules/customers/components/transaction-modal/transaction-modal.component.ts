@@ -44,7 +44,7 @@ export class TransactionModalComponent implements OnInit {
     customer: Customer;
     transactions: Transaction[] = [];
     loading = false;
-    filterForm: FormGroup;
+    filterForm!: FormGroup;
     transactionsMeta: PaginationMeta;
     
     displayedColumns: string[] = ['id', 'type', 'amount', 'description', 'created_at'];
@@ -66,6 +66,7 @@ export class TransactionModalComponent implements OnInit {
 
     ngOnInit(): void {
         this.initializeForm();
+        // Load transactions after form is initialized
         this.loadTransactions();
     }
 
@@ -101,14 +102,20 @@ export class TransactionModalComponent implements OnInit {
     }
 
     getFormFilters(): TransactionFilters {
-        const formValue = this.filterForm.value;
         const filters: TransactionFilters = {};
+        
+        // Check if form is initialized
+        if (!this.filterForm) {
+            return filters;
+        }
+        
+        const formValue = this.filterForm.value;
 
-        if (formValue.from_date) {
+        if (formValue?.from_date) {
             filters.from_date = this.formatDate(formValue.from_date);
         }
 
-        if (formValue.to_date) {
+        if (formValue?.to_date) {
             filters.to_date = this.formatDate(formValue.to_date);
         }
 
@@ -123,11 +130,17 @@ export class TransactionModalComponent implements OnInit {
     }
 
     onFilter(): void {
-        this.params.page = 1;
-        this.loadTransactions();
+        if (this.filterForm) {
+            this.params.page = 1;
+            this.loadTransactions();
+        }
     }
 
     onResetFilters(): void {
+        if (!this.filterForm) {
+            return;
+        }
+        
         const today = new Date();
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(today.getDate() - 30);
@@ -175,10 +188,15 @@ export class TransactionModalComponent implements OnInit {
     }
 
     get hasActiveFilters(): boolean {
+        // Check if form is initialized
+        if (!this.filterForm) {
+            return false;
+        }
+        
         const filters = this.filterForm.value;
         
         // Check if any filter has been changed from default
-        if (!filters.from_date || !filters.to_date) {
+        if (!filters || !filters.from_date || !filters.to_date) {
             return false;
         }
         
