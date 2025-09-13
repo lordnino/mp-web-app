@@ -1,7 +1,7 @@
 {
-    "name": "fuse-angular",
+    "name": "megaplug-dashboard",
     "version": "20.0.0",
-    "description": "Fuse - Angular Admin Template and Starter Project",
+    "description": "Megaplug dashboard",
     "author": "https://themeforest.net/user/srcn",
     "license": "https://themeforest.net/licenses/standard",
     "private": true,
