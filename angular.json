@@ -98,9 +98,7 @@
                                     "replace": "src/environments/environment.ts",
                                     "with": "src/environments/environment.staging.ts"
                                 }
-                            ],
-                            "baseHref": "/dev-megaplug-dashboard/",
-                            "deployUrl": "/dev-megaplug-dashboard/"
+                            ]
                         },
                         "development": {
                             "optimization": false,

@@ -18,7 +18,7 @@ npm run start:prod     # Production configuration
 ### Building
 ```bash
 npm run build          # Production build
-npm run build:staging  # Staging build with base href /dev-megaplug-dashboard/
+npm run build:staging  # Staging build with base href
 npm run build:prod     # Production build
 ```
 

@@ -14,7 +14,6 @@ export class StationCardComponent {
   @Output() cardClick = new EventEmitter<any>();
 
   get connectors(): number {
-    if (this.station?.connectors) return this.station.connectors;
     if (!this.station?.charging_points) return 0;
     
     // Count all connectors from all charging points
@@ -24,11 +23,11 @@ export class StationCardComponent {
         totalConnectors += Object.keys(cp.connectors).length;
       }
     });
-    return totalConnectors;
+    return totalConnectors ? totalConnectors : 1;
   }
 
   get powerRange(): string {
-    if (this.station?.power_range) return this.station.power_range;
+    // if (this.station?.power_range) return this.station.power_range;
     if (!this.station?.charging_points) return '';
     
     // Collect all charge powers from all connectors
